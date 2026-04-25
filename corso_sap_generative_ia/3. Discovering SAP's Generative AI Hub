@@ -1,0 +1,342 @@
+Exploring the Generative AI Hub
+Esplorare il Generative AI Hub
+Poiché l’intelligenza artificiale sta rapidamente rimodellando i contesti di business, le organizzazioni cercano modi potenti ma al tempo stesso sicuri e integrati per sfruttarne il potenziale. Per molte, questo percorso inizia dalla comprensione dell’infrastruttura core che rende possibile l’innovazione guidata dall’AI.
+In qualità di leader nelle applicazioni enterprise, SAP è impegnata a integrare capacità intelligenti direttamente nel nucleo dei tuoi processi di business attraverso SAP Business AI.
+Questa lezione ti introdurrà all’infrastruttura fondamentale che rende tutto questo possibile: l’AI Foundation di SAP. Esplorerai un componente chiave di questa foundation, il generative AI hub. Vedrai il suo ruolo come punto di accesso per sfruttare in modo sicuro ed efficace i Large Language Models (LLM) per soluzioni di livello enterprise. Che tu sia un business leader, un consulente o un esperto tecnico, comprendere questo approccio a livelli è fondamentale per sbloccare il pieno potenziale dell’AI generativa all’interno della tua organizzazione.
+AI Foundation
+L’AI è un’esigenza strategica per le organizzazioni. Tuttavia, mentre cercano di innovare più velocemente e operare in modo più efficiente, spesso si trovano ad affrontare una crescente complessità nella gestione dello sviluppo, del deployment e della governance dell’AI. È proprio qui che entra in gioco l’AI Foundation di SAP.
+
+
+
+
+L’AI Foundation funge da sistema operativo dell’AI di SAP, consentendo alle organizzazioni di costruire, estendere e gestire soluzioni AI personalizzate su larga scala in modo sicuro, responsabile ed efficiente su SAP Business Technology Platform (SAP BTP).
+È la spina dorsale di SAP Business AI, fornendo l’infrastruttura, gli strumenti e i servizi necessari per orchestrare tecnologia all’avanguardia con un profondo contesto di business.
+Perché l’AI Foundation è importante:
+
+Le organizzazioni oggi affrontano diverse sfide, tra cui elevate richieste di risorse per l’onboarding dei modelli AI, strumenti frammentati e difficoltà nel portare l’AI su scala in modo responsabile tra diverse regioni e normative. L’AI Foundation affronta direttamente queste problematiche offrendo:
+Una piattaforma unificata di sviluppo e orchestrazione: fornisce un punto di accesso centrale e integrato per tutti gli strumenti dell’AI Foundation, semplificando collaborazione e governance.
+Governance e sicurezza integrate: garantisce operazioni AI etiche, sicure e conformi fin dalle basi, riducendo significativamente il rischio.
+Integrazione senza soluzione di continuità: si connette facilmente con dati, infrastrutture e modelli partner SAP e non SAP, consentendo un’ampia applicabilità e valorizzando gli investimenti esistenti.
+
+Prodotti core e architettura dell’AI Foundation
+
+
+
+
+L’AI Foundation di SAP è costruita su un’architettura sofisticata e multilivello progettata per supportare operazioni AI di livello enterprise e mantenere le promesse fondamentali dell’AI di SAP. Combina componenti consolidati e li rende disponibili tramite un unico punto di accesso: lo Unified AI Portal. Questo portale funge da hub di accesso centralizzato per tutti gli strumenti dell’AI Foundation, semplificando la collaborazione e la gestione del ciclo di vita.
+I prodotti chiave integrati nell’AI Foundation includono:
+Joule Studio: un ambiente low-code/no-code specificamente progettato per costruire e personalizzare agenti AI ed estendere le skill di Joule, consentendo a sviluppatori e business user di innovare rapidamente.
+Generative AI Hub: questo componente cruciale fornisce accesso sicuro e gestito a LLM di alto livello e a strumenti avanzati di prompt engineering, che rappresentano un focus centrale di questo corso. Accelera lo sviluppo AI consentendo un utilizzo controllato ed efficiente degli LLM.
+SAP Document AI: automatizza la gestione dei dati su un’ampia gamma di documenti non strutturati, migliorando significativamente l’accuratezza e la qualità dell’elaborazione dei dati all’interno di workflow di business critici.
+Tecnologie sottostanti:
+SAP Knowledge Graph: collega grandi quantità di dati SAP ed esterni, creando una ricca rete di intelligenza contestuale che consente lo sviluppo di risultati AI più intelligenti e rilevanti.
+SAP Foundation Model: produce previsioni affidabili basate sui dati delle applicazioni SAP e affronta alcune limitazioni dell’AI e degli LLM.
+
+
+L’architettura dell’AI Foundation è strutturata su quattro livelli chiave per garantire operazioni AI solide e scalabili:
+OS Interfaces Layer: funge da punto di accesso unificato per sviluppo, operations e amministrazione. È il livello in cui risiedono strumenti rivolti all’utente come AI Playground e Joule Studio, consentendo un’interazione intuitiva.
+AI Kernel Layer: questo livello centrale gestisce agenti AI, workload, modelli e il loro intero ciclo di vita. Si occupa di attività critiche come allocazione delle risorse e scheduling per garantire operazioni AI sicure, conformi ed efficienti.
+AI Integration Layer: questo livello facilita la connettività senza soluzione di continuità verso fonti dati eterogenee, vari modelli e diversi servizi. Supporta la gestione dei workload, le pipeline di integrazione dei dati e l’orchestrazione sofisticata dei modelli AI in ambienti differenti.
+Peripheral and Data Layer: questo livello fondamentale fornisce l’infrastruttura essenziale integrando fonti dati SAP e non SAP, sfruttando l’infrastruttura IT esistente e collegandosi ai modelli dei partner. Fornisce inoltre le materie prime e la potenza computazionale necessarie per i processi AI.
+Questa struttura a livelli garantisce che l’AI Foundation non sia soltanto una raccolta di strumenti, ma un sistema operativo AI coeso che funge da spina dorsale per tutte le tecnologie e soluzioni AI utilizzate internamente da SAP. Allo stesso tempo, mette a disposizione di clienti e sviluppatori una suite completa di strumenti per costruire, estendere ed eseguire su larga scala le proprie soluzioni AI personalizzate e i propri agenti. SAP promuove inoltre un forte ecosistema di partner attraverso il suo approccio aperto, consentendo un’integrazione fluida con i principali partner AI e dati per sfruttare modelli best-in-class e competenze di settore.
+SAP AI Core
+
+SAP AI Core è un componente di SAP BTP. Consente la gestione, l’esecuzione e l’operatività degli asset AI in modo standardizzato, scalabile e indipendente dall’hyperscaler.
+Resource Groups
+
+SAP AI Core utilizza i resource group per mantenere separati i diversi task e le diverse risorse di machine learning.
+Un resource group è una cartella virtuale per elementi correlati all’interno di un account SAP AI Core. Quando inizi, ottieni automaticamente un resource group di default. Puoi aggiungere o rimuovere altri resource group se sei un amministratore utilizzando SAP AI Launchpad. I resource group possono essere configurati in base ai requisiti specifici dei singoli tenant e dei rispettivi casi d’uso.
+Il Generative AI Hub: alimentare gli LLM all’interno dell’AI Foundation
+
+
+
+
+Il crescente panorama degli LLM offre un potenziale senza precedenti, ma introduce anche complessità nella selezione sistematica dei modelli, nell’accesso e nella governance. Il generative AI hub è una parte essenziale dell’AI Foundation di SAP, all’interno di SAP AI Core, ed è progettato per soddisfare i requisiti enterprise. È progettato per consentire la selezione, l’accesso e l’esplorazione degli LLM in modo sistematico e supportato da strumenti, garantendo che siano basati su dati di business e contestuali.
+Il generative AI hub è fondamentale per la promessa di SAP di un’AI Rilevante, Affidabile e Responsabile quando si utilizzano gli LLM:
+Rilevante (Grounding nel Contesto di Business): l’hub consente agli LLM di essere ancorati ai tuoi dati unici di business e di contesto. Questo significa che le risposte e le applicazioni basate su LLM non sono soltanto generiche, ma specificamente adattate alle informazioni in tempo reale della tua organizzazione, migliorando in modo significativo l’accuratezza e l’applicabilità diretta al business. Questo è reso possibile tramite funzionalità come il Grounding alimentato da SAP HANA Vector Engine. Questo rende più facile trovare documenti di business correlati a una query e usarli come contesto per l’LLM.
+Affidabile (Accesso e Prestazioni Affidabili): consolida un accesso affidabile agli LLM e ai foundation model, riducendo la dipendenza da un singolo vendor grazie al supporto di modelli diversi provenienti da più provider. Questo garantisce la continuità funzionale delle tue applicazioni AI, con funzionalità come opzioni di upgrade automatico e manuale per le versioni dei modelli.
+Responsabile (Sicurezza e Compliance by Design): il generative AI hub garantisce compliance e affidabilità attraverso governance integrata, misure di sicurezza e considerazioni etiche. Include funzionalità critiche come content filtering e data masking per prevenire rischi come prompt injection e jailbreaking, oltre al rispetto di rigorosi standard di sicurezza come certificazioni SOC 2, NIST e ISO. I tuoi dati sono completamente protetti e isolati nel generative AI hub. SAP non condivide i dati dei clienti con vendor esterni per l’addestramento dei modelli. I dati dei clienti non sono mai accessibili ad altri clienti. SAP utilizza LLM di livello enterprise che non memorizzano input o output API, garantendo la protezione completa delle informazioni dei clienti.
+
+Capacità Chiave del Generative AI Hub
+
+Il Generative AI Hub copre l’intero ciclo di vita delle applicazioni di Generative AI:
+Accesso a più modelli: fornisce un accesso semplificato a frontier AI models provenienti da vari provider e un’allocazione flessibile delle risorse di calcolo. Questo garantisce che tu possa collegarti facilmente ai migliori LLM per i tuoi casi d’uso specifici.
+Sviluppo model agnostic: puoi passare facilmente da un modello all’altro, adattare al volo le configurazioni di orchestrazione e gestire varianti di prompt per diversi LLM. Questa capacità significa che puoi guidare l’adattamento AI secondo i tuoi tempi, sfruttando modelli nuovi e migliorati senza interrompere le soluzioni esistenti né richiedere migrazioni verso altri servizi.
+Esplorazione e sviluppo: offre un set completo di strumenti per costruire soluzioni AI personalizzate. Questo include un prompt editor, una robusta gestione dei prompt (registry, librerie) e Software Development Kits (SDKs). L’AI playground e l’ambiente chat integrati consentono un’esplorazione sicura di diversi modelli, metadati e modifiche dei parametri per identificare la tecnologia più adatta.
+SDKs e Client Libraries: utilizza strumenti orientati agli sviluppatori, inclusi SDK robusti e client libraries, per integrare in modo efficiente la generative AI nelle tue applicazioni e accelerare lo sviluppo di soluzioni AI su misura. SAP Cloud SDK for AI è l’SDK ufficiale per SAP AI Core, il generative AI hub e l’orchestration. Fornisce accesso ai modelli, consentendo l’integrazione delle capacità del generative AI hub con framework comuni come SpringAI, Langchain e Langgraph.
+Orchestration: facilita il coordinamento e la gestione di vari componenti AI, inclusi gli LLM. Consente l’esecuzione di più modelli AI, gestisce il flusso dei dati, ottimizza le risorse computazionali, integra funzionalità come content moderation e data masking e semplifica i workflow AI end-to-end.
+Deployment e Delivery: il deployment del software implica i passaggi, i processi e le attività necessarie per rendere un sistema software o un aggiornamento disponibile ai suoi utenti destinatari. Attualmente, la maggior parte delle organizzazioni IT e degli sviluppatori software utilizza metodi manuali e automatizzati per distribuire aggiornamenti software, patch e nuove applicazioni. Tu porti i tuoi modelli (ad esempio, modelli open-source fine-tuned, modelli proprietari) e li distribuisci. Queste capacità consentono il deployment e la delivery efficienti di modelli e applicazioni AI, assicurando che siano operativi e accessibili agli utenti.
+Governance: implementa policy e procedure robuste per gestire sviluppo, deployment e operation dell’AI in conformità con standard normativi e organizzativi. Le funzionalità includono logging completo per auditing, metering, monitoring, supporto multi-tenancy e ruoli e responsabilità chiari.
+Supporto per il Ciclo di Vita del Modello
+
+Il generative AI hub supporta diversi approcci per l’utilizzo dei modelli AI:
+Modelli Self-Hosted: le organizzazioni possono distribuire i propri modelli (come modelli open-source fine-tuned o proprietari) e gestire gli artifact del modello, le dipendenze e l’intero ciclo di vita. Questo include la supervisione di infrastruttura, scalabilità, sicurezza, compliance, monitoring, costi, aggiornamenti, versioning e performance.
+Modelli SAP Managed: questo approccio fornisce accesso preintegrato e gestito a vari LLM da provider terzi (come Azure OpenAI GPT-5, Google Gemini 2.5 Pro, AWS Claude Sonnet 4 e altri). Gli utenti non devono ottenere licenze separate per questi LLM, poiché SAP gestisce gli accordi commerciali e l’integrazione tecnica. SAP è inoltre responsabile dei requisiti di privacy, sicurezza e riservatezza dei dati relativi agli LLM accessibili tramite il generative AI hub, coprendo anche le attività operative correlate.
+Gli LLM sono soggetti a cambiamenti continui; i provider rilasciano nuove versioni, ritirano quelle più vecchie e possono modificare aspetti come prestazioni e costi. Di conseguenza, la specifica versione LLM utilizzata da un’applicazione potrebbe non rimanere sempre disponibile.
+Il generative AI hub garantisce che questi cambiamenti di versione degli LLM non abbiano impatto sulle tue applicazioni supportando upgrade automatici e upgrade manuali verso la versione più recente di uno specifico LLM. Puoi monitorare le date di deprecazione delle versioni dei modelli, utilizzare strategie di auto-upgrade o manual upgrade per mantenere la continuità del servizio e beneficiare degli ultimi avanzamenti.
+Modelli SAP Hosted:
+
+Questi modelli sono ospitati e gestiti da SAP nella propria infrastruttura, garantendo un’integrazione senza soluzione di continuità con sistemi e applicazioni SAP. SAP gestisce tutti gli aspetti relativi a sicurezza, compliance, ottimizzazione delle prestazioni e gestione operativa, consentendo alle organizzazioni di sfruttare le capacità AI senza dover gestire infrastruttura o complessità tecniche. Questi modelli sono preconfigurati per l’utilizzo all’interno dell’ecosistema SAP, fornendo soluzioni AI affidabili e sicure, guidate dall’AI e adattate alle esigenze di business.
+Per tutte le informazioni più aggiornate su tutti i modelli disponibili nel generative AI hub, fare riferimento alla Note 3437766.
+Accesso al Generative AI hub
+
+Per iniziare a utilizzare il generative AI hub, gli utenti devono stabilire l’accesso configurando il proprio global account SAP BTP, effettuando il provisioning di SAP AI Core e assicurandosi che siano assegnati ruoli e autorizzazioni appropriati. Il generative AI hub opera all’interno di SAP AI Core ed è accessibile principalmente tramite l’interfaccia SAP AI Launchpad o programmaticamente tramite API e SDK. Una volta ottenuto l’accesso, gli utenti possono distribuire LLM da vari provider leader, configurando parametri essenziali come tipo e versione del modello.
+A ogni LLM distribuito viene fornito un endpoint sicuro per integrare applicazioni enterprise, semplificando consumo e gestione con supporto per il monitoraggio delle versioni e gli upgrade. Questo processo fondamentale consente alle organizzazioni di sfruttare rapidamente la generative AI per l’innovazione di business all’interno del proprio ambiente SAP.
+Riepilogo della Lezione
+Hai ora esplorato l’infrastruttura fondamentale che abilita l’AI di livello enterprise all’interno dell’ecosistema SAP. Comprendi come l’AI Foundation di SAP agisca come sistema operativo che consente di Build, Extend e Run queste soluzioni con rilevanza, affidabilità e responsabilità integrate. Il generative AI hub è un componente centrale all’interno di questa foundation. Semplifica l’accesso sicuro ai frontier LLMs, fornisce strumenti essenziali per sviluppo e deployment e garantisce che le tue applicazioni di generative AI siano ancorate ai tuoi dati di business unici, offrendo risultati affidabili, contestualizzati e ad alto valore per la tua organizzazione. Supporta la gestione del ciclo di vita del modello per le tue applicazioni LLM, così da garantire continuità di business insieme ai più recenti avanzamenti dei modelli.
+
+Explaining Generative AI Hub Applications
+Spiegazione delle applicazioni del Generative AI Hub
+Questa lezione amplierà la tua prospettiva sulla versatilità della Generative AI. Approfondiremo una serie di applicazioni pratiche che sfruttano il SAP Generative AI Hub per risolvere problemi di business complessi, automatizzare attività, migliorare il processo decisionale e guidare l’innovazione in tutta l’azienda. Scoprirai come la Generative AI possa interagire con utenti umani e sistemi software in modi sofisticati, sbloccando un valore senza precedenti.
+Applicazioni della Generative AI
+La Generative AI, in particolare i Foundational Models o FM, ha aperto un’ampia gamma di applicazioni potenziali oltre il tradizionale paradigma del chatbot. Molti vedono ancora la generative AI semplicemente come elaborazione di input umano per produrre un output, ma il suo potenziale va molto oltre.
+La Generative AI può produrre in modo indipendente report, spiegazioni e traduzioni precise senza un input umano costante. Questo consente l’automazione delle attività e migliora l’accessibilità delle informazioni.
+La Generative AI può anche interpretare istruzioni umane per controllare il software, abilitando interfacce intelligenti che eseguono comandi in modo efficiente senza dover generare output per gli utenti.
+La Generative AI può inoltre produrre output interamente basati su un input proveniente da un’applicazione o da un servizio di generative AI.
+I confini tra le varie categorie applicative non sono sempre distinti, poiché molte applicazioni includono componenti sovrapposti, e il prompt engineering può integrare l’input umano con i processi software. La Generative AI ha un impatto su numerosi settori e domini, con utilizzi che vanno oltre i chatbot per supportare innovazione e automazione.
+Per illustrare ulteriormente questi quattro tipi di interazione, vediamo esempi specifici nel panorama SAP:
+Human-to-AI: un business analyst usa un’interfaccia di chat per chiedere: "Riassumi i ticket di assistenza clienti dell’ultimo trimestre per categoria di prodotto", e l’AI fornisce un riepilogo testuale strutturato derivato dai dati dei ticket.
+Software-to-AI: un sistema backend SAP invia i dati degli ordini di vendita all’AI, che genera un report in linguaggio naturale evidenziando i colli di bottiglia nell’evasione e i trend regionali.
+Human-to-Software via AI: uno sviluppatore descrive una funzionalità desiderata, "Genera un boilerplate per un servizio OData in SAP BTP per gestire l’inventario prodotti", e l’AI produce la corrispondente struttura di codice per il servizio.
+Software-to-Software via AI: un processo automatizzato in SAP SuccessFactors identifica un reparto sotto-organico, e un servizio guidato dall’AI avvia quindi un workflow di recruiting in un sistema di tracciamento candidati connesso.
+Caso d’uso per il generative AI hub
+Il generative AI hub in SAP AI Core può rivoluzionare il tuo business sfruttando gli LLM per insight avanzati sulle email e automazione, aumentando efficienza e produttività.
+Esempio: generazione coerente delle descrizioni prodotto
+Oltre all’automazione delle email, considera uno scenario in cui un’azienda manifatturiera fatica a mantenere descrizioni prodotto coerenti e di alta qualità sui numerosi canali di vendita e materiali marketing. Descrizioni incoerenti generano confusione nei clienti e possono erodere la fiducia nel brand.
+Usando il generative AI hub, l’azienda può distribuire una soluzione per creare un generatore unificato di descrizioni prodotto. Un LLM, fornito delle specifiche base del prodotto, ad esempio da un sistema SAP Product Lifecycle Management, può generare automaticamente descrizioni prodotto dettagliate, coinvolgenti e coerenti.
+Proposta di valore
+Questa applicazione garantisce coerenza del brand su tutte le piattaforme, migliora significativamente la comprensione dei prodotti da parte dei clienti e può aumentare le vendite. In modo critico, automatizza un’attività manuale tediosa, liberando i team marketing e prodotto per concentrarsi su iniziative più strategiche. Il generative AI hub fornisce accesso sicuro ai modelli AI avanzati necessari per comprendere le sfumature del prodotto e generare contenuti di alta qualità.
+L’esempio illustra che il generative AI hub non serve solo a creare interfacce conversazionali, ma è una piattaforma versatile per costruire soluzioni intelligenti che automatizzano, analizzano e migliorano i processi in tutta l’azienda, gestendo varie forme di input e output guidati dal software.
+Riepilogo della lezione
+Ora hai ampliato la tua comprensione delle applicazioni della generative AI oltre i chatbot di base, apprendendo un framework completo che categorizza le interazioni AI in base a input e output umani e software. Hai visto come il generative AI hub faciliti lo sviluppo di soluzioni enterprise pratiche, come l’automazione avanzata delle email e la generazione coerente di descrizioni prodotto, abilitando sperimentazione flessibile dei modelli e integrazione fluida. Questa visione più ampia delle capacità della generative AI fornisce una solida base e motivazione per esplorare le capacità del generative AI hub.
+
+
+Discovering Generative AI Hub Interface
+Scoprire l’interfaccia del Generative AI Hub
+Una volta effettuato l’accesso al generative AI hub e distribuiti i modelli, il passo successivo è familiarizzare con l’interfaccia utente di SAP AI Launchpad, che viene utilizzata per accedere al generative AI hub. Utilizzare questo ambiente non è solo un ottimo modo per esplorare più modelli e migliorare la propria produttività quotidiana, ma offre anche funzionalità solide per gestire i prompt e i cicli di vita delle applicazioni LLM, aiutandoti in definitiva ad affrontare problemi di business complessi in modo più efficace.
+Questa lezione ti fornirà una panoramica del SAP AI Launchpad, con un focus sul generative AI hub. Vedrai come le funzionalità del generative AI hub offrano un ambiente produttivo per usare più modelli, gestire i prompt e orchestrare workflow tutto in un unico posto, in modo sicuro e affidabile.
+Interfaccia di SAP AI Launchpad
+SAP AI Launchpad è un’applicazione software as a service (SaaS) multi-tenant su SAP BTP. Puoi usare SAP AI Launchpad per gestire casi d’uso AI, noti come scenari, attraverso più istanze di runtime AI, ad esempio SAP AI Core.
+Una volta ottenuto l’accesso a SAP AI Launchpad, vedrai l’interfaccia con alcune delle seguenti applicazioni principali.
+
+
+
+Nota
+Queste applicazioni sono accessibili solo agli amministratori e agli sviluppatori della tua organizzazione. Come business user, accederai e utilizzerai il generative AI hub descritto più avanti.
+Workspaces: questa applicazione consente agli utenti tecnici di gestire le connessioni API e organizzare le risorse. Ogni connessione API rappresenta un tenant univoco, che può a sua volta contenere più resource group per una gestione semplificata degli accessi al generative AI hub.
+Generative AI hub: questa è l’applicazione principale su cui ci concentreremo. Fornisce tutte le funzionalità necessarie per lavorare con la generative AI, inclusa la gestione dei modelli, lo sviluppo dei prompt e la supervisione del ciclo di vita delle applicazioni LLM.
+SAP AI Core Administrator: questa applicazione viene utilizzata da amministratori e sviluppatori per gestire i componenti infrastrutturali sottostanti, come repository Git, deployment delle applicazioni, secret del Docker registry e vari secret di connessione. Garantisce un accesso sicuro e autorizzato alle funzionalità del generative AI hub.
+ML Operations: questa applicazione viene utilizzata per gestire scenari che possono essere usati per creare eseguibili e configurazioni. Questi elementi eseguibili possono essere usati per distribuire modelli e orchestration service nel generative AI hub. Questa applicazione fornisce anche supporto per l’introduzione di dataset, modelli, result set e qualsiasi altro artifact per gestire la prototipazione e il ciclo di vita delle applicazioni LLM.
+Interfaccia del Generative AI Hub
+Il generative AI hub all’interno di SAP AI Launchpad offre una suite di interfacce, tra cui model library, chat, prompt editor, prompt management, orchestration e administration.
+
+
+Model Library
+La Model Library mostra l’elenco di tutti i modelli disponibili nel generative AI hub e funge da risorsa per selezionare i modelli più adatti. Fornisce informazioni complete per aiutarti a decidere quale modello si adatti meglio al tuo use case, considerando fattori come performance, costo e specializzazione.
+Fornisce le seguenti modalità che possono essere usate per selezionare un modello.
+Catalog Mode:
+
+
+
+Questa modalità mostra tutti i modelli disponibili con i relativi metadati. Usa i filtri per affinare la selezione oppure cerca un modello per nome. Quando selezioni un modello, viene visualizzata una scheda del modello.
+
+La scheda del modello offre informazioni dettagliate, inclusi i tipi di input dei dati, i costi potenziali e le metriche di performance rilevanti.
+
+Qui puoi anche avviare il deployment o controllare lo stato di un modello già distribuito.
+Nota
+Per test rapidi, usa il modello nella Chat o nel Prompt Editor.
+Leaderboard Mode:
+
+
+
+
+Questa modalità mostra i punteggi dei modelli su una gamma di benchmark. Puoi applicare filtri per restringere le opzioni, cercare per nome oppure riordinare l’elenco in base a benchmark specifici.
+
+
+
+Hai anche la possibilità di confrontare la context window e i costi associati tra più modelli e selezionare il modello migliore per il tuo use case. Ti basta passare con il mouse sopra ciascun benchmark o parametro per comprenderne il significato e prendere una decisione informata. Una volta selezionato un modello, visualizzerai la stessa scheda modello della modalità Catalog.
+Chart Mode:
+
+Questa modalità fornisce un confronto visivo tra due benchmark o parametri qualsiasi.
+
+
+Per esempio, puoi scegliere context window e costo degli output token e selezionare un modello con la context window più ampia e il costo più basso per output token. Puoi vedere nel dettaglio la scheda del modello e selezionare il modello ottimale per il tuo use case. Puoi anche fare zoom out su un grafico per un’analisi migliore. Questa è una delle molte funzionalità di valore del generative AI hub per aiutarti a ottimizzare le tue applicazioni LLM e risolvere problemi di business su larga scala.
+Per maggiori informazioni, visita il SAP AI Launchpad Help Portal - Model Library.
+Esempio di caso d’uso: immagina di aver bisogno di un LLM per riassumere lunghi report interni aziendali. Nella Model Library puoi confrontare diversi modelli in base alla loro "context window" (quanta parte di testo possono leggere in una sola volta) e al "costo per output token". Questo ti aiuta a identificare rapidamente un modello che possa gestire documenti di grandi dimensioni in modo efficiente e conveniente, assicurando che la tua soluzione sia sia efficiente sia compatibile con il budget.
+Interfaccia Chat
+
+
+
+L’interfaccia chat funge da piattaforma conversazionale per interagire con i modelli, migliorando l’esperienza utente attraverso interazioni personalizzate. Puoi interagire con i modelli in modo conversazionale, mantenendo nel contesto della sessione i messaggi precedenti. Questa funzionalità consente agli sviluppatori di prototipare e costruire applicazioni che possano scalare in modo efficiente.
+Puoi selezionare qualsiasi modello disponibile usando l’icona a ingranaggio Configure chat settings.
+
+
+
+Usa l’opzione di selezione per aprire la Model Library e scegliere il modello appropriato per il tuo caso.
+Puoi anche aggiornare i parametri disponibili per ciascun modello.
+
+
+Puoi anche aggiornare la cronologia del contesto per avere un contesto più ampio nella conversazione in chat e usare funzionalità avanzate come i ruoli dei messaggi e le variabili per adattare la conversazione alle esigenze del tuo business.
+
+
+
+
+Puoi scaricare la tua chat selezionando l’icona Download. I dati testuali verranno salvati localmente in formato JSON; tieni presente che le immagini sono escluse dai download.
+Per copiare i dati testuali da un singolo messaggio o risposta della chat, usa l’icona Copy. Le immagini non possono essere copiate.
+Esempio di caso d’uso:
+
+Hai un’idea per un assistente AI che aiuti i team di vendita a rispondere a domande comuni sui prodotti. Puoi usare l’interfaccia Chat per testare rapidamente diversi LLM con domande di esempio ("Quali sono le caratteristiche principali di S/4HANA Cloud?" oppure "Come si confronta il nostro prodotto con quello di un concorrente?"). Questo ti consente di prototipare rapidamente flussi conversazionali e vedere quanto bene i vari modelli comprendano e rispondano prima di costruire un’applicazione completa. Questo è un esempio di interazione human-to-AI per interazione conversazionale diretta e test.
+Grounding Management
+L’interfaccia di grounding management viene utilizzata per gestire il ciclo di vita delle pipeline dati. Queste pipeline dati vengono utilizzate per fornire più contesto agli LLM usando documenti archiviati in SharePoint o in cloud storage come S3.
+Per maggiori informazioni sulle tecniche di grounding, visita il corso Using Advanced AI Techniques with SAP’s Generative AI Hub.
+Prompt Editor
+
+
+
+Il prompt editor fornisce un ambiente completo per creare prompt, selezionare modelli, salvare prompt e configurare parametri.
+Funzionalità principali:
+
+
+
+Message Blocks: questa è un’area dedicata alla scrittura di prompt per i ruoli System, Assistant e User. Puoi aggiungere più blocchi per più ruoli in una versione.
+
+
+
+Definizione delle variabili: puoi aggiungere variabili ai tuoi prompt per renderli flessibili e personalizzabili in varie situazioni. Puoi riutilizzare un prompt per il tuo use case usando valori predefiniti o valori correnti. Usando l’SDK, le variabili ti permettono di inserire informazioni a runtime, sia tramite interfacce utente sia tramite workflow di sistema.
+Selezione del modello: puoi selezionare tra vari modelli disponibili nel generative AI hub e modificarne i parametri direttamente all’interno dell’editor per ottenere i migliori risultati, adattati ai tuoi use case specifici.
+
+
+Metadati: puoi aggiungere metadati organizzativi, come tag e note, per categorizzare e gestire i tuoi prompt in modo efficace.
+
+
+
+
+
+Salvataggio del prompt e gestione delle versioni: il Prompt Editor ti consente di salvare i prompt e persino assegnare un nome alla raccolta per organizzarli. Questo garantisce tracciabilità e consente un miglioramento iterativo.
+
+
+
+Risposta: puoi vedere la risposta e salvare i risultati. Puoi continuare a modificare il prompt nella stessa finestra e salvare più versioni per riferimenti futuri.
+Esempio di caso d’uso: il tuo business ha bisogno di generare email marketing personalizzate per diversi segmenti di clienti. Usando il Prompt Editor, puoi creare un prompt principale con variabili per nome cliente, interessi di prodotto e offerte promozionali. Puoi testare e salvare più versioni di questo prompt, ognuna pensata per un segmento diverso, assicurando che l’LLM generi in modo coerente email mirate e di alta qualità. Questo mostra come il generative AI hub supporti interazioni humans to software via AI.
+Questa interfaccia è il punto di riferimento per creare, gestire e recuperare prompt per la prototipazione e la gestione del ciclo di vita dei prompt.
+Questa interfaccia nell’AI hub supporta anche interazioni human-to-AI e software-to-AI. Puoi usare prompt diretti oppure fornire report generati dal software per ulteriori analisi.
+Prompt Management
+Una volta salvato un prompt, puoi accedervi e riutilizzarlo in Prompt Management.
+
+
+
+
+
+Puoi vedere tutte le versioni e i modelli utilizzati nel prompt.
+
+
+
+
+Puoi accedere a tutte le versioni e ai relativi dettagli e selezionare una versione specifica per aprirla nel Prompt Editor.
+Esempio di caso d’uso: è stato sviluppato un prompt efficace per estrarre dati chiave dalle fatture per l’elaborazione automatizzata. In Prompt Management, questo prompt validato può essere facilmente trovato, la sua cronologia può essere esaminata e poi può essere riutilizzato da altri team di sviluppo in progetti diversi. Questo garantisce coerenza, fa risparmiare tempo di sviluppo ed evita la duplicazione degli sforzi.
+Orchestration
+Questa interfaccia è progettata per creare e testare workflow di orchestrazione. Consente di progettare sequenze sofisticate di operazioni che coinvolgono gli LLM, in cui i prompt possono essere popolati dinamicamente con vari dati durante l’inferenza per eseguire logiche di business complesse. La prossima unità fornirà dettagli più approfonditi su questa potente funzionalità.
+La prossima unità fornirà maggiori dettagli sull’orchestration.
+Riepilogo della lezione
+Ora hai effettuato un tour guidato dell’interfaccia del generative AI hub all’interno di SAP AI Launchpad. Hai scoperto i suoi componenti principali, inclusi la Model Library per la selezione dei modelli, l’interfaccia Chat per la prototipazione interattiva, il Grounding Management per l’integrazione dei dati, il Prompt Editor per creare e gestire i prompt e l’interfaccia Orchestration per costruire workflow complessi. Questa comprensione completa dell’interfaccia ti consente di sfruttare in modo efficiente la potenza degli LLM, gestirne il ciclo di vita e costruire applicazioni di Generative AI sicure, affidabili e ad alte prestazioni per generare valore di business all’interno dell’ecosistema SAP.
+
+Discovering the Orchestration Service
+Scoprire il servizio di Orchestration
+Il generative AI hub fornisce accesso a un’ampia gamma di LLM, offrendo funzionalità come la selezione dei modelli e la gestione dei prompt tramite SAP AI Launchpad. Ora, mentre ti prepari a costruire applicazioni AI più sofisticate e robuste, avrai workflow che necessitano di integrazione per più attività come il filtraggio dei dati o l’anonimizzazione dei dati, ecc.
+È qui che il servizio di Orchestration nel generative AI hub diventa indispensabile. Eleva le tue capacità di AI generativa oltre le singole interazioni con gli LLM, consentendoti di progettare, gestire ed eseguire workflow AI complessi. Questa lezione introdurrà questo potente servizio, chiarendone lo scopo, le funzionalità essenziali e come garantisce che le tue soluzioni AI non siano solo intelligenti, ma anche conformi, efficienti e scalabili all’interno dell’impresa.
+
+
+
+
+L’Orchestration Service è un servizio gestito all’interno di SAP AI Core che fornisce accesso unificato, controllo ed esecuzione dei modelli di AI generativa. In questo contesto, orchestration si riferisce alla gestione e al coordinamento sistematici di più modelli AI, servizi e flussi di dati per raggiungere un obiettivo di business unificato. Funziona come un coordinatore centrale, gestendo più modelli e servizi AI per completare attività complesse.
+L’Orchestration Service semplifica l’integrazione e la gestione di vari modelli AI, consentendo alle aziende di utilizzare in modo efficiente funzionalità AI avanzate senza modificare il codice applicativo ogni volta che modelli o versioni vengono aggiornati.
+L’orchestration è essenziale per l’AI enterprise
+L’Orchestration Service affronta diverse sfide critiche intrinseche alla costruzione di applicazioni AI pronte per la produzione:
+Integrazione senza soluzione di continuità e indipendenza dal provider: in un panorama AI in rapida evoluzione, potrebbe essere necessario utilizzare LLM diversi di vari provider per ragioni di specializzazione del compito, prestazioni o costi. L’Orchestration Service fornisce un’API armonizzata che consente alle tue applicazioni di interagire con diversi foundation model senza essere strettamente accoppiate a un provider specifico. Questo significa che puoi cambiare o confrontare i modelli facilmente senza alterare la logica principale della tua applicazione.
+Controllo e conformità migliorati: le soluzioni enterprise richiedono una rigorosa aderenza agli standard, alle normative sulla privacy e alle linee guida etiche. L’Orchestration Service offre meccanismi integrati per garantire la conformità agli standard SAP e fornisce un controllo centralizzato sui tuoi workflow AI. Per esempio, fornisce funzionalità come il masking dei dati e l’anonimizzazione dei dati per garantire la privacy dei dati. Questo assicura che le operazioni AI siano coerenti e affidabili nelle soluzioni SAP.
+Maggiore efficienza e scalabilità: problemi di business complessi spesso richiedono più di una singola chiamata a un LLM. Richiedono un workflow coeso in cui l’output di un modulo può servire automaticamente come input per il successivo, semplificando i processi e automatizzando attività multi-step. Inoltre, supporta il deployment di questi workflow di orchestration, fornendo la flessibilità e la scalabilità necessarie per casi d’uso enterprise ad alto volume.
+Espandibilità e adattabilità: la natura dinamica del mercato AI fa sì che emergano costantemente nuove capacità. L’orchestration offre un’espandibilità intrinseca, consentendoti di aggiungere facilmente nuove funzionalità come content filtering, data masking, grounding e traduzione secondo necessità, garantendo che le tue soluzioni AI possano adattarsi in modo efficiente ai requisiti tecnici e commerciali in evoluzione.
+Caratteristiche chiave dell’Orchestration Service
+L’Orchestration Service fornisce una suite di potenti moduli che possono essere concatenati tra loro. Imparerai che, mentre la sequenza di questi moduli è strutturata per imporre un’elaborazione logica e la sicurezza, la configurazione di ciascun modulo offre un’ampia flessibilità per casi d’uso diversi. Questi includono:
+Grounding: L’Orchestration Service facilita l’integrazione di fonti di dati esterne, specifiche di dominio o in tempo reale (come i tuoi sistemi SAP) per migliorare la rilevanza contestuale e l’accuratezza fattuale degli output dei modelli AI. Questo è un meccanismo critico per combattere le allucinazioni e garantire l’affidabilità.
+Templating: Questa funzionalità ti consente di creare prompt con segnaposto. Questi segnaposto vengono popolati dinamicamente con dati o contesto in tempo reale durante l’inferenza, rendendo i tuoi prompt flessibili e riutilizzabili in vari scenari.
+Content Filtering: Per mantenere conformità e sicurezza, il servizio può limitare il tipo di contenuto inviato ai modelli di AI generativa e ricevuto da essi. Questo aiuta a prevenire la generazione o l’elaborazione di informazioni inappropriate o sensibili.
+Data Masking: Supporta l’anonimizzazione o la pseudonimizzazione dei dati sensibili prima che vengano elaborati dai modelli di AI generativa. In modo cruciale, offre anche la possibilità di rimuovere il mascheramento dei dati nelle risposte quando viene utilizzata la pseudonimizzazione, garantendo la privacy dei dati pur mantenendone l’utilità.
+Translation: Per le imprese globali, il servizio consente la traduzione dei dati di input e output direttamente all’interno del workflow di orchestration, supportando casi d’uso multilingue e abbattendo le barriere linguistiche.
+Prerequisiti per utilizzare l’Orchestration Service
+Per iniziare a sfruttare l’Orchestration Service, devono essere presenti alcuni elementi fondamentali:
+Account SAP BTP: Hai bisogno di un account SAP BTP attivo come piattaforma sottostante.
+Istanza SAP AI Core: Un’istanza di SAP AI Core deve essere configurata all’interno del tuo account BTP, poiché l’Orchestration Service viene eseguito su questa infrastruttura.
+Piano di servizio SAP AI Core esteso: In genere è richiesto un piano di servizio esteso per SAP AI Core, poiché le funzionalità del generative AI hub, inclusa l’orchestration, di solito non sono disponibili nei livelli free o standard.
+Deployment di Orchestration: Assicurati che almeno un deployment di orchestration sia creato o utilizzato all’interno di un resource group, fornendo la definizione eseguibile del tuo workflow AI. Un resource group avrà un deployment predefinito. Puoi creare e utilizzare il tuo deployment per personalizzare i modelli disponibili.
+Uso dell’SDK
+SAP Cloud SDK for AI offre un modo semplice per iniziare a utilizzare l’Orchestration Service per attività basate su AI. Configurando un template e collegandolo a un LLM come GPT-5 o Gemini 2.5 Pro, gli utenti possono automatizzare processi come la traduzione o la generazione di contenuti con uno sforzo minimo. L’SDK gestisce la logica di orchestration, consentendo agli utenti di definire gli input, configurare il comportamento del modello e recuperare i risultati, il tutto attraverso un’interfaccia pulita e semplice.
+Questa configurazione rende facile costruire workflow AI scalabili e riutilizzabili. Con solo poche righe di codice, gli utenti possono collegarsi all’endpoint di orchestration, eseguire attività utilizzando template predefiniti e ottenere output coerenti adattati alle loro esigenze. È un punto di partenza pratico per integrare l’AI generativa nelle operazioni quotidiane.
+Riepilogo della lezione
+Ora ti è stato introdotto l’Orchestration Service in SAP AI Core, riconoscendone il ruolo fondamentale nella costruzione di applicazioni di Generative AI complesse e di livello enterprise. Comprendi il suo scopo nell’unificare l’accesso e il controllo su LLM diversi, e la sua importanza nel garantire conformità, efficienza e scalabilità. Hai anche appreso le sue funzionalità chiave come templating, content filtering, data masking, grounding e translation, che ti permettono di creare workflow AI robusti e affidabili. Questa base prepara il terreno per esplorare ulteriormente le sue capacità e progettare soluzioni AI sofisticate all’interno dell’ecosistema SAP.
+
+Exploring Use Cases for the Orchestration Service
+Esplorare i casi d’uso dell’Orchestration Service
+Questa lezione passa dalla teoria alla pratica. Esploreremo alcuni workflow di orchestration, dimostrando come la sua specifica sequenza di passaggi trasformi un potente LLM in una risorsa enterprise davvero affidabile, conforme e integrata. Esplorerai come questi servizi lavorano insieme in una pipeline strutturata ma altamente adattabile per fornire soluzioni AI robuste.
+Workflow di Orchestration
+L’Orchestration Service è più efficace quando le sue funzionalità lavorano insieme in un ordine specifico. Una singola chiamata API può attivare un processo sofisticato e multi-step che prepara i dati per l’LLM e protegge l’output. Il workflow standard è strutturato come segue:
+
+
+Input dell’utente: la query o i dati iniziali, che in genere provengono da un utente finale o da un’applicazione a monte.
+Grounding: in base all’input dell’utente, il sistema cerca e recupera informazioni rilevanti, fattuali e aggiornate da repository di dati aziendali designati. Esempi di questi repository possono essere SAP Help Portal, documentazione interna, dati anagrafici, ecc. Questo garantisce che la risposta dell’LLM sia basata sui fatti.
+Templating: i dati recuperati tramite grounding, l’input originale dell’utente e istruzioni di sistema predefinite, che possono includere la persona dell’LLM e le regole per la generazione della risposta, vengono combinati in un prompt completo utilizzando un template preconfigurato.
+Input Masking: questo passaggio cruciale analizza il prompt generato dal template alla ricerca di Personally Identifiable Information (PII) o di altri dati sensibili (ad esempio email, nomi, indirizzi, numeri di telefono) e li pseudonimizza. Questo garantisce che i dati sensibili non vengano esposti direttamente all’LLM.
+Input Filtering: il prompt mascherato viene quindi analizzato da un servizio di content safety (ad esempio, Azure Content Safety) per rilevare eventuali contenuti dannosi, tossici o inappropriati prima di essere inviato all’LLM.
+Input Translation: se l’LLM principale elabora in una lingua diversa da quella dell’input dell’utente, l’intero prompt filtrato e mascherato viene tradotto nella lingua operativa dell’LLM, per esempio dal tedesco all’inglese.
+LLM Processing: il prompt accuratamente preparato, sicuro, mascherato, filtrato e tradotto viene inviato all’LLM selezionato, che elabora questo input e genera la sua risposta (tipicamente nella sua lingua operativa, come l’inglese).
+Output Filtering: la risposta generata dall’LLM viene analizzata da un servizio di content safety per rilevare eventuali contenuti dannosi, tossici o inappropriati prima di essere restituita all’utente o a un’applicazione a valle.
+Output Translation: se l’input originale dell’utente era in una lingua diversa, la risposta finale dell’LLM, sicura, viene tradotta nuovamente nella lingua nativa dell’utente, per esempio dall’inglese al tedesco.
+Sebbene l’ordine dei moduli di orchestration sia predeterminato per garantire sicurezza robusta, integrità dei dati e conformità, la configurazione e l’attivazione di ciascun modulo sono altamente flessibili e adattate al tuo caso d’uso specifico. Questo significa che controlli se un modulo è attivo, come si comporta e con quali parametri, consentendo al workflow di essere sia affidabile sia adattabile.
+Per esempio, potresti configurare un input filtering rigoroso ma un output filtering meno restrittivo, oppure specificare diverse entità PII per il masking in base ai dati in fase di elaborazione. Questo equilibrio tra una struttura fissa e una configurazione dinamica è la chiave della potenza del servizio.
+Use Case 1: risposta automatizzata del supporto tecnico
+In questo caso, osserverai un esempio elaborato di un workflow personalizzato per un’esigenza specifica.
+Il problema di business: un cliente invia un ticket di supporto tecnico in tedesco, chiedendo aiuto per configurare le notifiche in SAP Signavio Process Manager e includendo il proprio indirizzo email. Il sistema di supporto deve fornire una risposta accurata, allineata alle policy, proteggere i dati sensibili del cliente e gestire senza problemi la barriera linguistica. Se non è possibile fornire automaticamente una risposta completa, dovrebbe riassumere il problema per un operatore umano.
+Il workflow di orchestration in azione: il sistema di supporto riceve un’email, che attiva questo workflow con il messaggio in tedesco del cliente.
+Input dell’utente: il problema di supporto in tedesco: "Betreff: Unterstützung benötigt. Nachricht: Hallo, ich benötige Unterstützung mit SAP Signavio. Insbesondere möchte ich Benachrichtigungen im SAP Signavio Process Manager konfigurieren. Bitte kontaktieren Sie mich mit unter Jane.Janeson@gmx.net."
+Grounding: il sistema utilizza parole chiave dall’input utente in tedesco come "SAP Signavio Process Manager", "Benachrichtigungen", per interrogare la documentazione ufficiale help.sap.com. Gli articoli rilevanti sulla configurazione delle notifiche vengono recuperati come contesto per il problema o contesto del problema.
+Templating: viene popolato un prompt template predefinito. Include un’istruzione di sistema: "You are a helpful support assistant. First, check if the provided context answers the issue. If yes, provide an email answer based only on the context. If no, summarize the issue (sentiment, key theme, contact) for a human support team." Il template incorpora anche il problema di supporto originale in tedesco e il contesto di grounding recuperato in inglese (o in lingua mista).
+Input Masking: il modulo di masking identifica "Jane.Janeson@gmx.net" all’interno del prompt generato dal template e lo pseudonimizza (ad esempio, sostituendolo con [profile-email]).
+Input Filtering: il modulo di filtering analizza questo prompt mascherato per rilevare eventuali contenuti dannosi o inappropriati che potrebbero essere presenti nel feedback grezzo; questo filtering può essere configurato come ‘relaxed’ per ridurne la rigidità e consentire una gamma più ampia di input. Quando è rilassato, il sistema ha una tolleranza più elevata per contenuti che altrimenti potrebbero essere segnalati, spesso per evitare di bloccare termini legittimi specifici del business.
+Input Translation: questo modulo traduce il testo tedesco in inglese per una migliore elaborazione da parte dell’LLM.
+LLM Processing: l’LLM (ad esempio, gpt-5) riceve il prompt in inglese completamente preparato, sicuro e mascherato. Analizza il feedback rispetto alle policy HR contestualizzate e genera un riepilogo e un’analisi tematica in inglese.
+Output Filtering: il modulo filtering.output analizza il riepilogo in inglese generato dall’LLM per assicurarsi che non contenga linguaggio tossico, bias o suggerimenti inappropriati.
+Output Translation: l’output in inglese viene tradotto nuovamente in tedesco per la fruizione da parte dell’utente.
+Valore di business fornito:
+Anonimato e conformità garantiti: i dati PII sensibili vengono mascherati e il contenuto viene filtrato, in allineamento con le policy HR sulla privacy dei dati.
+Generazione rapida di insight: identifica rapidamente trend e problemi da grandi volumi di feedback, consentendo una risposta più veloce da parte dell’HR.
+Analisi contestualizzata: l’analisi dell’LLM è informata dalle reali policy aziendali, rendendola rilevante e utilizzabile.
+Traduzione: l’input per l’LLM e l’output dall’LLM vengono tradotti per garantire la migliore esperienza utente.
+Efficienza: automatizza un processo di revisione ad alta intensità di lavoro, consentendo ai professionisti HR di concentrarsi su iniziative strategiche.
+Ottimizzazione dei costi: omettendo passaggi di traduzione non necessari, il workflow riduce il tempo di elaborazione e i costi associati.
+Use Case 2: analisi interna dei feedback HR
+In questo caso, vedrai come un workflow di orchestration può essere creato senza alcuni moduli opzionali. Questo è necessario per semplificare workflow complessi e adattarli a specifiche esigenze di business.
+Il problema di business: un dipartimento interno di Human Resources raccoglie periodicamente feedback dei dipendenti tramite moduli di survey. Questi moduli vengono tipicamente inviati in inglese. Il team HR deve analizzare i feedback per identificare temi comuni, sentiment e possibili violazioni delle policy, ma deve garantire rigorosamente l’anonimato dei dipendenti e filtrare eventuali contenuti inappropriati. Il riepilogo finale e l’analisi devono essere in inglese per la reportistica interna.
+Il workflow di orchestration in azione: un analista HR carica un batch di moduli di feedback in inglese, attivando il workflow.
+Input dell’utente: moduli di feedback dei dipendenti.
+Grounding: il sistema utilizza parole chiave dai feedback (ad esempio, "benefits," "work-life balance") per cercare e recuperare policy HR aziendali rilevanti e documenti interni di best practice dalla knowledge base HR. Questo fornisce un contesto cruciale per l’analisi dell’LLM.
+Templating: viene popolato un prompt template predefinito. Include un’istruzione di sistema: "You are an HR analyst. Summarize the key themes, sentiment, and actionable insights from the employee feedback. Ensure anonymity and highlight any potential policy violations (based on the provided HR policies). Make sure the output is concise and objective." Il template integra il feedback dei dipendenti e le policy HR recuperate.
+Input Masking: il modulo di masking analizza il prompt generato dal template alla ricerca di eventuali informazioni identificative (ad esempio, nomi dei dipendenti, ID, nomi specifici di reparti se considerati sensibili in questo contesto) che potrebbero essere state incluse involontariamente nei feedback e le pseudonimizza.
+Input Filtering: il modulo di filtering analizza questo prompt mascherato per rilevare eventuali contenuti dannosi o inappropriati che potrebbero essere presenti nel feedback grezzo; questo filtering può essere configurato come ‘relaxed’ per ridurne la rigidità e consentire una gamma più ampia di input. Quando è rilassato, il sistema ha una tolleranza più elevata per contenuti che altrimenti potrebbero essere segnalati, spesso per evitare di bloccare termini legittimi specifici del business.
+Input Translation: (questo modulo non è configurato oppure viene di fatto saltato per questo caso d’uso). Poiché l’input dell’utente è già in inglese e l’LLM elabora in inglese, la traduzione non è necessaria.
+LLM Processing: l’LLM (ad esempio, gpt-5) riceve il prompt in inglese completamente preparato, sicuro e mascherato. Analizza il feedback rispetto alle policy HR contestualizzate e genera un riepilogo e un’analisi tematica in inglese.
+Output Filtering: il modulo filtering.output analizza il riepilogo in inglese generato dall’LLM per assicurarsi che non contenga linguaggio tossico, bias o suggerimenti inappropriati.
+Output Translation: (questo modulo non è configurato oppure viene di fatto saltato per questo caso d’uso). Poiché l’output desiderato è in inglese, non è necessaria alcuna traduzione verso un’altra lingua.
+Valore di business fornito:
+Anonimato e conformità garantiti: i dati PII sensibili vengono mascherati e il contenuto viene filtrato, in allineamento con le policy HR sulla privacy dei dati.
+Generazione rapida di insight: questo processo identifica rapidamente trend e problemi da grandi volumi di feedback, consentendo una risposta HR più veloce.
+Analisi contestualizzata: l’analisi dell’LLM è informata dalle reali policy aziendali, rendendola rilevante e utilizzabile.
+Efficienza: automatizza un processo di revisione ad alta intensità di lavoro, consentendo ai professionisti HR di concentrarsi su iniziative strategiche.
+Ottimizzazione dei costi: omettendo passaggi di traduzione non necessari, il workflow riduce il tempo di elaborazione e i costi associati.
+Progettare e distribuire workflow di Orchestration
+Per gli sviluppatori, è importante comprendere che questi workflow complessi vengono definiti ed eseguiti in modo efficiente.
+API unificata e SDK: gli sviluppatori utilizzano SAP Cloud SDK for AI per definire un orchestration template, che è un file JSON che specifica la sequenza dei servizi. Questo approccio basato su template è fondamentale per bilanciare la sequenza logica fissa del workflow con le configurazioni dinamiche e specifiche del caso d’uso, consentendo agli sviluppatori di definire con precisione come ciascun passaggio opera per i loro requisiti unici.
+Single API Call: una volta che il template è stato distribuito, l’intero workflow multi-step può essere eseguito con una singola chiamata API unificata. L’applicazione invia semplicemente la query iniziale all’endpoint dell’Orchestration Service, che gestisce internamente l’intera catena di eventi. Questo astrae la complessità di chiamare più servizi diversi e di gestire i dati tra di essi.
+Questo approccio semplifica drasticamente lo sviluppo, garantisce coerenza e consente un deployment e una modifica rapidi di sofisticati processi di business guidati dall’AI.
+Riepilogo della lezione
+Ora hai visto il valore tangibile dell’Orchestration Service attraverso esempi pratici e reali che seguono il workflow ufficiale SAP. Comprendi che iniziare dal Grounding è fondamentale per l’accuratezza di livello enterprise e che i passaggi di post-processing come Content Filtering e Data Masking sono essenziali per la sicurezza e la conformità.
+Questa struttura intrinseca fornisce affidabilità e prevedibilità di livello enterprise, mentre la configurazione all’interno di ciascun modulo garantisce che il workflow possa essere adattato con precisione a diversi problemi di business. Sequenziando questi servizi, puoi trasformare LLM general purpose in strumenti di business specializzati, guidati dai dati e altamente sicuri, consentendoti di costruire soluzioni AI sofisticate e affidabili.
