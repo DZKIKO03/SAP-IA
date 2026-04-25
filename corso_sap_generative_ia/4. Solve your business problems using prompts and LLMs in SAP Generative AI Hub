@@ -1,0 +1,2367 @@
+Getting Started with Generative AI Hub
+
+La AI Foundation di SAP fornisce il sistema operativo per l’AI di livello enterprise, con il generative AI hub come suo componente principale per l’accesso ai Large Language Models (LLMs). Il generative AI hub offre accesso a un’ampia gamma di modelli e la capacità di orchestrare i tuoi workflow AI in modo sicuro e affidabile.
+Questa lezione ti guiderà attraverso i passaggi fondamentali necessari per ottenere accesso al generative AI hub e distribuire LLM per i tuoi casi d’uso specifici. Imparerai come configurare il tuo ambiente, gestire i resource group, distribuire l’Orchestration Service (e, facoltativamente, i singoli LLM), e come limitare l’uso dei modelli e gestire strategicamente gli aggiornamenti dei modelli. Padroneggiare queste procedure di accesso e distribuzione è essenziale per sbloccare le capacità pratiche dell’AI generativa all’interno del tuo landscape SAP e gettare le basi per costruire applicazioni AI enterprise robuste.
+Suggerimento
+Questo corso è una componente del learning journey Solving Business Problems using SAP's Generative AI Hub. Include Hands-on Practice per risolvere i tuoi problemi di business usando prompt e LLMs nel Generative AI Hub di SAP, che fornisce accesso a un sistema SAP AI Launchpad preconfigurato. Questo ambiente ti permette di completare gli esercizi del corso e di prepararti per la certificazione.
+Tieni presente che questo sistema è destinato esclusivamente alla pratica. Per costruire soluzioni produttive di AI generativa, segui i passaggi specifici di questa lezione richiesti per ottenere l’accesso ufficiale al generative AI hub.
+Ottenere l’accesso al Generative AI Hub
+Per accedere al generative AI hub, inizia configurando il tuo ambiente SAP Business Technology Platform (BTP) e attivando i servizi AI richiesti, garantendo una base sicura ed efficace per interagire con il generative AI hub.
+Configura il tuo Global Account SAP BTP: il primo prerequisito è avere accesso a un global account SAP BTP. Questo funge da punto centrale di ingresso e gestione per tutti i servizi su SAP BTP. È il contenitore amministrativo sotto cui risiederanno le tue capacità AI.
+Per accedere al global account del tuo SAP BTP Enterprise Account ed effettuare le configurazioni iniziali, fai riferimento a Setup your Global Account of your SAP BTP Enterprise Account.
+Provisioning di SAP AI Core dal SAP BTP Cockpit: il generative AI hub opera all’interno di SAP AI Core, che è un servizio che attivi direttamente dal tuo SAP BTP cockpit. Questo processo di provisioning genera una service key. Questa service key contiene gli URL e le credenziali necessari che autenticano e autorizzano il tuo accesso alla tua istanza dedicata di SAP AI Core.
+Consulta la seguente documentazione per questo processo: Initial setup for SAP AI core.
+Per configurare il generative AI hub in SAP AI Core e iniziare a consumare LLMs, fai riferimento a Set up Generative AI Hub in SAP AI Core.
+Connettiti agli strumenti di SAP AI Core: una volta effettuato il provisioning di SAP AI Core, devi stabilire una connessione dai tuoi strumenti preferiti. Il generative AI hub può essere accessibile principalmente tramite SAP AI Launchpad, un’interfaccia utente per la gestione e il monitoraggio delle tue risorse AI. Per gli sviluppatori, è vitale anche l’accesso programmatico, che consente di connettersi usando strumenti come Bruno per il testing delle API o SDK Python per integrare direttamente le capacità AI nelle tue applicazioni.
+Per creare una connessione tra SAP AI Core e lo strumento di tua scelta (SAP AI Launchpad, client API come Postman, SDK per linguaggi come Python), fai riferimento a Set Up Tools to Connect With and Operate SAP AI Core.
+Proteggere l’accesso tramite ruoli e autorizzazioni: l’accesso al generative AI hub tramite SAP AI Launchpad è gestito tramite ruoli e autorizzazioni specifici. Il generative AI hub è disponibile in SAP AI Core esclusivamente con l’extended service plan.
+Per utilizzare il generative AI hub tramite SAP AI Launchpad, agli utenti deve essere assegnato uno dei seguenti ruoli oppure una role collection che includa uno di questi ruoli:
+genai_manager
+prompt_manager
+genai_experimenter
+prompt_experimenter
+Nota
+Gli utenti che possiedono solo i ruoli genai_experimenter o prompt_experimenter non sono autorizzati a salvare prompt in SAP AI Launchpad.
+Per ulteriori dettagli, fai riferimento a Roles and Authorizations.
+Distribuzione dell’orchestrazione
+Una volta ottenuto l’accesso al generative AI hub, il passo successivo è distribuire gli LLM specifici che intendi utilizzare. La distribuzione nel generative AI hub significa istanziare una configurazione LLM specifica per il caso d’uso che le tue applicazioni potranno poi consumare.
+Puoi iniziare con una distribuzione di orchestrazione. Non è necessario distribuire i singoli modelli e la loro configurazione. Puoi usare una singola distribuzione di orchestrazione per configurare e consumare modelli nel generative AI hub.
+Seleziona la sezione Configuration per il tuo resource group.
+
+
+
+
+Compila i Deployment Details, nella sezione Configurations, con i seguenti dati:
+Name: "orchestration"
+Scenario: "orchestration"
+Version: "0.0.1"
+Executable: "orchestration"
+Fai clic su Next.
+
+
+
+Quando richiesto, fai clic su Create Deployment. Continua la configurazione facendo clic su Next fino a quando non ricevi la conferma della distribuzione.
+
+
+Una volta che la distribuzione inizia, prosegui fino alla pagina di stato. Verifica che il Deployment Status cambi in Running (fai riferimento allo screenshot seguente come riferimento).
+
+
+Restrizione dei modelli
+Puoi controllare esplicitamente quali LLM vengono utilizzati per la distribuzione di orchestrazione. Questo è fondamentale per applicare standard interni, conformità e gestione dei costi, garantendo che i modelli approvati siano accessibili per i casi d’uso.
+Per limitare l’accesso ai modelli, includi modelFilterList e modelFilterListType all’interno della configurazione.
+modelFilterList: è un elenco di specifici modelNames e, facoltativamente, modelVersions che vuoi consentire oppure negare. Se modelVersions non è definito per un modelName, vengono considerate tutte le versioni di quel modello.
+modelFilterListType: questo parametro controlla come deve essere interpretato il modelFilterList:
+deny: esclude i modelli e le versioni definite dall’utilizzo all’interno di questa distribuzione di orchestrazione. Qualsiasi LLM presente nel modelFilterList non sarà disponibile.
+allow: consente solo l’utilizzo dei modelli e delle versioni definite nel modelFilterList all’interno di questa distribuzione di orchestrazione. Qualsiasi LLM non presente nel modelFilterList non sarà disponibile.
+Questo meccanismo ti consente di implementare policy interne, ad esempio permettendo solo determinati LLM che sono stati pre-approvati per specifici tipi di dati o caratteristiche di performance.
+Esempio:
+
+
+
+Utilizza il seguente elenco JSON in modelFilterList.
+JSON
+Copy code
+Switch to dark mode
+[{"modelName": "gpt-4.1-nano"},{"modelName": "gpt-4o-mini"},{"modelName": "gemini-2.0-flash-lite"},{"modelName": "mistralai--mistral-small-instruct"}]
+Questa istanza è limitata ai modelli specificati. Poiché non è specificata alcuna versione, verrà utilizzata la versione più recente disponibile dal generative AI hub.
+Questo è un modo potente per applicare policy interne di utilizzo e consentire o limitare temporaneamente modelli che non sono ancora approvati per determinati compiti.
+Distribuire LLM nel Generative AI Hub
+Anche modelli specifici possono essere distribuiti in base alle tue esigenze. Ad esempio, puoi distribuire modelli come cohere--command-a-reasoning, che non è disponibile nella distribuzione di orchestrazione.
+Create a Deployment: questo passaggio consiste nel creare una deployment, cosa che può essere fatta sia programmaticamente tramite API sia tramite l’interfaccia user-friendly di SAP AI Launchpad. Quando crei una deployment, farai riferimento a un executable specifico del provider del modello – per esempio, modelli forniti tramite models from OpenAI (via Azure), GCP Vertex AI, Amazon, Anthropic (via AWS Bedrock) e Meta. Configurerai inoltre parametri essenziali come il nome del modello (ad esempio, gpt-4o, Gemini 2.2 Pro o Claude 3.5 Sonnet) e la sua versione.
+Access the Deployed LLM: una volta completata con successo la deployment, SAP AI Core fornisce un URL univoco e sicuro per ogni deployment. Questo URL agisce come endpoint che le tue applicazioni chiameranno per interagire con l’LLM distribuito. Questa astrazione semplifica il modo in cui le tue applicazioni si connettono e utilizzano questi potenti modelli, indipendentemente dal provider del modello sottostante.
+Aggiornare il tuo modello
+Una volta che i tuoi LLM sono distribuiti, avrai bisogno di una strategia per gestire le nuove versioni dei modelli man mano che diventano disponibili. Questa è una parte cruciale del ciclo di vita degli LLM per le tue applicazioni. In genere scegli una di due strategie principali quando configuri la tua deployment: auto upgrade oppure manual upgrades. Questa decisione influisce su controllo, effort e stabilità dell’applicazione.
+Aggiornamenti automatici del modello (modelVersion: latest)
+Questa strategia dice alla tua deployment di usare sempre la versione supportata più recente di un modello specificato.
+Come funziona: quando configuri la tua configurazione LLM (sia per un workflow di orchestrazione sia per una deployment diretta del modello), imposti il parametro modelVersion su latest. Questo utilizzerà automaticamente la versione più recente del modello specificato che è supportata.
+Vantaggi:
+Less Manual Effort: la tua deployment si aggiorna automaticamente a una versione più recente, dandoti potenzialmente accesso ai miglioramenti del modello senza richiedere il tuo intervento.
+Continuous Updates: ricevi automaticamente le ultime correzioni di bug, i miglioramenti delle performance e le nuove capacità di quel modello.
+Rischi e limitazioni:
+Less Control: la tua applicazione potrebbe improvvisamente iniziare a usare una nuova versione del modello che non hai testato. Questo potrebbe introdurre sottili cambiamenti nel comportamento dell’output o nelle performance.
+Potential for Instability: se la tua applicazione si basa su output LLM altamente coerenti, cambiamenti comportamentali imprevisti da una nuova versione possono causare problemi.
+Same Model Only: questa strategia aggiorna solo le versioni dello stesso modello (per esempio, da una vecchia versione di gpt-4o a una più recente di gpt-4o). Non passa automaticamente a un modello completamente diverso (per esempio, da gpt-4o a gpt-5).
+Aggiornamenti manuali del modello (modello/versione specifici)
+Questa strategia ti dà un controllo preciso su quale versione del modello utilizza la tua deployment.
+Come funziona:: quando crei la tua configurazione di orchestrazione o del modello, specifichi un modelVersion esatto, come "2024-05-13". Quando ti prepari a passare a una versione più recente del modello, sia perché la versione corrente sta per essere ritirata sia perché scegli di effettuare l’upgrade, segui questi passaggi:
+Research: identifica una versione più recente del modello adatta. Puoi usare la SAP Note 3437766, la Discovery API o la Model Library in SAP AI Launchpad per benchmarking e informazioni.
+Usa i seguenti modi per gestire la versione del modello:
+a. Update Configuration: modifica facilmente la tua configurazione alla nuova versione specifica del modello usando la harmonized API nell’orchestrazione.
+b. Apply (if direct deployment): se stai gestendo il tuo endpoint personalizzato per una deployment diretta dell’LLM, puoi quindi fare patch della tua deployment esistente affinché faccia riferimento a questo nuovo configuration ID.
+Vantaggi:
+Full Control: decidi con precisione quale versione del modello usa la tua applicazione e quando effettuare cambiamenti.
+Comprehensive Testing: ti consente di testare in modo completo le nuove versioni del modello in un ambiente controllato prima di distribuirle in produzione.
+Predictable Behavior: essenziale per i sistemi di produzione in cui un comportamento coerente dell’LLM è critico, mitigando i rischi dovuti a cambiamenti imprevisti.
+Rischi - More Manual Effort: devi monitorare attivamente le date di ritiro dei modelli ed eseguire tu stesso i passaggi di upgrade.
+Scegliere la tua strategia: Best Practices
+La strategia di upgrade ideale dipende dalle priorità della tua applicazione:
+Per la maggior parte delle applicazioni di produzione, specialmente quelle sensibili a potenziali cambiamenti comportamentali, specificare un modelVersion fisso (Manual Upgrade) è la best practice raccomandata. Questo fornisce il controllo e la prevedibilità necessari. La maggior parte dei proprietari delle applicazioni preferisce questo approccio per evitare cambiamenti di comportamento imprevisti che possono verificarsi con nuove versioni di LLM. Fissare la versione ti permette di pianificare e testare gli aggiornamenti in modo proattivo.
+Per applicazioni non critiche o esplorative, dove si preferisce minimizzare l’overhead operativo, usare Auto Upgrade (modelVersion: latest) può essere appropriato. Tuttavia, devi sempre essere consapevole che il comportamento potrebbe cambiare con nuove versioni e dovrai comunque gestire manualmente le transizioni se decidi di passare a un modello completamente diverso.
+Riepilogo della lezione
+Hai completato con successo i passaggi fondamentali per iniziare con il generative AI hub. Ora comprendi i prerequisiti per ottenere l’accesso e la procedura step-by-step per distribuire l’Orchestration Service, che fornisce l’endpoint centrale per tutte le tue interazioni orchestrate con LLM. Hai anche imparato come limitare esplicitamente l’accesso ai modelli all’interno delle deployment e le considerazioni per la gestione degli aggiornamenti dei modelli, bilanciando la necessità di controllo con il desiderio di automazione.
+Questa configurazione completa è un prerequisito per sviluppare applicazioni potenti e sicure guidate dall’AI. Ti consente di concentrarti sulla creazione di prompt intelligenti e sulla risoluzione di problemi di business senza preoccuparti della gestione dell’infrastruttura sottostante. Ora sei pronto per iniziare a sfruttare tutta la potenza del generative AI hub.
+
+
+
+Developing Basic Prompts for Common Queries
+
+Una volta che hai effettuato l’accesso al generative AI hub e distribuito il tuo orchestration service, sei pronto a risolvere problemi di business concreti utilizzando il generative AI hub. Una competenza chiave per questa interazione è lo sviluppo di prompt, che consiste nel creare istruzioni chiare ed efficaci per un LLM.
+Questa lezione ti guiderà attraverso un processo iterativo di sviluppo di un prompt di base all’interno di SAP AI Launchpad per affrontare una sfida di business. Ci concentreremo sull’utilizzo dei ruoli system e user per fornire istruzioni e contesto chiari, producendo infine un output strutturato e leggibile dalla macchina. Al termine di questa lezione, sarai in grado di costruire e affinare prompt che producono risultati precisi e utilizzabili, pronti per essere integrati nelle tue applicazioni enterprise.
+Identificazione dello scenario di business
+
+Facility Management
+Il focus di questo learning journey è una Facility Solutions Company, un fornitore leader di servizi completi di facility management, manutenzione e pulizia sia per proprietà residenziali sia commerciali. La loro missione è garantire che gli ambienti rimangano sicuri, efficienti e mantenuti in modo impeccabile. I loro mercati target includono complessi residenziali di lusso, appartamenti, abitazioni private, edifici per uffici, spazi retail, impianti industriali e istituti scolastici.
+Il problema di business:
+La Facility Solutions company riceve ogni giorno migliaia di email dai clienti riguardanti richieste, reclami e altre domande. Mantengono applicazioni interne per gestire queste comunicazioni dei clienti, che richiedono un’elaborazione e una prioritizzazione efficienti per garantire risposte tempestive e accurate.
+Tuttavia, la categorizzazione di queste email attualmente comporta un processo manuale: trasferire i dati dalle email alle applicazioni interne, poi categorizzare e prioritizzare manualmente ogni attività. Questo processo richiede tempo, è soggetto a errori e crea colli di bottiglia nel servizio clienti.
+L’azienda si sta ora rivolgendo al generative AI hub di SAP per automatizzare e semplificare questo processo critico. Nel corso di questo learning journey, forniremo soluzioni passo dopo passo a questo problema.
+Sviluppo di prompt in SAP AI Launchpad
+
+Sviluppare un prompt per risolvere un problema di business è un processo iterativo di ideazione. Si parte da un’idea di base, la si testa, si osserva la risposta dell’LLM e poi si affinano le istruzioni finché l’output non soddisfa le specifiche esigenze di business.
+La best practice nella moderna prompt engineering è l’uso di ruoli conversazionali distinti: system e user. Questi ruoli forniscono chiarezza all’LLM sulla natura di ciascun blocco di testo che riceve:
+Il ruolo system viene utilizzato per impostare le regole generali, la persona e i vincoli per l’LLM. Definisce chi è l’LLM, come deve comportarsi e quali linee guida generali deve seguire durante tutta l’interazione.
+Il ruolo user fornisce la query o l’input specifico per quel determinato turno. È qui che inserisci il contenuto dinamico che l’LLM deve elaborare.
+Iniziamo a sviluppare un prompt per estrarre urgenza e sentiment da una email cliente in arrivo. Puoi iniziare con qualsiasi modello come i modelli Gemini o un LLM open source, come Mistral AI, accessibile tramite il generative AI hub. Gli LLM open source offrono vantaggi come riduzione dei costi, trasparenza e personalizzazione, rendendoli scelte eccellenti per lo sviluppo.
+Passo 1: Sviluppare un prompt di base per urgenza e sentiment
+Inizieremo chiedendo all’LLM di estrarre semplicemente urgenza e sentiment. In questa fase, non imponiamo una formattazione rigida o vincoli sui valori.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un assistente utile. Il tuo compito è analizzare i messaggi dei clienti. Estrai l'urgenza e il sentiment dal messaggio fornito."
+  },
+  {
+      "role": "user" 
+"content": " Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+}
+]
+Quando esegui questo prompt in SAP AI Launchpad, potresti ricevere una risposta lunga e conversazionale. Per esempio: "L’urgenza di questo messaggio è alta. Il sentiment trasmesso è negativo, poiché il cliente sta vivendo un notevole disagio a causa di un malfunzionamento del sistema HVAC."
+Sebbene l’LLM abbia identificato correttamente urgenza e sentiment, questo output verboso non è direttamente utile per un’applicazione che deve elaborare automaticamente questi valori. Dobbiamo affinare il prompt per produrre dati più strutturati.
+Passo 2: Assegnare valori predefiniti a urgenza e sentiment
+La risposta precedente era troppo lunga. Il nostro obiettivo è assegnare valori specifici di urgenza e sentiment che possano essere utilizzati come input per un’applicazione interna. Questo passaggio vincola l’LLM a usare solo etichette predefinite.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti. Il tuo compito è analizzare i messaggi dei clienti ed estrarre urgenza e sentiment. Per 'urgency', classifica il messaggio come uno tra: `low`, `medium`, `high`. Per 'sentiment', classifica il messaggio come uno tra: `positive`, `neutral`, `negative`."
+  },
+    {
+    "role": "user",
+    "content": "Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+Ora, la risposta dell’LLM sarà più vincolata, forse "Urgency: high, Sentiment: negative." Questo è meglio, ma richiede ancora parsing da una stringa in linguaggio naturale.
+Passo 3: Generare output JSON per urgenza e sentiment
+Per rendere l’output leggibile dalla macchina e direttamente utilizzabile dalle tue applicazioni interne, istruirai l’LLM a fornire la sua risposta in formato JSON. JSON offre una soluzione semplice, indipendente dal linguaggio e leggera per uno scambio efficiente dei dati, ampiamente adottata nelle API e nei web service.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti. Il tuo compito è analizzare i messaggi dei clienti ed estrarre attributi specifici. Per 'urgency', classifica il messaggio come uno tra: `low`, `medium`, `high`. Per 'sentiment', classifica il messaggio come uno tra: `positive`, `neutral`, `negative`.
+
+La tua risposta DEVE essere una stringa JSON valida contenente SOLO le chiavi 'urgency' e 'sentiment'."
+  },
+  {
+    "role": "user",
+    "content": "Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+Questo prompt produrrà un output JSON come: {"urgency": "high", "sentiment": "neutral"}. Questo è un miglioramento significativo!
+Passo 4: Garantire il corretto formato JSON
+Anche con istruzioni per JSON, gli LLM possono talvolta includere caratteri estranei come blocchi di codice markdown (json ... ) o spazi bianchi extra, che possono compromettere il parsing automatico. Questo passaggio aggiunge istruzioni esplicite per garantire una stringa JSON pulita e parsabile.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti. Il tuo compito è analizzare i messaggi dei clienti ed estrarre attributi specifici. Per 'urgency', classifica il messaggio come uno tra: `low`, `medium`, `high`. Per 'sentiment', classifica il messaggio come uno tra: `positive`, `neutral`, `negative`.
+
+La tua risposta completa DEVE essere una stringa JSON valida, pronta per essere parsata da un’applicazione. Deve contenere SOLO le chiavi 'urgency' e 'sentiment'. Non includere nessun altro testo, spiegazioni o formattazione come blocchi di codice markdown (ad esempio, ```json). Assicurati che non ci siano nuove righe o spazi bianchi non necessari al di fuori della struttura JSON."
+  },
+  {
+    "role": "user",
+    "content": "Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+
+
+
+Come illustrato nello screenshot, questo prompt fornisce istruzioni chiare per restituire un formato JSON pulito senza virgolette o spazi bianchi extra, rendendolo robusto per il consumo da parte del software.
+Passo 5: Categorie semplici basate sulle funzioni di business
+Oltre a urgenza e sentiment, dobbiamo anche categorizzare i messaggi per esigenze di business. Inizialmente, chiederemo all’LLM di assegnare semplicemente le categorie rilevanti senza fornire un elenco predefinito.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti. Il tuo compito è analizzare i messaggi dei clienti e assegnare al messaggio un elenco di categorie di supporto corrispondenti."
+  },
+  {
+    "role": "user",
+    "content": "Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+
+
+
+Ora, l’LLM assegnerà delle categorie. Tuttavia, queste categorie potrebbero essere in forma libera, potenzialmente sovrapporsi ad altri valori come l’urgenza e non essere allineate con categorie interne predefinite.
+Passo 6: Assegnare valori alle categorie da un elenco predefinito
+Per garantire coerenza e allineamento con l’elaborazione interna dell’azienda, dobbiamo fare in modo che l’LLM selezioni le categorie da un elenco specifico e predefinito. Allineare l’output alle esigenze di business è un passaggio chiave per affrontare in modo efficace un problema di business.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti. Il tuo compito è analizzare i messaggi dei clienti e assegnare un elenco dei tag di categoria di supporto più corrispondenti dal seguente elenco predefinito:
+`facility_management_issues`, `cleaning_services_scheduling`, `general_inquiries`, `specialized_cleaning_services`, `routine_maintenance_requests`, `emergency_repair_services`, `sustainability_and_environmental_practices`, `training_and_support_requests`, `quality_and_safety_concerns`, `customer_feedback_and_complaints`."
+  },
+  {
+    "role": "user",
+    "content": "Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+
+
+Come mostrato nello screenshot, nella versione 6 l’LLM assegnerà ora le categorie rigorosamente dall’elenco fornito, che è ottimizzato per l’elaborazione di business.
+Passo 7: Generare output JSON per i valori delle categorie
+Analogamente al Passo 3, abbiamo bisogno dei valori delle categorie in un output JSON per l’elaborazione programmatica. Ribadiremo anche l’importanza di una formattazione JSON pulita.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti. Il tuo compito è analizzare i messaggi dei clienti ed estrarre attributi specifici. Per 'categories', assegna un elenco dei tag di supporto più corrispondenti dal seguente elenco predefinito:
+`facility_management_issues`, `cleaning_services_scheduling`, `general_inquiries`, `specialized_cleaning_services`, `routine_maintenance_requests`, `emergency_repair_services`, `sustainability_and_environmental_practices`, `training_and_support_requests`, `quality_and_safety_concerns`, `customer_feedback_and_complaints`.
+
+La tua risposta completa DEVE essere una stringa JSON valida, pronta per essere analizzata da un’applicazione. Deve contenere SOLO la chiave 'categories'. Non includere nessun altro testo, spiegazioni o formattazione come blocchi di codice markdown. Assicurati che non ci siano nuove righe o spazi bianchi non necessari al di fuori della struttura JSON."
+  },
+  {
+    "role": "user",
+    "content": "Analizza il seguente messaggio:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+
+
+
+
+Come mostrato nello screenshot, l’LLM fornirà le categorie all’interno di un output JSON pulito, pronto per essere consumato dal software.
+Passo 8: Combinare tutti i passaggi in un prompt consolidato
+Abbiamo adottato un approccio passo dopo passo per arrivare a valori corretti per urgenza, sentiment e categorie in formato JSON. Ora consolidiamo tutte queste istruzioni in un unico prompt robusto. Questo prompt combinato fungerà da versione finale per il nostro sistema automatizzato di categorizzazione delle email.
+Struttura del prompt:
+JSON
+Copy code
+Switch to dark mode
+[
+  {
+    "role": "system",
+    "content": "Sei un analista esperto del servizio clienti per una società di facility management. Il tuo compito è analizzare i messaggi in arrivo dei clienti ed estrarre attributi specifici per l’elaborazione automatizzata.
+
+Per 'urgency', classifica il messaggio come uno tra: `low`, `medium`, `high`.
+Per 'sentiment', classifica il messaggio come uno tra: `positive`, `neutral`, `negative`.
+Per 'categories', assegna un elenco dei tag di supporto più corrispondenti dal seguente elenco predefinito:
+`facility_management_issues`, `cleaning_services_scheduling`, `general_inquiries`, `specialized_cleaning_services`, `routine_maintenance_requests`, `emergency_repair_services`, `sustainability_and_environmental_practices`, `training_and_support_requests`, `quality_and_safety_concerns`, `customer_feedback_and_complaints`.
+
+La tua risposta completa DEVE essere una stringa JSON valida, pronta per essere analizzata da un’applicazione. Deve contenere SOLO le chiavi 'urgency', 'sentiment' e 'categories'. Non includere nessun altro testo, spiegazioni o formattazione come blocchi di codice markdown (ad esempio, ```json). Assicurati che non ci siano nuove righe o spazi bianchi non necessari al di fuori della struttura JSON."
+  },
+  {
+    "role": "user",
+    "content": "Analizza il seguente messaggio del cliente:
+---
+Oggetto: Necessaria urgente riparazione del sistema HVAC
+
+Gentile team di supporto,
+
+Spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e vi scrivo da [Residential Complex Name], dove risiedo da alcuni anni. Ho sempre apprezzato la cura meticolosa e l’attenzione che il vostro team dedica alla manutenzione delle nostre strutture.
+
+Tuttavia, sto attualmente affrontando un problema urgente con il sistema HVAC del mio appartamento. Negli ultimi giorni, il sistema ha avuto malfunzionamenti, causando temperature incoerenti e, a volte, arresti completi. Considerate le attuali condizioni climatiche, la situazione è diventata piuttosto insostenibile e sta influenzando in modo significativo la mia routine quotidiana.
+
+Ho provato a risolvere il problema reimpostando il sistema e controllando le impostazioni del termostato, ma questi tentativi non hanno portato ad alcun miglioramento. La situazione sembra essere oltre il mio controllo e richiede un intervento professionale.
+
+Chiedo cortesemente che venga inviato immediatamente un team di riparazione per affrontare questo problema urgente. L’urgenza della situazione non può essere sottovalutata, poiché sta influenzando non solo il mio comfort ma anche la mia capacità di svolgere efficacemente le attività quotidiane.
+
+Grazie per la vostra pronta attenzione a questa questione. Attendo una vostra rapida risposta e risoluzione.
+
+Cordiali saluti,
+[Sender]
+---
+"
+  }
+]
+
+
+Come illustrato nello screenshot, questo prompt consolidato restituisce l’output come un JSON pulito, per esempio:
+JSON
+Copy code
+Switch to dark mode
+{"urgency": "high", "sentiment": "negative", "categories": ["emergency_repair_services", "routine_maintenance_requests", "facility_management_issues"]}
+Questo output ora assegna in modo coerente urgenza, sentiment e categorie ai messaggi dei clienti in un formato immediatamente elaborabile dal software, soddisfacendo il requisito di business. Hai sviluppato con successo un prompt che va verso una soluzione del problema.
+Riepilogo della lezione
+Hai completato con successo il processo iterativo di sviluppo di prompt di base per query comuni all’interno del generative AI hub in SAP AI Launchpad. Hai visto come definire istruzioni chiare usando i ruoli system e user, fornire opzioni di classificazione specifiche e richiedere esplicitamente un output JSON strutturato siano elementi cruciali per creare risultati leggibili dalla macchina e utilizzabili. Questa competenza fondamentale di prompt engineering ti permette di trasformare comunicazioni di business non strutturate in dati di valore ed elaborabili, abilitando l’automazione e migliorando l’efficienza nelle tue applicazioni enterprise.
+
+
+Managing Prompts with the Prompt Registry and Templates
+
+Hai imparato a sviluppare e perfezionare prompt in SAP AI Launchpad che producono output JSON strutturati per attività come la categorizzazione delle email dei clienti. Tuttavia, man mano che le tue soluzioni di AI generativa crescono, copiare manualmente i prompt o incorporarli direttamente nel codice applicativo diventa inefficiente e difficile da gestire. Devi garantire coerenza, controllo di versione e riusabilità per i tuoi prompt critici su più applicazioni e team di sviluppo.
+È qui che Prompt Registry e Prompt Templates all’interno del generative AI hub diventano particolarmente utili. Questa lezione spiegherà come aiutano a gestire il ciclo di vita dei tuoi prompt. Imparerai come sfruttare queste funzionalità per costruire applicazioni di AI generativa più robuste, scalabili e manutenibili per l’impresa.
+Il Prompt Registry
+Il Prompt Registry è un servizio centrale all’interno del generative AI hub progettato per gestire l’intero ciclo di vita dei tuoi prompt. Pensalo come una libreria sicura e versionata per tutte le tue preziose definizioni di prompt. Invece di incorporare i prompt direttamente nel codice della tua applicazione o affidarti a file di testo ad hoc, il Prompt Registry ti consente di archiviare, scoprire e integrare i tuoi template di prompt in varie applicazioni e workflow di orchestrazione.
+Per la Facility Solutions Company, che ha sviluppato un prompt sofisticato per categorizzare le email dei clienti, il Prompt Registry offre vantaggi chiari:
+Coerenza garantita: garantisce che ogni applicazione e workflow di orchestrazione che utilizza il prompt di categorizzazione delle email impieghi la versione identica e approvata. Questo elimina le discrepanze e fornisce un comportamento e un output AI uniformi in tutti i sistemi aziendali.
+Riusabilità migliorata: consente che il prompt perfezionato di categorizzazione delle email venga distribuito in modo efficiente su diverse applicazioni interne, come dashboard del servizio clienti e strumenti di reporting. Questo evita sforzi di sviluppo ridondanti e copie manuali, facendo risparmiare tempo e risorse significative.
+Controllo di versione robusto: fornisce un tracciamento completo dell’evoluzione del prompt, ad esempio quando vengono aggiunte nuove categorie o perfezionate le istruzioni. Questo consente un facile rollback a versioni precedenti, A/B testing fluido di nuove iterazioni e una traccia di audit trasparente di tutte le modifiche.
+Gestione semplificata: l’integrazione incorporata semplifica la gestione dei template di prompt, rendendo più facile per la tua azienda gestire e aggiornare i prompt su larga scala.
+Il Prompt Registry integra i template di prompt direttamente in SAP AI Core, rendendoli individuabili e utilizzabili in tutto il tuo ambiente di sviluppo e runtime di AI generativa.
+Prompt Templates
+Un prompt template è una struttura predefinita per un prompt LLM che include segnaposto per contenuti dinamici. Questi template ti consentono di creare prompt riutilizzabili per casi d’uso specifici, in cui alcune parti del prompt (come il messaggio reale del cliente o un elenco dinamico di opzioni) verranno compilate successivamente a runtime. Questa separazione tra istruzione e dati dinamici è un principio fondamentale di una buona prompt engineering.
+Componenti chiave della definizione di un prompt template:
+template: definisce la struttura centrale del tuo prompt, inclusi i ruoli system, user e assistant con il loro contenuto. I segnaposto, tipicamente indicati con {{?placeholderName}}, segnano dove verranno inseriti i dati dinamici quando il template viene utilizzato.
+defaults (Opzionale): puoi impostare valori predefiniti per i tuoi segnaposto. Questo è utile per fornire opzioni comuni (come un elenco predefinito di categorie) o valori di fallback se non viene fornito input dinamico.
+additional_fields (Opzionale): è un campo non strutturato che ti consente di memorizzare metadati extra o oggetti di configurazione insieme al tuo prompt. Ad esempio, potresti memorizzare parametri LLM specifici (temperature, max_tokens) da usare con questo template, oppure anche regole di validazione personalizzate.
+Esempio di un Prompt Template:
+Ecco un’illustrazione di una struttura JSON. Questo JSON definisce un template per il nostro compito di categorizzazione delle email, pronto per essere archiviato nel Prompt Registry. Nota come {{?categories_list}} e {{?customer_email}} siano segnaposto per il contenuto che verrà fornito quando il template verrà effettivamente utilizzato.
+JSON
+Copy code
+Switch to dark mode
+{
+"name": "email-categorization-template",
+"version": "0.0.1",
+"scenario": "customer-support",
+"spec": {
+"template": [
+{
+"role": "system",
+"content": "Sei un esperto analista del servizio clienti per un’azienda di facility management. Il tuo compito è analizzare i messaggi in arrivo dei clienti ed estrarre attributi specifici per l’elaborazione automatizzata.
+Per 'urgency', classifica il messaggio come uno tra: low, medium, high.
+Per 'sentiment', classifica il messaggio come uno tra: positive, neutral, negative.
+Per 'categories', assegna un elenco dei tag di supporto più corrispondenti dal seguente elenco predefinito: {{?categories_list}}.
+La tua risposta completa DEVE essere una stringa JSON valida, pronta per essere analizzata da un’applicazione. Deve contenere SOLO le chiavi 'urgency', 'sentiment' e 'categories'. Non includere altro testo, spiegazioni o formattazione come blocchi di codice markdown (ad es., ```json). Assicurati che non ci siano nuove righe o spazi bianchi non necessari al di fuori della struttura JSON."
+},
+{
+"role": "user",
+"content": "Analizza il seguente messaggio del cliente:
+{{?customer_email}}
+---"
+}
+],
+"defaults": {
+"categories_list": "facility_management_issues, cleaning_services_scheduling, general_inquiries, specialized_cleaning_services, routine_maintenance_requests, emergency_repair_services, sustainability_and_environmental_practices, training_and_support_requests, quality_and_safety_concerns, customer_feedback_and_complaints"
+},
+"additional_fields": {
+"modelParams": {
+"temperature": 0.1,
+"max_tokens": 300
+},
+"modelGroup": "chat"
+}
+}
+}
+Interfacce del Prompt Registry
+Il Prompt Registry fornisce due interfacce principali per gestire i tuoi prompt template, ciascuna pensata per diverse fasi del tuo ciclo di vita di sviluppo:
+Imperative API (Per iterazione e perfezionamento in fase di design)
+Logica e valore: questa API è ideale quando stai progettando e perfezionando attivamente un prompt. Fornisce funzionalità CRUD complete (Create, Read, Update, Delete), consentendo agli sviluppatori di iterare rapidamente sui prompt template. Mentre sperimenti con formulazioni o istruzioni diverse (come nel processo iterativo dello scenario facility solutions per il prompt di categorizzazione delle email), puoi creare rapidamente nuove versioni, apportare modifiche e salvarle. Il sistema tiene anche traccia di tutte queste iterazioni, fornendoti una cronologia delle modifiche. Questo rapido ciclo di feedback è prezioso durante le fasi iniziali di sviluppo e tuning.
+Azione chiave: definisci un prompt template (come l’esempio JSON sopra) e lo invii al Prompt Registry per crearlo o aggiornarlo. Puoi anche specificarne nome, versione e scenario di appartenenza.
+Declarative API (Per applicazioni runtime e pipeline CI/CD)
+Logica e valore: la declarative API è progettata per applicazioni pronte per la produzione e per l’integrazione con pipeline CI/CD (Continuous Integration/Continuous Delivery). Invece di effettuare chiamate API dirette per creare o aggiornare i prompt, gestisci i tuoi prompt template come file (ad esempio file YAML) direttamente all’interno di un repository Git. I tuoi commit Git sincronizzano automaticamente questi template con il Prompt Registry. Questo approccio tratta i prompt come “codice”, abilitando controllo di versione robusto, collaborazione e processi di deployment automatici che sono standard nello sviluppo software enterprise. È perfetto per garantire che le tue applicazioni in produzione utilizzino sempre i prompt più recenti, testati e approvati.
+Azione chiave: effettui il commit di un file YAML che definisce il tuo prompt template in un repository Git. SAP AI Core, configurato per monitorare questo repository, aggiorna automaticamente il Prompt Registry.
+Accesso e utilizzo dei Prompt Template archiviati
+
+Una volta che i tuoi prompt template sono archiviati in modo sicuro nel Prompt Registry, le tue applicazioni e i workflow di orchestrazione possono recuperarli e utilizzarli facilmente.
+Recupero di un Prompt Template: puoi recuperare un prompt template o tramite il suo ID univoco oppure tramite una combinazione di nome, scenario e versione.
+Valore del recupero per ID: usare l’ID garantisce di recuperare sempre l’esatta versione del prompt template che è stata archiviata. Questo è utile per l’immutabilità, garantendo che il prompt template non cambi dopo il deployment.
+Valore del recupero per Nome, Scenario e Versione: questo metodo è flessibile e in genere recupera l’ultima iterazione (head version) del prompt template che corrisponde al nome, scenario e versione specificati. Questo è utile quando vuoi che la tua applicazione utilizzi sempre la versione più aggiornata.
+Recupero della cronologia di un Prompt Template: per i prompt template gestiti in modo imperativo, il Prompt Registry tiene traccia delle modifiche. Puoi recuperare una cronologia delle modifiche, che ti consente di rivedere come un prompt si è evoluto nel tempo. Questa traccia di audit è fondamentale per il debugging, per comprendere i cambiamenti di comportamento e per la compliance.
+Utilizzo di un Prompt Template (Sostituzione): per usare un prompt template, fornisci i dati dinamici che riempiono i suoi segnaposto. Questo processo si chiama sostituzione.
+Logica: invii i tuoi inputParams dinamici (ad esempio, il testo reale della customer_email per la Facility Solutions Company) a un endpoint specifico che genera quindi il prompt completo, pronto all’uso, riempiendo tutti i segnaposto nel template scelto. Questo prompt pre-elaborato può poi essere inviato a un LLM.
+Integrazione con l’Orchestration
+
+Un vantaggio fondamentale per gli sviluppatori è che i prompt template archiviati nel Prompt Registry possono essere integrati senza interruzioni nelle configurazioni del tuo Orchestration Service. Questo significa che i tuoi workflow orchestrati possono recuperare dinamicamente gli ultimi prompt template approvati, garantendo coerenza, riusabilità e facilità di aggiornamento in tutto il panorama delle tue soluzioni di Generative AI.
+Per i dettagli su queste configurazioni, fai riferimento a Prompt Registry.
+Scopri come l’API del Prompt Registry ti consente di creare, gestire e recuperare prompt template da usare in SAP AI Core quando lavori con i modelli del generative AI hub.
+Scopri come puoi fare riferimento a un prompt template usando l’orchestration service.
+Utilizzo dei Prompt Template in SAP AI Launchpad
+Puoi creare, recuperare e utilizzare prompt template in SAP AI Launchpad per il rapid prototyping.
+
+
+
+Puoi salvare un prompt come template utilizzando il pulsante Save Template.
+
+
+
+Puoi recuperare tutti questi template nell’interfaccia Prompt Management. Puoi vedere tutte le versioni di un template e utilizzare direttamente uno qualsiasi di questi template nel Prompt Editor.
+Riepilogo della lezione
+Ora hai imparato il ruolo fondamentale del Prompt Registry e dei Prompt Templates nella gestione su larga scala delle tue applicazioni di Generative AI. Hai capito come il Prompt Registry agisca come hub centrale per il controllo delle versioni e la reperibilità, e come i prompt template forniscano modelli riutilizzabili per le interazioni con gli LLM.
+Sfruttando sia l’API imperativa per l’iterazione in fase di progettazione sia l’API dichiarativa per una gestione robusta a runtime, puoi garantire che i tuoi prompt vengano applicati in modo coerente, aggiornati facilmente e integrati senza interruzioni nelle tue applicazioni e nei workflow di orchestrazione. Questo approccio strutturato alla gestione dei prompt è essenziale per costruire soluzioni di Generative AI manutenibili, affidabili e scalabili all’interno dell’impresa, portando i tuoi sforzi di prompt engineering da tentativi ad hoc a un processo maturo e governato.
+Esercizio
+Questo esercizio ti guiderà nella gestione e nella scalabilità efficaci delle tue soluzioni di prompt engineering centralizzando, standardizzando e versionando i prompt tramite prompt template nel generative AI hub utilizzando SAP AI Launchpad.
+Scenario
+Nello scenario Facility Management, hai utilizzato con successo gli LLM per estrarre informazioni dalle email dei clienti. Ora ti viene chiesto di scalare questa soluzione. La gestione manuale dei prompt e l’incorporazione diretta dei prompt nel codice possono portare a incoerenze e rendere difficili gli aggiornamenti. Il tuo compito è sfruttare il Prompt Registry per centralizzare, standardizzare e gestire i prompt di categorizzazione delle email, garantendo riusabilità e controllo di versione tra diversi strumenti interni.
+Prima di iniziare a creare un prompt template, considera queste linee guida essenziali per costruire soluzioni di AI generativa affidabili e scalabili in un ambiente enterprise come SAP:
+Struttura le tue istruzioni (usando tag simili a XML): usa una struttura esplicita all’interno del contenuto del tuo prompt, utilizzando tag come <Instructions> e <ExampleInput>. Questa chiarezza aiuta l’LLM a distinguere accuratamente tra le diverse parti del tuo prompt, riducendo le interpretazioni errate e portando a risultati più coerenti. Questi tag forniscono di fatto all’LLM una mappa precisa da seguire.
+Progetta per definire uno schema (ad esempio JSON rigoroso): progetta il tuo template in modo da limitare sempre l’output a un formato che possa essere elaborato facilmente dalle tue applicazioni. Per l’integrazione enterprise, l’output dell’LLM serve come dato per altri sistemi, non solo come testo da leggere. Ad esempio, un JSON rigoroso garantisce che questo output possa essere automaticamente analizzato ed elaborato dalle applicazioni downstream, come il tuo sistema di gestione attività, senza intervento manuale o trasformazioni soggette a errore, il che è fondamentale per l’automazione.
+Definisci i ruoli per un comportamento prevedibile (System/User): assegna chiaramente una persona di System e usa il ruolo User per la query specifica. Questa separazione delle responsabilità garantisce che il modello si comporti in modo coerente all’interno del ruolo definito, cosa cruciale per applicazioni professionali e affidabili.
+Guida con esempi (Few-Shot/One-Shot Learning): includi un esempio chiaro dell’input che fornirai e dell’esatto output strutturato che ti aspetti. Questo migliora significativamente le prestazioni dell’LLM e l’aderenza a formati complessi, fungendo da chiave di risposta perfetta per il modello e minimizzando gli errori, garantendo al contempo la conformità del formato.
+Costruisci robustezza e sicurezza (Prompt Hardening): il tuo template affronterà input reali, talvolta imprevedibili. Integra principi di prompt hardening, come vincoli negativi espliciti (ad esempio, "DO NOT include markdown code blocks"), istruzioni per la gestione dei dati mancanti e delimitatori chiari. Questo rende il tuo template resiliente, proteggendo la tua applicazione da output imprevisti e prompt injection, e migliorando l’affidabilità complessiva.
+Abilita gestibilità e scalabilità (Prompt Registry): ricorda che registrare il tuo template nel Prompt Registry del generative AI hub non è solo un passaggio di archiviazione. Abilita funzionalità importanti come il controllo di versione, rendendo facile tracciare le modifiche, tornare a versioni precedenti e condurre A/B testing. Consente anche la riusabilità tra più applicazioni e una governance centralizzata, cosa vitale per le grandi organizzazioni.
+Esegui le seguenti attività per implementare queste linee guida.
+Attività 1: Definire i ruoli e ottenere un output JSON strutturato
+Creeremo un prompt template in cui definiremo i ruoli System e User con prompt per ottenere un output JSON strutturato.
+Passaggi
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Espandi Generative AI Hub e poi seleziona Prompt Editor nel pannello sinistro.
+Definisci i ruoli e i requisiti per l’output JSON strutturato.
+Usa i seguenti prompt per il ruolo system.
+Snippet di codice
+Copy code
+Switch to dark mode
+Sei un assistente esperto per Facility Solutions Company. Il tuo compito è analizzare le email di reclamo dei clienti ed estrarre le informazioni chiave in un formato JSON strutturato. Presta molta attenzione ai dettagli e attieniti rigorosamente allo schema di output.
+
+La tua risposta completa DEVE essere una stringa JSON valida, pronta per essere analizzata da un’applicazione. Deve contenere SOLO le chiavi 'Complaint_ID', 'Complaint_Type', 'Urgency', 'Problem_Description', 'Affected_Location', 'Customer_Sentiment' e 'Suggested_Initial_Action'. Non includere altro testo, spiegazioni o formattazione come blocchi di codice markdown (ad es., ```json). Assicurati che non ci siano nuove righe o spazi bianchi non necessari al di fuori della struttura JSON.
+
+Per 'Complaint_Type', classifica il messaggio come uno tra: `Plumbing`, `HVAC`, `Electrical`, `Noise`, `Cleaning`, `Pest Control`, `General Maintenance`, `Other`.
+Per 'Urgency', classifica il messaggio come uno tra: `High`, `Medium`, `Low`.
+Per 'Customer_Sentiment', classifica il messaggio come uno tra: `Very Negative`, `Negative`, `Neutral`, `Positive`.
+Copia il prompt e incollalo nel ruolo System nella casella di testo Message Blocks.
+Seleziona Add role, per aggiungere il ruolo user.
+
+
+
+
+Usa il seguente prompt per il ruolo user.
+Snippet di codice
+Copy code
+Switch to dark mode
+Analizza il seguente messaggio del cliente:
+---
+{{?user_email_placeholder}}
+---
+
+e fornisci l’output nel formato JSON specificato.
+Copia il prompt e incollalo nel ruolo User nella casella di testo Message Blocks.
+
+
+Fai clic sul pulsante Save Template. Viene visualizzata la finestra di dialogo Save Template.
+
+
+Seleziona il nome dello Scenario appropriato. Il template sarà disponibile per tutti gli utenti che accedono a questo scenario. Qui utilizziamo lo scenario di orchestration.
+Aggiungi un nome Template appropriato. Evita spazi bianchi o altri caratteri speciali. Segui un formato come "message-analyzer". Solo per questi esercizi pratici, aggiungi al nome il suffisso con il tuo ID visualizzato nell’angolo in alto a destra, come mostrato nello screenshot sopra.
+Inserisci una versione appropriata nel formato major/minor come "1.0.0". Usa i valori come mostrato nello screenshot seguente.
+
+
+
+Fai clic sul pulsante Save. Il template viene salvato. Hai creato un prompt template con ruoli definiti per un output JSON strutturato.
+Attività 2: Costruire robustezza e sicurezza (Prompt Hardening)
+Aggiorneremo il prompt template per garantire un rigoroso controllo dell’ambito, una robusta sicurezza dei dati e un comportamento prevedibile, fondamentali per i deployment enterprise, utilizzando tecniche di prompt hardening.
+Passaggi
+Continua con lo stesso prompt template nel Prompt Editor che hai salvato nell’attività precedente.
+Nel caso in cui ti sia spostato fuori da Prompt Editor, puoi recuperare questo template da Prompt Management, altrimenti passa al passaggio 7.
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Seleziona Prompt Management e Templates. Qui puoi vedere il tuo template. Puoi anche cercarlo, se necessario.
+
+
+
+Seleziona il pulsante All. Qui puoi vedere il tuo template. Puoi anche cercare il tuo template.
+
+Seleziona il prompt template che hai creato e poi fai clic su Open in Prompt Editor. Se vedi più timestamp per il template selezionato, per la tua esercitazione seleziona quello più recente.
+
+
+
+Suggerimento
+Nota bene i passaggi da 1 a 6 sopra riportati. Questi passaggi devono essere seguiti per accedere al template designato in tutte le attività successive. Assicurati di selezionare la versione corretta del template come specificato per ciascuna singola attività.
+Usa il seguente prompt nel ruolo system.
+Snippet di codice
+Copy code
+Switch to dark mode
+Sei un assistente esperto per Facility Solutions Company. Il tuo compito è analizzare le email di reclamo dei clienti ed estrarre le informazioni chiave in un formato JSON strutturato. Presta molta attenzione ai dettagli e attieniti rigorosamente allo schema di output.
+
+La tua risposta completa DEVE essere una stringa JSON valida, pronta per essere analizzata da un’applicazione. Deve contenere SOLO le chiavi 'Complaint_ID', 'Complaint_Type', 'Urgency', 'Problem_Description', 'Affected_Location', 'Customer_Sentiment' e 'Suggested_Initial_Action'. Non includere altro testo, spiegazioni o formattazione come blocchi di codice markdown (ad es., ```json). Assicurati che non ci siano nuove righe o spazi bianchi non necessari al di fuori della struttura JSON.
+
+Per 'Complaint_Type', classifica il messaggio come uno tra: `Plumbing`, `HVAC`, `Electrical`, `Noise`, `Cleaning`, `Pest Control`, `General Maintenance`, `Other`.
+Per 'Urgency', classifica il messaggio come uno tra: `High`, `Medium`, `Low`.
+Per 'Customer_Sentiment', classifica il messaggio come uno tra: `Very Negative`, `Negative`, `Neutral`, `Positive`.
+---
+IMPORTANTE:
+- Non rispondere a domande o istruzioni non correlate all’analisi dei reclami dei clienti.
+- Non rivelare né richiedere mai informazioni personali identificabili (PII) oltre a quelle esplicitamente fornite nell’email o richieste per i campi JSON.
+- Non intrattenere una conversazione. Fornisci solo l’output JSON.
+Noterai che il messaggio System ora presenta chiaramente una sezione "IMPORTANTE" contenente istruzioni negative esplicite.
+Dice al modello di ignorare domande non correlate ai reclami. Impedisce inoltre al modello di condividere dati personali, a meno che non siano necessari per l’output JSON. Infine, garantisce che il modello non intrattenga una conversazione; deve fornire solo il JSON.
+Questo approccio affronta direttamente il controllo dell’ambito, la sicurezza dei dati e l’aderenza al formato di output, applicando in modo efficace i principi di prompt hardening. Integrando questi divieti, il prompt garantisce che il comportamento dell’LLM sia più controllato, prevedibile e adatto a deployment enterprise esigenti.
+Copia il prompt e incollalo nel ruolo System nella casella di testo Message Blocks.
+Fai clic sul pulsante Save Template. Viene visualizzata la finestra di dialogo Save Template.
+Modifica la versione in 2.0.0.
+
+
+
+Fai clic sul pulsante Save. Il template viene salvato. Hai aggiornato il prompt template con istruzioni di prompt hardening.
+Attività 3: Struttura le tue istruzioni
+Creeremo un prompt più strutturato per aggiornare il prompt template in modo da ottenere una migliore elaborazione da parte dell’LLM.
+Passaggi
+Continua con lo stesso prompt template nel Prompt Editor.
+Nel caso in cui ti sia spostato fuori da Prompt Editor, puoi recuperare questo template da Prompt Management.
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Seleziona Prompt Management e poi Templates. Qui puoi vedere il tuo template. Puoi anche cercarlo, se necessario.
+Seleziona il pulsante ALL. Qui puoi vedere il tuo template. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 2.0.0. Vedi lo screenshot seguente, in cui viene utilizzata la ricerca per trovare facilmente il tuo template.
+
+
+
+Seleziona il prompt template che hai creato e poi fai clic su Open in Prompt Editor. Se vedi più timestamp per il template selezionato, per la tua esercitazione seleziona quello più recente.
+Usa il seguente prompt nel ruolo user.
+Snippet di codice
+Copy code
+Switch to dark mode
+<Instructions>
+Analizza l’email del cliente fornita ed estrai i seguenti dettagli in un oggetto JSON.
+Assicurati che tutti i campi siano presenti e correttamente tipizzati secondo le specifiche in <OutputFormat>.
+Riassumi 'Problem_Description' in modo conciso (massimo 100 parole).
+Se il valore di un campo non può essere determinato dall’email, usa 'Unknown' o 'N/A' a seconda dei casi.
+</Instructions>
+
+<OutputFormat>
+{
+  "Complaint_ID": "stringa (ad es. AUTO-GEN-001)",
+  "Complaint_Type": "enum (Plumbing, HVAC, Electrical, Noise, Cleaning, Pest Control, General Maintenance, Other)",
+  "Urgency": "enum (High, Medium, Low)",
+  "Problem_Description": "stringa (riassunto conciso, massimo 100 parole)",
+  "Affected_Location": "stringa (ad es. Apartment 301, Main Lobby)",
+  "Customer_Sentiment": "enum (Very Negative, Negative, Neutral, Positive)",
+  "Suggested_Initial_Action": "stringa (chiaro passo successivo per l’operatore)"
+}
+</OutputFormat>
+
+<UserQuery>
+{{?user_email_placeholder}}
+</UserQuery>
+Noti che le istruzioni generali, la definizione del formato di output e il segnaposto della query utente ora sono esplicitamente racchiusi in tag simili a XML. Questo fornisce chiari segnali visivi e una guida strutturale all’LLM.
+Copia il prompt e incollalo nel ruolo User nella casella di testo Message Blocks.
+Fai clic sul pulsante Save Template. Viene visualizzata la finestra di dialogo Save Template.
+Modifica la versione in 3.0.0.
+
+
+
+Fai clic sul pulsante Save. Il template viene salvato. Hai aggiornato il prompt template con una struttura corretta utilizzando tag simili a XML.
+Attività 4: Utilizza il tuo Prompt Template per affrontare il tuo problema di business
+Useremo il prompt template salvato per generare una risposta valida che possa essere utilizzata dalle applicazioni.
+Passaggi
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Seleziona Prompt Management e poi Templates. Qui puoi vedere il tuo template. Puoi anche cercarlo, se necessario.
+Seleziona il pulsante All. Qui puoi vedere il tuo template. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 3.0.0. Assicurati di selezionare il tuo template e il timestamp corretto all’interno del template. Una buona pratica è leggere il template prima di utilizzarlo.
+Seleziona il prompt template e poi fai clic su Open in Prompt Editor. Il tuo prompt è pronto per essere utilizzato.
+Scorri verso il basso fino a vedere Variable Definitions. Devi fornire i messaggi dei clienti in questa variabile usando il seguente messaggio:
+Snippet di codice
+Copy code
+Switch to dark mode
+Oggetto: Urgente: Problemi di manutenzione in corso presso la nostra struttura
+
+Gentile Team di Supporto,
+
+spero che questo messaggio vi trovi bene. Mi chiamo [Sender] e sono il community manager di [Community Name]. Supervisiono le operazioni e la manutenzione della nostra struttura ormai da parecchio tempo e devo dire che la recente esperienza con i vostri servizi di manutenzione è stata meno che soddisfacente.
+
+Abbiamo riscontrato diversi problemi ricorrenti con i nostri impianti elettrici e idraulici che non sono stati affrontati adeguatamente nonostante molteplici richieste di assistenza. La mancanza di soluzioni tempestive ed efficaci sta causando notevoli disagi ai nostri residenti e al personale, e sta diventando sempre più difficile gestire la situazione.
+
+Per darvi un quadro più chiaro, abbiamo avuto tecnici presso la nostra struttura in tre occasioni separate nel corso dell’ultimo mese. Ogni volta, il problema è stato risolto solo temporaneamente oppure è rimasto irrisolto. Questo ha portato a una significativa frustrazione tra i membri della nostra comunità e riflette negativamente sulla nostra gestione.
+
+Vi contatto per richiedere una soluzione più permanente ed efficace a questi problemi di manutenzione in corso. Abbiamo bisogno di un’ispezione approfondita e di un piano completo per affrontare le cause alla radice di questi problemi. È fondamentale garantire un ambiente sicuro e confortevole per tutti nella nostra comunità.
+
+Confido che comprendiate l’urgenza della questione e che darete alla nostra richiesta la priorità necessaria. Abbiamo sempre apprezzato la qualità del servizio fornito da Facility Solutions e speriamo di vedere una rapida risoluzione di questi problemi.
+
+Grazie per l’attenzione dedicata a questa questione. Attendo un vostro rapido riscontro.
+
+Cordiali saluti,
+
+[Sender]
+Copia il messaggio e incollalo nella casella di testo Current Value accanto alla variabile user_email_placeholder.
+
+
+
+Scorri verso l’alto ed esegui il prompt. Viene generata una risposta. Puoi vedere che la risposta è perfezionata e pronta per un ulteriore utilizzo da parte delle tue applicazioni software.
+
+
+
+Puoi vedere che la risposta è perfezionata e pronta per essere utilizzata dalle tue applicazioni software.
+Nota
+Puoi anche fornire un valore predefinito per la variabile, che può essere usato per testare e perfezionare l’output senza dover fornire ogni volta il valore della variabile. Utilizzeremo questa funzionalità più avanti.
+Hai utilizzato il tuo prompt template per eseguire un prompt.
+
+
+Identifying the Need for Using SAP Cloud Software Development Kits for AI
+Hai imparato come creare prompt in SAP AI Launchpad per estrarre dati chiave come urgenza, sentiment e categorie dalle comunicazioni dei clienti in un formato JSON strutturato.
+Sebbene SAP AI Launchpad sia utile per lo sviluppo e il testing interattivo dei prompt, per portare queste soluzioni in produzione e integrarle senza problemi nelle tue applicazioni aziendali, hai bisogno di un’interfaccia programmatica robusta.
+È qui che i Software Development Kit (SDK) diventano indispensabili. Questa lezione spiegherà cosa sono gli SDK e perché sono importanti per integrare gli LLM in applicazioni di livello enterprise. Imparerai a conoscere SAP Cloud SDK for AI, che è il toolkit ufficiale per costruire potenti soluzioni di AI generativa all’interno dell’ecosistema SAP, sfruttando SAP AI Core, il generative AI hub e l’Orchestration Service.
+Ruolo degli SDK nell’integrazione degli LLM
+
+Un SDK è una raccolta completa di strumenti, librerie e documentazione progettata per aiutare gli sviluppatori a creare applicazioni software per piattaforme o framework specifici. Per gli LLM, gli SDK in genere incapsulano le Application Programming Interfaces (API) in funzioni specifiche per linguaggio di programmazione, aggiungendo livelli di praticità sopra le API.
+Questo semplifica il processo di creazione e integrazione delle tue applicazioni con un servizio LLM.
+Rivediamo il nostro problema di business per capire come l’uso di un SDK possa aiutare a risolvere problemi di questo tipo.
+L’azienda Facility Solutions si trova ad affrontare elevati volumi di comunicazioni da parte dei clienti (email, messaggi), che richiedono un’elaborazione e una prioritizzazione efficienti all’interno delle applicazioni interne per garantire risposte tempestive e accurate. Hai sviluppato prompt nel generative AI hub in SAP AI Launchpad per estrarre informazioni chiave come urgenza, sentiment e categorie.
+Tuttavia, l’esigenza di business finale è semplificare questo processo per gestire automaticamente query su larga scala e integrare questi output nelle applicazioni operative. Per raggiungere questo obiettivo, le tue applicazioni hanno bisogno di un modo per inviare programmaticamente questi messaggi dei clienti all’LLM (tramite il generative AI hub) e ricevere l’output JSON strutturato. Gli SDK rendono possibile proprio questo.
+Vantaggi chiave dell’uso degli SDK per l’integrazione degli LLM
+Per gli sviluppatori che integrano LLM in applicazioni enterprise, gli SDK offrono un valore chiaro e concreto:
+Sviluppo accelerato: gli SDK forniscono strumenti, librerie e API predefiniti che astraggono i complessi dettagli di basso livello. Questo semplifica il flusso di sviluppo, consentendoti di concentrarti sulla business logic della tua applicazione invece di scrivere codice boilerplate per richieste HTTP, gestire l’autenticazione o affrontare direttamente le complessità delle API.
+Integrazione fluida ed efficienza: gli SDK facilitano un’integrazione più rapida e semplice degli LLM nelle tue applicazioni esistenti. Gestendo la complessità dell’interazione con il modello, ti aiutano a concentrarti sulla consegna delle soluzioni più velocemente.
+Accesso programmatico alle funzionalità della piattaforma: gli SDK offrono controllo programmatico su funzionalità avanzate della piattaforma, come quelle presenti nel generative AI hub. Ciò significa che puoi gestire programmaticamente i prompt, integrare dati di grounding e utilizzare funzionalità come data masking e content filtering direttamente nel tuo codice, adattando con precisione il comportamento dell’LLM al tuo caso d’uso.
+In sostanza, gli SDK aiutano a semplificare l’accesso agli LLM, aumentano l’efficienza dello sviluppo, supportano una personalizzazione profonda e ottimizzano le prestazioni degli LLM per soluzioni enterprise.
+SAP Cloud SDK for AI
+
+SAP Cloud SDK for AI fornisce le astrazioni e gli strumenti necessari per interagire in modo fluido con SAP AI Core, il generative AI hub e l’Orchestration Service. Questo SDK è disponibile in più linguaggi di programmazione per supportare diversi ambienti di sviluppo.
+Questi SDK integrano chat completion, sfruttano le funzionalità del generative AI hub (templating, grounding, data masking, content filtering) e permettono di impostare/gestire programmaticamente la tua istanza SAP AI Core.
+SAP Cloud SDK for AI (JavaScript):
+L’SDK ufficiale per integrare SAP AI Core, Generative AI Hub e Orchestration usando JavaScript.
+Fai riferimento alla Documentazione ufficiale e alle voci NPM.
+SAP Cloud SDK for AI (Java):
+L’SDK ufficiale per integrare SAP AI Core, Generative AI Hub e Orchestration usando Java.
+Fai riferimento al Repository GitHub ufficiale, alla Documentazione e alle voci Maven.
+SAP Cloud SDK for AI (Python):
+Scopo: l’SDK ufficiale per integrare SAP AI Core, Generative AI Hub e Orchestration usando Python. Questo SDK è composto da tre distribuzioni Python distinte:
+sap-ai-sdk-base: usalo per accedere alla AI API di base usando metodi e strutture dati Python, fornendo un livello fondamentale di interazione.
+sap-ai-sdk-core: consente l’interazione con SAP AI Core per l’amministrazione e la gestione pubblica del ciclo di vita, offrendo controllo sui tuoi deployment e sulle tue risorse AI.
+sap-ai-sdk-gen: progettato specificamente per le funzionalità di Generative AI. Usalo per integrare librerie SDK native e LangChain per accedere ai modelli sul Generative AI Hub in SAP AI Core e per sfruttare tutta la potenza dell’Orchestration Service (templating, grounding, data masking, content filtering).
+Fai riferimento alle voci ufficiali Pypi Base, Pypi Core e Pypi Gen.
+Questo corso spiegherà i passaggi successivi usando SAP Cloud SDK for AI (Python). Visualizza ulteriori informazioni: codice SAP Cloud SDK for AI (JavaScript) nel repository.
+Introduzione a SAP Cloud SDK for AI (Python)
+
+Con l’SDK Python, puoi interagire programmaticamente con gli LLM distribuiti tramite il generative AI hub per creare completamenti in linguaggio naturale, risposte in chat ed elementi embedded direttamente dalle tue applicazioni Python.
+Prerequisiti: si consiglia di usare python kernel 3.11.9 o superiore per eseguire tutti i codici di questo learning journey. Puoi fare riferimento alla guida Python qui. In caso di errori, assicurati di aver distribuito, configurato e provisionato correttamente il generative AI hub in SAP BTP.
+Installazione: puoi installare l’SDK Python usando il seguente comando pip:
+Python
+Copy code
+Switch to dark mode
+pip install "sap-ai-sdk-gen[all]" 
+Nota
+L’extra [all] include pacchetti aggiuntivi come langchain, che non viene installato di default ma spesso è utile per integrazioni LLM avanzate.
+Configurazione: l’SDK riutilizza le impostazioni di configurazione dell’AI Core SDK. Queste includono il tuo client ID, client secret, authentication URL, base URL e resource group. Puoi impostare questi valori come variabili d’ambiente o, più comodamente, tramite un file di configurazione.
+Suggeriamo di impostare questi valori per le credenziali AI Core tramite un file di configurazione. Il percorso predefinito per questo file è ~/.aicore/config.json per Mac/Linux. Per Windows, in genere è C:\Users<utente corrente>.aicore\config.json. Otterrai questi valori dalla tua service key di AI Core scaricata da BTP.
+Passaggi di configurazione (esempio per Mac):
+Crea la cartella .aicore: se non esiste, creala usando il terminale:
+Code Snippet
+Copy code
+Switch to dark mode
+mkdir ~/.aicore/
+Modifica config.json: apri il file usando un editor di testo (ad esempio nano nel terminale o VS Code):
+Code Snippet
+Copy code
+Switch to dark mode
+nano ~/.aicore/config.json
+Incolla il contenuto JSON: sostituisci i valori placeholder con le tue credenziali reali della AI Core Service Key:
+Python
+Copy code
+Switch to dark mode
+{
+  "AICORE_AUTH_URL": "https://***.authentication.sap.hana.ondemand.com",
+  "AICORE_CLIENT_ID": "***",
+  "AICORE_CLIENT_SECRET": "***",
+  "AICORE_RESOURCE_GROUP": "***",
+  "AICORE_BASE_URL": "https://api.ai.***.cfapps.sap.hana.ondemand.com/v2"
+}
+In alternativa, puoi fare riferimento al file https://github.com/SAP-samples/ai-core-samples/blob/main/10_Learning_Journeys/README.md per i passaggi di configurazione dettagliati necessari a eseguire il notebook di questo learning journey nel tuo sistema.
+Esempi di utilizzo:
+OpenAI-like API Completion: questo snippet di codice mostra la generazione di un completamento di testo usando un modello (ad esempio, gpt-5-nano) con un’interfaccia API compatibile con OpenAI.
+Python
+Copy code
+Switch to dark mode
+from gen_ai_hub.proxy.native.openai import completions
+response = completions.create(
+ model_name="gpt-5-nano ",
+prompt="The Answer to the Ultimate Question of Life, the Universe, and Everything is",
+ max_tokens=7,
+ temperature=0
+)
+print(response)
+Questo codice Python genera un completamento per il prompt fornito. Richiede una breve risposta sull’answer to the ultimate question of life e imposta parametri per la lunghezza della risposta e il livello di casualità. Poi stampa il completamento generato.
+Chat Completion: questo esempio mostra come simulare una conversazione chat multi-turno, sfruttando i ruoli system, user e assistant.
+Python
+Copy code
+Switch to dark mode
+from gen_ai_hub.proxy.native.openai import chat
+
+messages = [
+   {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Does Azure OpenAI support customer managed keys?"},
+    {"role": "assistant", "content": "Yes, customer managed keys are supported by Azure OpenAI."},
+    {"role": "user", "content": "Do other Azure Cognitive Services support this too?"}
+]
+kwargs = dict(model_name='gpt-5-nano ', messages=messages)
+response = chat.completions.create(**kwargs)
+print(response)
+Questo codice interagisce con un LLM (ad esempio, gpt-5-nano) per simulare una conversazione chat. Caricando messaggi predefiniti strutturati con i ruoli system, user e assistant nella lista messages e specificando i dettagli del modello, invia questi input all’API per generare una risposta. Questo consente un’integrazione fluida per interrogare il modello e ottenere risposte automatiche all’interno della tua applicazione.
+Riepilogo della lezione
+Ora comprendi il ruolo degli SDK nell’integrazione programmatica degli LLM nelle tue applicazioni enterprise. Hai imparato come gli SDK semplificano lo sviluppo, migliorano l’efficienza e forniscono accesso programmatico alle funzionalità avanzate del generative AI hub. In particolare, ti è stato introdotto SAP Cloud SDK for AI (Python), inclusi installazione, configurazione tramite il file config.json ed esempi base di utilizzo per generare completamenti e gestire interazioni chat. Questa conoscenza di base ti permette di andare oltre la prototipazione interattiva e iniziare a costruire soluzioni di Generative AI scalabili, affidabili e sicure all’interno delle tue applicazioni business SAP usando il linguaggio di tua scelta.
+
+
+Using SAP Cloud SDK for AI to Interact with Orchestration Services
+SDK come SAP Cloud SDK for AI (Python) ti permettono di collegare facilmente le tue applicazioni alle funzionalità di generative AI.
+Ora porteremo questa conoscenza un passo oltre, mostrando come usare questi potenti SDK per accedere e controllare programmaticamente l’Orchestration Service.
+Questa lezione ti guida attraverso il processo di definizione di un workflow orchestrato completo usando SAP Cloud SDK for AI. Vedrai come impostare programmaticamente template, definire parametri LLM ed eseguire task AI complessi e multi-step che sfruttano capacità come grounding, filtering e masking, tutto tramite un’interfaccia SDK semplificata.
+Interazione con l’Orchestration Service
+
+Per interagire con l’Orchestration Service in modo programmatico, in generale segui questi passaggi di alto livello:
+Authentication: ottieni un token di autenticazione (Bearer token).
+Deployment: crea un deployment per l’Orchestration Service e ottieni il tuo ORCH_DEPLOYMENT_URL univoco.
+Consumption: invia programmaticamente richieste al tuo endpoint dell’Orchestration Service distribuito. Questo è il focus principale di questa lezione.
+SAP Cloud SDK for AI for Python fornisce un modo robusto e intuitivo per definire, configurare ed eseguire workflow dell’Orchestration Service direttamente dalle tue applicazioni Python. Questo ti consente di integrare con facilità complesse capacità di Generative AI nella tua business logic.
+Prima di procedere, assicurati di aver completato i passaggi di installazione e configurazione dell’SDK Python discussi in precedenza, inclusa la configurazione del file ~/.aicore/config.json.
+Uso dell’Orchestration Service
+Esegui i seguenti passaggi per usare l’Orchestration Service:
+Ottieni un Auth Token per Orchestration
+Crea un Deployment per Orchestration
+Consuma Orchestration
+Per interagire con l’Orchestration Service usando l’SDK, segui questi passaggi del processo:
+Inizializza il client dell’Orchestration Service
+Definisci il template di Orchestration
+Definisci l’LLM
+Crea la configurazione di Orchestration
+Esegui la richiesta di Orchestration
+Step 1: Inizializzare il client dell’Orchestration Service
+Per prima cosa, devi importare la classe necessaria e puntare il client SDK al valore ORCH_DEPLOYMENT_URL che hai ottenuto durante il deployment del tuo Orchestration Service.
+Python
+Copy code
+Switch to dark mode
+# Assuming YOUR_API_URL is the ORCH_DEPLOYMENT_URL.
+YOUR_API_URL = "https://your-orchestration-deployment-url.ai.sap.com/orchestration-service-endpoint"
+from gen_ai_hub.orchestration.service import OrchestrationService
+Nota
+Sostituisci your-orchestration-deployment-url con il tuo actual Orchestration Deployment URL.
+Step 2: Definire il template di Orchestration
+L’oggetto Template nell’SDK ti permette di definire programmaticamente la struttura del tuo prompt, inclusi messaggi system, user e assistant. Ti consente anche di definire placeholder per input dinamici e impostare valori di default.
+Consideriamo un esempio per un translation assistant.
+Python
+Copy code
+Switch to dark mode
+  from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage
+from gen_ai_hub.orchestration.models.template import Template, TemplateValue
+
+template = Template(
+    messages=[
+        SystemMessage("You are a helpful translation assistant."),
+        UserMessage(
+            "Translate the following text to {{?to_lang}}: {{?text}}"
+        ),
+    ],
+    defaults=[
+        TemplateValue(name="to_lang", value="German"),
+    ],
+)
+Questo codice Python imposta un template per un translation assistant. Definisce un SystemMessage per stabilire il ruolo dell’assistente e un UserMessage che include placeholder ({{?to_lang}} e {{?text}}) per la lingua di destinazione e il testo da tradurre. Imposta anche una lingua di destinazione di default su "German", rendendo il template pronto per l’uso immediato nella traduzione del testo in tedesco senza specificare esplicitamente la lingua ogni volta.
+Step 3: Definire l’LLM
+Successivamente, definisci quale LLM l’Orchestration Service deve usare per il modulo prompt_templating. Questo implica specificare il nome del modello, la versione ed eventuali parametri specifici (come max_tokens o temperature) per controllarne il comportamento.
+Python
+Copy code
+Switch to dark mode
+from gen_ai_hub.orchestration.models.llm import LLM
+
+llm = LLM(name="gpt-4o", version="latest", parameters={"max_tokens": 256, "temperature": 0.2})
+Questo codice crea un’istanza di un LLM, per esempio qui è "gpt-4o". Configura l’orchestration service per usare l’ultima versione disponibile nel generative AI hub.
+Imposta anche parametri come un limite massimo di 256 token per la risposta e una temperature di 0.2 per controllare la variabilità della risposta (una temperature più bassa significa output più deterministici). Questa configurazione definisce il motore di generative AI per il tuo task orchestrato.
+Step 4: Creare la configurazione di Orchestration
+L’oggetto OrchestrationConfig combina il template e l’LLM definiti (e opzionalmente altri moduli come grounding, filtering, masking, translation) in un’unica configurazione eseguibile per il tuo workflow.
+Python
+Copy code
+Switch to dark mode
+from gen_ai_hub.orchestration.models.config import OrchestrationConfig
+
+config = OrchestrationConfig(
+    template=template,
+    llm=llm,
+)
+Questo codice inizializza un’istanza di OrchestrationConfig usando le variabili template e llm definite nei passaggi precedenti. Questo oggetto di configurazione racchiude l’intero design del tuo specifico workflow AI orchestrato, assicurando che il sistema usi il template specificato e i parametri del language model quando viene eseguito.
+Step 5: Eseguire la richiesta di Orchestration
+Infine, esegui il workflow di orchestration definito chiamando il metodo run del client OrchestrationService. Passi eventuali template_values dinamici richiesti dai placeholder del tuo template.
+Python
+Copy code
+Switch to dark mode
+# Instantiate the OrchestrationService with your API URL and defined config
+orchestration_service = OrchestrationService(api_url=YOUR_API_URL, config=config)
+
+# Run the orchestration, providing values for the template placeholders
+result = orchestration_service.run(template_values=[
+    TemplateValue(name="text", value="The Orchestration Service is working!")
+])
+
+# Print the content of the LLM's response
+print(result.orchestration_result.choices[0].message.content)
+Questo codice inizializza prima il client OrchestrationService con il tuo endpoint URL distribuito e il workflow configurato. Poi esegue il task orchestrato chiamando run(), fornendo il testo "The Orchestration Service is working!" per il placeholder {{?text}} nel tuo template. Il contenuto del risultato (il testo tradotto in tedesco, in base ai valori di default del template) viene quindi stampato, dimostrando un’interazione programmatica riuscita con l’Orchestration Service.
+Estendere la configurazione di Orchestration con moduli aggiuntivi
+
+L’esempio sopra ha mostrato una semplice traduzione usando prompt_templating e LLM. Tuttavia, il vero potere dell’Orchestration Service sta nella sua capacità di concatenare più moduli. Puoi estendere ulteriormente il tuo OrchestrationConfig per includere:
+grounding: per iniettare dati fattuali in tempo reale dalle tue fonti enterprise.
+filtering: per controlli di sicurezza dei contenuti in input e output.
+masking: per proteggere dati sensibili come PII.
+translation: per gestire input e output multilingua.
+Puoi usare moduli per content filtering e altri task. Consulta Obtain Optional Modules per dettagli e per le configurazioni di orchestration più aggiornate.
+Riepilogo della lezione
+Hai imparato con successo come usare SAP Cloud SDK for AI (Python) per interagire programmaticamente con l’Orchestration Service. Hai seguito i passaggi di inizializzazione del client del servizio, definizione dei prompt template e dei parametri LLM, creazione di una configurazione di orchestration completa ed esecuzione di un workflow. Questo controllo programmatico è fondamentale per integrare senza problemi capacità avanzate di Generative AI nelle tue applicazioni enterprise, consentendoti di costruire soluzioni scalabili, automatizzate e ricche di funzionalità che sfruttano tutta la potenza del generative AI hub di SAP.
+
+
+Using SAP Cloud SDK for AI to Leverage the Power of LLMs
+In questa lezione esploreremo l’arte pratica dello sviluppo dei prompt all’interno del generative AI hub. Basandoti sulla tua comprensione di SAP Cloud SDK for AI e dei servizi di orchestration, imparerai un approccio iterativo, passo dopo passo, per affinare prompt che estraggano informazioni precise e strutturate dal testo e siano pronte per essere utilizzate dalle tue applicazioni SAP.
+Hai installato e configurato SAP Cloud SDK for AI (Python) - generative. Hai anche configurato i servizi di orchestration. Con questa lezione inizieremo installando i pacchetti e poi caricando i dati.
+Python
+Copy code
+Switch to dark mode
+!pip install -U "generative-ai-hub-sdk>=3.1" tqdm
+Questo codice installa i pacchetti software necessari. Utilizzando !pip install -U "generative-ai-hub-sdk>=3.1" tqdm, garantisce che tu abbia l’ultima versione di SAP Cloud SDK for AI (Python) - generative (versione 3.1 o successiva) e la libreria "tqdm". Il pacchetto "tqdm" è una libreria per la barra di avanzamento che aiuta a mostrare il progresso delle attività nella console.
+Devi configurare un client AI Core per interagire con il servizio AI Core, e importare i moduli necessari, caricare le credenziali da un file JSON e impostare le variabili d’ambiente richieste per l’autenticazione e l’accesso al servizio. Vedi qui il codice per i dettagli.
+Fai riferimento al codice dettagliato nel repository e al relativo file Solving Your Business Problems Using Prompts and LLMs in SAP's Generative AI Hub.
+Python
+Copy code
+Switch to dark mode
+from typing import Literal, Type, Union, Dict, Any, List, Callable
+import re, pathlib, json, time
+from functools import partial
+EXAMPLE_MESSAGE_IDX = 10
+Questo codice inizia importando i moduli e i tipi necessari da varie librerie Python, tra cui typing, re, pathlib, json, time e functools. Definisce poi una costante, EXAMPLE_MESSAGE_IDX, impostata a 10 per selezionare casualmente il decimo messaggio da un dataset.
+Successivamente, devi caricare e pre-elaborare un dataset di email memorizzato in un file JSON. Puoi suddividere il dataset in insiemi di sviluppo e test, con un insieme di test più piccolo creato per una valutazione più mirata. Puoi anche elaborare i dati delle email per estrarre e organizzare categorie, urgenza e sentiment in insiemi per ulteriori analisi.
+Helper Functions
+Prima di sviluppare prompt utilizzando SAP Cloud SDK for AI (Python) - generative, devi abilitare l’uso dei modelli AI nel generative AI hub. Questo viene fatto tramite funzioni helper. Puoi vedere qui nel repository le funzioni dettagliate.
+Una delle funzioni si interfaccia con l’AI Core SDK per gestire in modo efficiente le attività di deployment. Include una funzione spinner per fornire aggiornamenti in tempo reale durante le operazioni lunghe, mantenendo il coinvolgimento dell’utente. La funzione verifica se esiste già un deployment e lo recupera oppure ne crea uno nuovo, coordinando le configurazioni e garantendo un’esecuzione fluida entro un timeout specificato. Fai riferimento al codice dettagliato nel repository.
+In caso di errori o problemi durante l’esecuzione del codice, puoi fare riferimento ad alcuni suggerimenti di troubleshooting.
+La seguente funzione configura e invia richieste a un servizio di AI orchestration.
+Python
+Copy code
+Switch to dark mode
+import pathlib
+import yaml
+
+from gen_ai_hub.proxy import get_proxy_client
+from ai_api_client_sdk.models.status import Status
+
+from gen_ai_hub.orchestration.models.config import OrchestrationConfig
+from gen_ai_hub.orchestration.models.llm import LLM
+from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage
+from gen_ai_hub.orchestration.models.template import Template, TemplateValue
+from gen_ai_hub.orchestration.service import OrchestrationService
+
+client = get_proxy_client()
+deployment = retrieve_or_deploy_orchestration(client.ai_core_client)
+orchestration_service = OrchestrationService(api_url=deployment.deployment_url, proxy_client=client)
+
+def send_request(prompt, _print=True, _model='meta--llama3.1-70b-instruct', **kwargs):
+    config = OrchestrationConfig(
+        llm=LLM(name=_model),
+        # template=Template(messages=[SystemMessage(prompt),UserMessage("{{?input}}")
+        template=prompt
+    )
+    template_values = [TemplateValue(name=key, value=value) for key, value in kwargs.items()]
+    answer = orchestration_service.run(config=config, template_values=template_values)
+    result = answer.module_results.llm.choices[0].message.content
+    
+    if _print:
+        formatted_prompt = "\n".join([t.content for t in answer.module_results.templating])
+        print(f"<-- PROMPT --->\n{formatted_prompt}\n<--- RESPONSE --->\n{result}")
+
+    return result
+Importa le librerie e i moduli necessari, configura un proxy client e recupera o distribuisce una configurazione di orchestration. Definisce una funzione, send_request, che configura e invia prompt a un modello AI, quindi formatta e stampa la risposta. La funzione può accedere a tutti i modelli configurati nella tua istanza di generative AI hub utilizzando il deployment di orchestration. Questa configurazione mira a semplificare le attività guidate dall’AI utilizzando un approccio coerente e riutilizzabile.
+Sviluppare un Prompt usando SAP Cloud SDK for AI (Python) - generative
+Ora troveremo l’urgenza e il sentiment in una mail in arrivo.
+Usa il seguente codice per leggere una mail casuale con l’ID assegnato in precedenza.
+Python
+Copy code
+Switch to dark mode
+mail = dev_set[EXAMPLE_MESSAGE_IDX]
+Come abbiamo visto prima, sviluppare un prompt per risolvere un problema di business è un processo iterativo. Questo processo è spiegato nei seguenti passaggi:
+Sviluppare un prompt di base: inizieremo con un prompt di base e poi svilupperemo il prompt, trovando un output che possa essere utilizzato dalle applicazioni all’interno dell’azienda. Il primo prompt è:
+Python
+Copy code
+Switch to dark mode
+from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage
+from gen_ai_hub.orchestration.models.template import Template, TemplateValue
+
+prompt_1 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Your task is to extract:
+            - urgency
+            - sentiment
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+
+f_1 = partial(send_request, prompt=prompt_1)
+
+response = f_1(input=mail["message"])
+Questo codice importa le classi necessarie dal pacchetto gen_ai_hub.orchestration.models per creare un prompt strutturato per un assistente intelligente. Definisce i messaggi di sistema e dell’utente. All’assistente viene assegnato il compito di estrarre urgenza e sentiment da un dato messaggio. La funzione partial imposta la richiesta con il prompt e il codice invia la richiesta utilizzando il messaggio di input da mail["message"].
+Puoi vedere il seguente output:
+
+
+
+
+Puoi utilizzare modelli diversi usando la stessa funzione. Questo è un vantaggio della funzionalità di orchestration del generative AI hub.
+L’attuale risposta lunga non è utile per il nostro obiettivo di assegnare urgenza e sentiment alle email come input per il software, quindi dovremmo continuare a svilupparla.
+Nota
+Potresti ottenere risposte leggermente diverse da quella mostrata qui e in tutte le restanti risposte dei modelli mostrate in questo learning journey.
+Quando esegui lo stesso prompt sulla tua macchina, un LLM produce output variabili a causa della sua natura probabilistica, dell’impostazione della temperatura e della sua architettura non deterministica, portando a risposte diverse anche con lievi modifiche delle impostazioni o cambiamenti dello stato interno.
+Assegnare valori a urgenza e sentiment: ora assegneremo alcuni valori base di urgenza e sentiment ed eseguiremo il prompt.
+Python
+Copy code
+Switch to dark mode
+prompt_2 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Your task is to extract:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+
+f_2 = partial(send_request, prompt=prompt_2, **option_lists)
+
+response = f_2(input=mail["message"])
+Il codice definisce un prompt per estrarre "urgency" e "sentiment" da un determinato messaggio. Usa la funzione "partial" per configurare una richiesta con opzioni predefinite. Infine, elabora il messaggio email facendolo passare attraverso la richiesta configurata per ottenere i dettagli necessari. Questo garantisce un’estrazione coerente e accurata dei dati dai messaggi.
+Ottieni una risposta. Noterai che i valori per urgenza e sentiment si basano su valori assegnati.
+Generare output JSON: un software richiede input in un formato specifico, e per questo scopo viene scelto JSON. JSON è una scelta adatta perché è un formato leggero, indipendente dal linguaggio e facile da analizzare, che consente uno scambio efficiente dei dati e semplifica lo sviluppo.
+Usiamo il seguente codice:
+Python
+Copy code
+Switch to dark mode
+prompt_3 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Extract and return a json with the follwoing keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above.
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+f_3 = partial(send_request, prompt=prompt_3, **option_lists)
+
+response = f_3(input=mail["message"])
+Questo codice prepara e invia una richiesta per estrarre informazioni specifiche da un messaggio. Usa un template di prompt predefinito per istruire il sistema a estrarre "urgency" e "sentiment" e restituirli in formato JSON. La funzione "partial" configura questa richiesta con opzioni fisse, e poi invia la richiesta utilizzando il contenuto del messaggio.
+Vedrai un output JSON.
+Assicurarsi che la formattazione JSON sia corretta: questo passaggio è necessario quando il formato di output JSON non è chiaro nel prompt precedente. Puoi renderlo più chiaro usando il seguente codice:
+Python
+Copy code
+Switch to dark mode
+prompt_4 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Extract and return a json with the follwoing keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnessacary whitespaces.
+
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+
+f_4 = partial(send_request, prompt=prompt_4, **option_lists)
+
+response = f_4(input=mail["message"])
+Questo codice definisce un template di prompt chiamato "prompt_4" che specifica istruzioni per estrarre "urgency" e "sentiment" da un messaggio di input e restituirli come stringa JSON. Questo prompt fornisce un’istruzione chiara per restituire un formato pulito senza virgolette o spazi bianchi.
+Vedrai che ora l’output JSON è chiaro. Questo è pronto per essere utilizzato dal software.
+Categorie semplici basate sulle funzioni di business: abbiamo associato urgenza e sentiment a una mail. Tuttavia, abbiamo bisogno anche di più tag per ciascun messaggio, per classificarli in base alle esigenze di business. Possiamo iniziare con un codice semplice.
+Python
+Copy code
+Switch to dark mode
+prompt_5 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Assign a list of matching support category to the message.
+
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+f_5 = partial(send_request, prompt=prompt_5)
+
+response = f_5(input=mail["message"])
+Questo codice imposta un template per assegnare categorie di supporto in base ai messaggi dell’utente. Prepara un messaggio di sistema che dichiara il ruolo dell’assistente, incorpora l’input dell’utente e definisce una funzione partial per inviare la richiesta. Infine, usa questa funzione per elaborare il messaggio e generare una risposta, aiutando a classificare in modo efficiente le richieste di supporto.
+Vedrai che le categorie vengono assegnate al messaggio. La risposta assegna le categorie di supporto al messaggio originale, semplificando i processi di supporto clienti.
+Assegnare valori alle categorie da un elenco: le categorie generate sopra hanno valori sovrapposti, come l’urgenza, e dovrebbero essere allineate ai valori definiti dall’azienda per rispondere efficacemente alle esigenze di business.
+Python
+Copy code
+Switch to dark mode
+prompt_6 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Assign a list of best matching support category tags to the message:
+{{?categories}}
+
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]
+)
+
+# Prepare the options
+option_lists = {
+    'categories': ', '.join(f"`{entry}`" for entry in categories),
+}
+
+# Create the partial function
+f_6 = partial(send_request, prompt=prompt_6, **option_lists)
+
+# Call it
+response = f_6(input=mail["message"])
+Questo codice imposta un template per classificare i messaggi per categorie di supporto. Definisce i messaggi di sistema e dell’utente, prepara un elenco di opzioni di categoria e crea una funzione per inviare la richiesta di classificazione usando queste opzioni. Poi richiama la funzione con il messaggio di input per ottenere la risposta, assegnando in modo efficace tag adatti in base al contenuto del messaggio.
+Vedrai che le categorie vengono assegnate ai valori dell’elenco. Questi sono ottimizzati per l’elaborazione di business.
+Generare output JSON per i valori delle categorie: in modo simile al passaggio 3 precedente, abbiamo bisogno di output JSON per elaborare questi valori in un software. Ci assicuriamo anche che il formato dell’output JSON sia privo di simboli o spazi non necessari.
+Usiamo il seguente codice:
+Python
+Copy code
+Switch to dark mode
+prompt_7 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Extract and return a json with the follwoing keys and values:
+- "categories" list of the best matching support category tags from: {{?categories}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnessacary whitespaces.
+
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+f_7 = partial(send_request, prompt=prompt_7, **option_lists)
+
+response = f_7(input=mail["message"])
+Questo codice crea un template di prompt preciso per estrarre specifici tag di categoria da un messaggio di input e restituirli in un formato JSON valido. Quindi usa una funzione predefinita, "send_request", con il prompt costruito e alcune opzioni per generare la risposta necessaria a partire dal messaggio di input dato. Questo garantisce coerenza e accuratezza nell’estrazione dei dati.
+Vedrai le categorie in output JSON che possono essere elaborate in un software.
+Combinare tutti i passaggi: abbiamo usato SAP Cloud SDK for AI (Python) - generative per arrivare passo dopo passo a valori corretti di urgenza, sentiment e categorie in formato JSON. Ora combiniamo tutti questi passaggi in un unico prompt.
+Python
+Copy code
+Switch to dark mode
+prompt_8 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Extract and return a json with the follwoing keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+- "categories" list of the best matching support category tags from: {{?categories}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnessacary whitespaces.
+
+Giving the following message:"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+
+option_lists = {
+    'urgency': ', '.join(f"`{entry}`" for entry in urgency),
+    'sentiment': ', '.join(f"`{entry}`" for entry in sentiment),
+    'categories': ', '.join(f"`{entry}`" for entry in categories),
+}
+f_8 = partial(send_request, prompt=prompt_8, **option_lists)
+
+response = f_8(input=mail["message"])
+Il codice combina tutti i passaggi precedenti in un unico prompt. Aiuta a elaborare un messaggio email per identificare e restituire informazioni chiave. Usando un template predefinito, estrae dettagli come urgenza, sentiment e categorie, quindi li formatta come stringa JSON. Garantisce che l’output sia pulito e direttamente utilizzabile invocando una funzione con i parametri forniti.
+La seguente schermata mostra l’output di questo codice.
+
+
+Puoi vedere l’output consolidato che assegna urgenza, sentiment e categorie ai messaggi dei clienti e che può essere utilizzato nel software.
+Hai sviluppato con successo un prompt per avanzare verso una soluzione del problema utilizzando SAP Cloud SDK for AI (Python) - generative.
+Riepilogo della lezione
+Hai completato con successo il processo iterativo di sviluppo dei prompt, partendo da una richiesta di base fino ad arrivare a un output altamente rifinito e pronto per l’uso applicativo. Sfruttando SAP Cloud SDK for AI e le capacità di orchestration del generative AI hub, hai estratto da un’email informazioni complesse come urgenza, sentiment e categorie, formattandole in un JSON pulito direttamente utilizzabile dal software. Questo processo evidenzia come il continuo affinamento dei prompt sia fondamentale per risolvere problemi di business reali con la Generative AI, semplificata grazie all’uso di SAP Cloud SDK for AI.
+
+
+Using SAP Cloud SDK for AI to Evaluate Prompts
+Dopo aver imparato a sviluppare e perfezionare i prompt nella lezione precedente, il passo critico successivo è garantirne la qualità e l’affidabilità. In questa lezione esploreremo come stabilire un framework di valutazione sistematico per i tuoi prompt utilizzando SAP Cloud SDK for AI. Imparerai ad automatizzare la valutazione dell’output del tuo LLM, impostando una baseline fondamentale per il miglioramento continuo delle tue applicazioni di AI generativa.
+Valutare i Prompt Utilizzando SAP Cloud SDK for AI
+Hai sviluppato con successo un prompt che assegna urgenza, sentiment e categorie ai messaggi dei clienti in formato JSON. Tuttavia, per l’azienda di facility solutions, l’accuratezza di questi output è importante perché influisce direttamente su applicazioni critiche rivolte ai clienti e su decisioni operative.
+Per garantire questa accuratezza, è essenziale una valutazione automatizzata e coerente dei prompt in vari scenari, così da assicurare affidabilità ed efficienza. È qui che le funzioni di valutazione personalizzate, implementate utilizzando SAP Cloud SDK for AI, diventano indispensabili.
+SAP Cloud SDK for AI fornisce vantaggi chiave per la valutazione dei prompt:
+Test affidabili: automatizza il test dei prompt in vari scenari, garantendo risultati coerenti ed efficienti.
+Misurazione delle prestazioni: fornisce metriche oggettive (ad esempio, rilevanza, coerenza, fluidità) per valutare quantitativamente la qualità delle risposte.
+Valutazioni su misura: consente di creare valutatori personalizzati che soddisfano esigenze specifiche, permettendo valutazioni più precise e pertinenti.
+Risultati scalabili: supporta valutazioni su larga scala, rendendo più semplice testare i prompt su dataset estesi.
+
+Implementazione delle Funzioni di Valutazione
+Importa i package.
+Python
+Copy code
+Switch to dark mode
+from tqdm.auto import tqdm
+import time
+class RateLimitedIterator:
+def init(self, iterable, max_iterations_per_minute):
+self._iterable = iter(iterable)
+self._max_iterations_per_minute = max_iterations_per_minute
+self._min_interval = 1.0 / (max_iterations_per_minute / 60.)
+self._last_yield_time = None
+def __iter__(self):
+    return self
+
+def __next__(self):
+    current_time = time.time()
+
+    if self._last_yield_time is not None:
+        elapsed_time = current_time - self._last_yield_time
+        if elapsed_time < self._min_interval:
+            time.sleep(self._min_interval - elapsed_time)
+
+    self._last_yield_time = time.time()
+    return next(self._iterable)
+Il codice definisce una classe "RateLimitedIterator" per controllare la velocità con cui è possibile iterare su un iterabile. Specificando un numero massimo di iterazioni al minuto, garantisce che il processo di iterazione rispetti una velocità definita, evitando di superare i rate limit. Utilizza la libreria "tqdm" per la visualizzazione del progresso e il modulo "time" per il controllo temporale.
+Definisci una funzione di valutazione.
+Python
+Copy code
+Switch to dark mode
+def evaluation(mail: Dict[str, str], extract_func: Callable, _print=True, **kwargs):
+response = extract_func(input=mail["message"], _print=_print, **kwargs)
+result = {
+"is_valid_json": False,
+"correct_categories": False,
+"correct_sentiment": False,
+"correct_urgency": False,
+}
+try:
+pred = json.loads(response)
+except json.JSONDecodeError:
+result["is_valid_json"] = False
+else:
+result["is_valid_json"] = True
+result["correct_categories"] = 1 - (len(set(mail["ground_truth"]["categories"]) ^ set(pred["categories"])) / len(categories))
+result["correct_sentiment"] = pred["sentiment"] == mail["ground_truth"]["sentiment"]
+result["correct_urgency"] = pred["urgency"] == mail["ground_truth"]["urgency"]
+return result
+evaluation(mail, f_8)
+Questo codice valuta le predizioni effettuate da una funzione che elabora un messaggio email. Utilizza una funzione di estrazione fornita per analizzare il contenuto dell’email e confronta i risultati con dati di ground truth predefiniti, verificando JSON valido, categorie corrette, sentiment corretto e urgenza corretta. Questo garantisce che la funzione di estrazione operi in modo accurato e coerente.
+L’ultima riga valuta la funzione di prompt combinata che abbiamo sviluppato in precedenza.
+
+
+
+Puoi vedere che la valutazione mostra che tutte le predizioni sono corrette tranne il sentiment.
+Implementa una funzione di valutazione, per un gran numero di email, per supportare valutazioni su larga scala, rendendo più semplice testare i prompt con dataset estesi.
+Python
+Copy code
+Switch to dark mode
+from tqdm.auto import tqdm
+
+def transpose_list_of_dicts(list_of_dicts):
+    keys = list_of_dicts[0].keys()
+    transposed_dict = {key: [] for key in keys}
+    for d in list_of_dicts:
+        for key, value in d.items():
+            transposed_dict[key].append(value)
+    return transposed_dict
+
+def evalulation_full_dataset(dataset, func, rate_limit=100, _print=False, **kwargs):
+    results = [evaluation(mail, func, _print=_print, **kwargs) for mail in tqdm(RateLimitedIterator(dataset, rate_limit), total=len(dataset))]
+    results = transpose_list_of_dicts(results)
+    n = len(dataset)
+    for k, v in results.items():
+        results[k] = sum(v) / len(dataset)
+    return results
+
+
+def pretty_print_table(data):
+    # Get all row names (outer dict keys)
+    row_names = list(data.keys())
+
+    # Get all column names (inner dict keys)
+    if row_names:
+        column_names = list(data[row_names[0]].keys())
+    else:
+        column_names = []
+
+    # Calculate column widths
+    column_widths = [max(len(str(column_name)), max(len(f"{data[row][column_name]:.2f}") for row in row_names)) for column_name in column_names]
+    row_name_width = max(len(str(row_name)) for row_name in row_names)
+
+    # Print header
+    header = f"{'':>{row_name_width}} " + " ".join([f"{column_name:>{width}}" for column_name, width in zip(column_names, column_widths)])
+    print(header)
+    print("=" * len(header))
+
+    # Print rows
+    for row_name in row_names:
+        row = f"{row_name:>{row_name_width}} " + " ".join([f"{data[row_name][column_name]:>{width}.1%}" for column_name, width in zip(column_names, column_widths)])
+        print(row)
+
+overall_result = {}
+Questo codice ora esegue la valutazione sull’intero dataset, valuta ogni voce tramite una funzione con rate limiting, trasforma i risultati per una migliore aggregazione e poi stampa in modo formattato le metriche finali di valutazione in una tabella. Utilizza la libreria "tqdm" per mostrare una barra di avanzamento, rendendo più semplice tracciare lo stato di elaborazione. L’intero flusso garantisce un’elaborazione snella, efficiente e una presentazione chiara dei risultati.
+Implementa la funzione finale nella funzione combinata finale.
+Python
+Copy code
+Switch to dark mode
+overall_result["basic--llama3.1-70b"] = evalulation_full_dataset(test_set_small, f_8)
+pretty_print_table(overall_result)
+Puoi ottenere il seguente output:
+Code Snippet
+Copy code
+Switch to dark mode
+ 0%|          | 0/20 [00:00<?, ?it/s]
+                    is_valid_json correct_categories correct_sentiment correct_urgency
+======================================================================================
+basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+Puoi vedere i risultati per il prompt di base. L’output varia in modo significativo quando esegui di nuovo il codice con esempi di input diversi. Questo stabilisce la baseline per ulteriori miglioramenti nell’accuratezza e nella rilevanza del prompt.
+L’aspetto chiave da ricordare fino a questo punto in questo learning journey è che possiamo creare un prompt di base e poi valutare il prompt sul dataset per impostare una baseline per ulteriori miglioramenti.
+Lesson Summary
+Sviluppare un prompt è una parte della risoluzione di un problema di business; una valutazione rigorosa e automatizzata è essenziale per una AI generativa di livello enterprise. Sfruttando SAP Cloud SDK for AI, puoi implementare funzioni di valutazione personalizzate per misurare in modo coerente le prestazioni del prompt, validare la qualità dell’output (come il formato JSON e l’accuratezza delle entità estratte) e applicare queste valutazioni su larga scala ai dataset. Questo approccio sistematico ti consente di stabilire una baseline chiara e migliorare iterativamente i tuoi prompt per soddisfare requisiti di business critici.
+
+
+Implementing Prompt Engineering Techniques
+
+In questa lezione scoprirai come migliorare l’intelligenza e la precisione delle risposte degli LLM attraverso tecniche avanzate di prompt engineering. Basandoti sulle valutazioni di riferimento stabilite in precedenza, imparerai a implementare strategie potenti come il Few-shot Prompting e il Meta-prompting utilizzando SAP Cloud SDK for AI, e osserverai il loro impatto nel migliorare la qualità e l’accuratezza delle tue applicazioni di intelligenza artificiale generativa.
+Few-Shot Prompting
+
+Implementiamo le tecniche di prompting e poi valutiamo i risultati per vedere il miglioramento nei risultati del prompt.
+Usiamo il seguente codice:
+
+
+prompt_10 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Your task is to extract and categorize messages. Here are some example:
+{{?few_shot_examples}}
+Use the examples when extract and categorize the following message:
+Extract and return a json with the follwoing keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+- "categories" list of the best matching support category tags from: {{?categories}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnessacary whitespaces."""),
+        UserMessage("{{?input}}")
+    ]      
+)
+
+import random
+random.seed(42)
+
+k = 3
+examples = random.sample(dev_set, k)
+
+example_template = """<example>
+{example_input}
+
+## Output
+
+{example_output}
+</example>"""
+
+examples = '\n---\n'.join([example_template.format(example_input=example["message"], example_output=json.dumps(example["ground_truth"])) for example in examples])
+
+
+f_10 = partial(send_request, prompt=prompt_10, few_shot_examples=examples, **option_lists)
+
+response = f_10(input=mail["message"])
+overall_result["few_shot--llama3.1-70b"] = evalulation_full_dataset(test_set_small, f_10)
+pretty_print_table(overall_result)
+
+Il codice mira a creare un template di prompt per estrarre e categorizzare i messaggi in base alla loro urgenza, sentiment e tag di categoria di supporto. Utilizzando esempi selezionati casualmente da un set di sviluppo, genera un prompt few-shot learning formattato. Il prompt viene inviato a un modello linguistico per elaborare e categorizzare un dato messaggio di input, e le prestazioni complessive del modello vengono poi valutate e visualizzate in formato tabellare.
+Ecco una spiegazione estesa per alcune parti del codice:
+Impostazione del seed casuale: imposta un seed casuale utilizzando "random.seed(42)" per garantire che il campionamento casuale degli esempi sia riproducibile. Questo aiuta a mantenere coerenza negli esperimenti e nelle valutazioni.
+Campionamento degli esempi: la variabile "k" è impostata a 3, indicando il numero di esempi da campionare dal dataset "dev_set". La funzione "random.sample(dev_set, k)" seleziona tre esempi casuali dal set di sviluppo.
+Formattazione degli esempi: gli esempi selezionati vengono formattati in un template "example_template". Ogni esempio include il messaggio di input e l’output atteso in formato JSON. Questa stringa formattata viene poi unita utilizzando "\n---\n" per creare un insieme coeso di esempi.
+Applicazione parziale della funzione: la funzione "partial" viene utilizzata per associare il prompt generato e gli esempi alla funzione "send_request", creando una funzione "f_10" che può essere chiamata solo con il messaggio di input. Questo semplifica il processo di invio delle richieste al modello con il contesto necessario.
+Invio della richiesta e valutazione: lo script invia la richiesta utilizzando "f_10(input=mail["message"])" con il messaggio di input proveniente da "mail["message"]". Il risultato viene memorizzato e valutato rispetto a un piccolo dataset di test "test_set_small". I risultati della valutazione vengono memorizzati in "overall_result["few_shot--llama3-70b"]".
+Visualizzazione dell’output: infine, la funzione "pretty_print_table(overall_result)" viene utilizzata per visualizzare i risultati della valutazione in una tabella formattata, rendendo più semplice interpretare i risultati.
+Esempio di risposta:
+
+
+
+ 0%|          | 0/20 [00:00<?, ?it/s]
+                       is_valid_json correct_categories correct_sentiment correct_urgency
+=========================================================================================
+   basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+
+Questo è l’output della valutazione dopo aver implementato il few-shot prompting.
+Puoi vedere un miglioramento nell’assegnazione del sentiment e dell’urgenza.
+Abbiamo stabilito una baseline in precedenza, e ora possiamo valutare e confrontare i risultati dei prompt perfezionati con la baseline utilizzando i dati di test.
+Meta-prompting
+
+Qui implementeremo il meta-prompting per creare guide dettagliate per i prompt per vari tag come urgenza, sentiment e così via.
+Usiamo il seguente codice:
+
+example_template_metaprompt = """<example>
+{example_input}
+
+## Output
+{key}={example_output}
+</example>"""
+
+prompt_get_guide = Template(
+    messages=[
+        SystemMessage(
+            """Here are some example:
+---
+{{?examples}}
+---
+Use the examples above to come up with a guide on how to distinguish between {{?options}} {{?key}}.
+Use the following format:
+```
+### **<category 1>**
+- <instruction 1>
+- <instruction 2>
+- <instruction 3>
+### **<category 2>**
+- <instruction 1>
+- <instruction 2>
+- <instruction 3>
+...
+```
+When creating the guide:
+- make it step-by-step instructions
+- Consider than some labels in the examples might be in correct
+- Avoid including explicit information from the examples in the guide
+The guide has to cover: {{?options}}
+"""
+),
+        UserMessage("{{?input}}")  
+    ]
+)
+
+guides = {}
+
+for i, key in enumerate(["categories", "urgency", "sentiment"]):
+    options = option_lists[key]
+    selected_examples_txt_metaprompt = '\n---\n'.join([example_template_metaprompt.format(example_input=example["message"], key=key, example_output=example["ground_truth"][key]) for example in dev_set])
+    guides[f"guide_{key}"] = send_request(prompt=prompt_get_guide, examples=selected_examples_txt_metaprompt,input=selected_examples_txt_metaprompt, key=key, options=options, _print=False, _model='gpt-4o')
+print(guides['guide_urgency'])
+
+Questo codice genera guide passo dopo passo per diverse categorie, come "categories", "urgency" e "sentiment", a partire da esempi etichettati in un dataset.
+Crea guide personalizzate per distinguere tra categorie, urgenza e sentiment nei dati testuali. Formatta gli esempi utilizzando un template specifico, poi invia questi esempi a un modello per generare istruzioni passo dopo passo. Le guide aiutano gli utenti a distinguere tra queste categorie in base ai pattern presenti negli esempi forniti.
+Spiegazione dettagliata:
+Definizioni dei template:
+"example_template_metaprompt": definisce un template per formattare gli esempi, specificando come strutturare input e output all’interno di un esempio.
+"prompt_get_guide": definisce un formato di prompt per richiedere la generazione di una guida basata su esempi formattati. Specifica anche il formato e i requisiti della guida, incluso il fatto che debba essere un’istruzione passo dopo passo, che debba tenere conto di possibili etichette errate e che debba evitare la replica esplicita degli esempi.
+Preparazione della guida:
+Lo script itera su tre chiavi: "categories", "urgency" e "sentiment".
+Per ogni chiave, recupera le opzioni rilevanti da "option_lists".
+Selezione e formattazione degli esempi: formatta gli esempi da "dev_set" utilizzando il template predefinito per ogni chiave, incorporando il messaggio di input e il ground truth corrispondente.
+Generazione della guida:
+Invia a un modello (gpt-4o) un prompt formattato insieme agli esempi, richiedendo la generazione di una guida per distinguere tra le opzioni specificate per ogni chiave.
+Memorizza le guide generate in un dizionario (guides), con ogni guida associata alla rispettiva chiave, per esempio "guide_categories", "guide_urgency", "guide_sentiment".
+Questo processo garantisce che vengano generate guide di istruzioni complete e accurate per diversi task di classificazione, facilitando la corretta categorizzazione dei dati testuali.
+L’ultima riga del codice stampa la guida per l’urgenza.
+Vedrai la guida che descrive le regole per ogni categoria di urgenza che può essere utilizzata in un prompt.
+Nota
+Consulta il codice nel repository per esempi di output.
+Usiamo il seguente codice per utilizzare queste guide in un prompt.
+prompt_12 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Your task is to classify messages.
+This is an explanation of `urgency` labels:
+---
+{{?guide_urgency}}
+---
+This is an explanation of `sentiment` labels:
+---
+{{?guide_sentiment}}
+---
+This is an explanation of `support` categories:
+---
+{{?guide_categories}}
+---
+Giving the following message:
+
+Extract and return a json with the following keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+- "categories" list of the best matching support category tags from: {{?categories}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnessacary whitespaces.
+"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+f_12 = partial(send_request, prompt=prompt_12, **option_lists, **guides)
+response = f_12(input=mail["message"])
+
+Il codice aggiorna il ruolo di sistema nel prompt per classificare i messaggi in base a urgenza, sentiment e categorie di supporto utilizzando guide predefinite generate tramite il codice di meta-prompt. Utilizza poi una funzione parziale per inviare questo prompt come richiesta con opzioni e guide specifiche. Infine, elabora un messaggio email per estrarre e restituire queste classificazioni in formato JSON.
+Valuta questo prompt e la sua risposta, utilizzando il seguente codice:
+
+overall_result["metaprompting--llama3.1-70b"] = evalulation_full_dataset(test_set_small, f_12)
+pretty_print_table(overall_result)
+
+Puoi ottenere il seguente output:
+0%|          | 0/20 [00:00<?, ?it/s]
+                            is_valid_json correct_categories correct_sentiment correct_urgency
+==============================================================================================
+        basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+     few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+metaprompting--llama3.1-70b        100.0%              90.0%             30.0%           95.0%
+
+Ora vediamo che l’accuratezza per l’urgenza e le categorie è migliorata, tuttavia l’accuratezza si è ridotta nel caso del sentiment.
+Combinare Meta-prompting e Few-shot Prompting
+Possiamo combinare meta-prompting e few-shot prompting utilizzando il seguente codice:
+
+prompt_13 = Template(
+    messages=[
+        SystemMessage(
+            """You are an intelligent assistant. Your task is to classify messages.
+Here are some examples:
+---
+{{?few_shot_examples}}
+---
+This is an explanation of `urgency` labels:
+---
+{{?guide_urgency}}
+---
+This is an explanation of `sentiment` labels:
+---
+{{?guide_sentiment}}
+---
+This is an explanation of `support` categories:
+---
+{{?guide_categories}}
+---
+Giving the following message:
+
+extract and return a json with the follwoing keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+- "categories" list of the best matching support category tags from: {{?categories}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnessacary whitespaces.
+"""
+        ),
+        UserMessage("{{?input}}")
+    ]      
+)
+
+f_13 = partial(send_request, prompt=prompt_13, **option_lists, few_shot_examples=examples, **guides)
+
+response = f_13(input=mail["message"])
+
+Questo codice definisce un template per un assistente intelligente per classificare i messaggi in base a urgenza, sentiment e categorie di supporto. Utilizza l’applicazione parziale per personalizzare la gestione della richiesta con esempi e linee guida specifici, poi elabora il messaggio di input per restituire una risposta JSON strutturata. Questo aiuta a ottenere una classificazione dei messaggi accurata ed efficiente.
+Sta combinando alcuni esempi con le guide generate durante il meta-prompting.
+Valuta questo prompt e la sua risposta utilizzando il seguente codice:
+
+overall_result["metaprompting_and_few_shot--llama3.1-70b"] = evalulation_full_dataset(test_set_small, f_13)
+pretty_print_table(overall_result)
+Riceverai il seguente output:
+0%|          | 0/20 [00:00<?, ?it/s]
+                                         is_valid_json correct_categories correct_sentiment correct_urgency
+===========================================================================================================
+                     basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+                  few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+             metaprompting--llama3.1-70b        100.0%              90.0%             30.0%           95.0%
+metaprompting_and_few_shot--llama3.1-70b        100.0%              88.5%             50.0% 90.0%
+
+
+Ora vediamo che l’accuratezza per quasi tutte le categorie è simile o si è ridotta. Inoltre, è un prompt più costoso che richiede più risorse.
+Nota
+Potresti ottenere una risposta leggermente diversa da quella mostrata qui e in tutte le risposte rimanenti dei modelli mostrate in questo learning journey.
+Quando esegui lo stesso prompt sulla tua macchina, un LLM produce output variabili a causa della sua natura probabilistica, dell’impostazione della temperatura e dell’architettura non deterministica, portando a risposte diverse anche con lievi modifiche delle impostazioni o cambiamenti dello stato interno.
+Riepilogo della valutazione
+Dobbiamo considerare l’accuratezza complessiva e la qualità di un modello insieme al suo costo e alla sua scalabilità.
+A volte, modelli più piccoli e tecniche più semplici possono dare risultati migliori.
+Nell’output precedente, possiamo vedere che il few-shot offre prestazioni ottimali con un prompt meno costoso.
+Ricordiamo cosa abbiamo fatto finora per risolvere il problema di business:
+Abbiamo creato un prompt di base in SAP AI Launchpad utilizzando un modello open-source.
+Abbiamo ricreato il prompt utilizzando SAP Cloud SDK for AI (Python) per scalare la soluzione.
+Abbiamo creato un metodo di valutazione baseline per il prompt semplice.
+Infine, abbiamo utilizzato tecniche come few-shot e meta-prompting per migliorare ulteriormente i prompt.
+I risultati mostrano un miglioramento nella qualità delle risposte del prompt dopo l’implementazione di tecniche avanzate.
+Riepilogo della lezione
+Hai implementato e valutato con successo tecniche chiave di prompt engineering: Few-shot Prompting per fornire all’LLM esempi ricchi di contesto, e Meta-prompting per generare istruzioni e guide esplicite per un comportamento coerente. Hai anche esplorato la combinazione di questi metodi. Attraverso una valutazione iterativa, hai osservato come queste tecniche, utilizzate con SAP Cloud SDK for AI, possano migliorare significativamente l’accuratezza e la qualità delle risposte degli LLM, avvicinando le tue soluzioni ad applicazioni pronte per il business, comprendendo anche i compromessi in termini di complessità e costo.
+Esercizio
+Negli esercizi, imparerai a migliorare significativamente l’efficacia del prompt e la comprensione del contesto implementando tecniche avanzate come il few-shot learning all’interno dei prompt template in SAP AI Launchpad.
+Infine, vedrai come costruire applicazioni AI sicure e affidabili integrando i tuoi prompt template perfezionati con l’orchestration service per implementare privacy dei dati e content filtering nei workflow in SAP AI Launchpad.
+Continuando con lo scenario discusso in precedenza, abbiamo creato prompt di base che assegnano urgenza, sentiment e categorie ai messaggi dei clienti che possono essere utilizzati nel software.
+Tuttavia, noti che a volte le risposte mancano ancora del contesto adeguato. Devi perfezionare i prompt per ottenere risultati migliori.
+Puoi perfezionare i prompt utilizzando tecniche come one-shot e few-shot prompting.
+Il one-shot prompting è la tecnica più diretta. Consiste nel fornire all’LLM una singola istruzione diretta insieme a tutto il contesto necessario in una sola volta.
+Il few-shot prompting è una tecnica significativamente più potente che consiste nel fornire all’LLM alcuni esempi, tipicamente da 1 a 5, di coppie input-output all’interno del prompt stesso. Questi esempi dimostrano il task, il formato e il comportamento desiderati, consentendo all’LLM di apprendere il pattern prima di eseguire la richiesta effettiva.
+Task 1: Implementare il Few-Shot Prompting utilizzando i Prompt Template
+Aggiorneremo il prompt template che hai creato in precedenza con tecniche few-shot.
+Passaggi
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Seleziona Prompt Management e poi Templates.
+Seleziona il pulsante All. Puoi vedere il tuo template qui. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 3.0.0. Assicurati di selezionare il tuo template e il timestamp corretto al suo interno. Una buona pratica è leggere il template prima di utilizzarlo.
+Seleziona il prompt template e poi fai clic sul pulsante Open in Prompt Editor. Il tuo prompt è pronto per essere utilizzato.
+Usa il seguente prompt nel ruolo User:
+
+
+"<Instructions>
+Analyze the provided customer email and extract the following details into a JSON object.
+Ensure all fields are present and correctly typed according to the specifications in <OutputFormat>.
+Summarize 'Problem_Description' concisely (max 100 words).
+If any field's value cannot be determined from the email, use 'Unknown' or 'N/A' as appropriate.
+</Instructions>
+
+<OutputFormat>
+{
+  "Complaint_ID": "string (e.g., AUTO-GEN-001)",
+  "Complaint_Type": "enum (Plumbing, HVAC, Electrical, Noise, Cleaning, Pest Control, General Maintenance, Other)",
+  "Urgency": "enum (High, Medium, Low)",
+  "Problem_Description": "string (concise summary, max 100 words)",
+  "Affected_Location": "string (e.g., Apartment 301, Main Lobby)",
+  "Customer_Sentiment": "enum (Very Negative, Negative, Neutral, Positive)",
+  "Suggested_Initial_Action": "string (clear next step for agent)"
+}
+</OutputFormat>
+
+<ExampleInput>
+Subject: Urgent - Leaky Faucet in Kitchen, Apartment 301
+
+Dear Facility Management,
+I am writing to report a serious issue in my apartment, 301. The kitchen faucet has been leaking non-stop since last night. It's not just a drip, it's a steady stream, and I'm worried about water damage. I tried to tighten it myself but it didn't help. This is incredibly frustrating, especially since I just moved in last month. Please send someone to fix it immediately.
+Thank you,
+Sarah Jenkins
+</ExampleInput>
+
+<ExampleOutput>
+{
+  "Complaint_ID": "AUTO-GEN-001",
+  "Complaint_Type": "Plumbing",
+  "Urgency": "High",
+  "Problem_Description": "Kitchen faucet in Apartment 301 is leaking continuously since last night, causing concern for water damage. Tenant attempted to fix without success.",
+  "Affected_Location": "Apartment 301",
+  "Customer_Sentiment": "Very Negative",
+  "Suggested_Initial_Action": "Dispatch plumber to Apartment 301 with leaking faucet repair kit immediately."
+}
+</ExampleOutput>
+
+<ExampleInput>
+Subject: AC not working properly in Main Lobby
+
+Dear ProCare Support,
+The air conditioning in the main lobby has not been cooling effectively for the past few days. It's making the waiting area very uncomfortable for visitors and staff, especially with the weather getting warmer. It's not completely broken, but definitely struggling. Could someone please take a look at it soon? Thanks.
+Regards,
+Building Manager
+</ExampleInput>
+
+<ExampleOutput>
+{
+  "Complaint_ID": "AUTO-GEN-002",
+  "Complaint_Type": "HVAC",
+  "Urgency": "Medium",
+  "Problem_Description": "Air conditioning in the main lobby is not cooling effectively, causing discomfort for visitors and staff. The unit is struggling but not completely non-functional.",
+  "Affected_Location": "Main Lobby",
+  "Customer_Sentiment": "Negative",
+  "Suggested_Initial_Action": "Schedule HVAC technician to inspect main lobby AC unit within 24-48 hours."
+}
+</ExampleOutput>
+
+<ExampleInput>
+Subject: Light bulb replacement - Hallway 3rd Floor
+
+Hi Team,
+Just a quick note that a light bulb in the hallway on the 3rd floor, near apartment 305, seems to have burned out. It's not a critical issue, but it would be great if someone could replace it when convenient. No rush.
+Thanks,
+Resident
+</ExampleInput>
+
+<ExampleOutput>
+{
+  "Complaint_ID": "AUTO-GEN-003",
+  "Complaint_Type": "General Maintenance",
+  "Urgency": "Low",
+  "Problem_Description": "A light bulb in the 3rd floor hallway, near apartment 305, has burned out and needs replacement.",
+  "Affected_Location": "3rd Floor Hallway (near Apt 305)",
+  "Customer_Sentiment": "Neutral",
+  "Suggested_Initial_Action": "Add to general maintenance task list for light bulb replacement during next routine visit."
+}
+</ExampleOutput>
+
+<UserQuery>
+{{?user_email_placeholder}}
+</UserQuery>
+.
+"
+
+Puoi vedere che i tag e forniscono esempi concreti e ben formattati di ciò che l’LLM dovrebbe aspettarsi come input e di ciò che dovrebbe produrre come output.
+Copia il prompt e incollalo nel ruolo User nella casella di testo Message Blocks.
+Fai clic sul pulsante Save Template. Viene visualizzata la finestra di dialogo Save Template.
+Cambia la Versione a 4.0.0.
+
+
+
+
+Fai clic sul pulsante Save. Il template viene salvato. Hai aggiornato il prompt template con esempi few-shot.
+Task 2: Usare il tuo Prompt Template per affrontare il tuo problema di business
+Useremo il prompt template salvato per generare una risposta valida che possa essere utilizzata dalle applicazioni.
+Passaggi
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Seleziona Prompt Management e poi Templates.
+Seleziona il pulsante All. Puoi vedere il tuo template qui. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 4.0.0. Assicurati di selezionare il tuo template e il timestamp corretto all’interno del template. Una buona pratica è leggere il template prima di utilizzarlo.
+Seleziona il prompt template e poi fai clic su Open in Prompt Editor. Il tuo prompt è pronto per essere utilizzato.
+Scorri verso il basso e poi seleziona Variable Definitions.
+Devi fornire i messaggi dei clienti in questa variabile. Usa il seguente messaggio:
+Subject: Urgent: Ongoing Maintenance Issues at Our Facility
+
+Dear Support Team,
+
+I hope this message finds you well. My name is [Sender], and I am the community manager for [Community Name]. I have been overseeing our facility’s operations and maintenance for quite some time now, and I must say, the recent experiences with your maintenance services have been less than satisfactory.
+
+We have been facing several recurring issues with our electrical and plumbing systems that have not been adequately addressed despite multiple service requests. The lack of timely and effective solutions is causing significant inconvenience to our residents and staff, and it is becoming increasingly difficult to manage the situation.
+
+To give you a clearer picture, we have had technicians visit our facility on three separate occasions over the past month. Each time, the problem was either temporarily fixed or not resolved at all. This has led to a lot of frustration among our community members, and it is reflecting poorly on our management.
+
+I am reaching out to request a more permanent and effective solution to these ongoing maintenance issues. We need a thorough inspection and a comprehensive plan to address the root causes of these problems. It is crucial for us to ensure a safe and comfortable environment for everyone in our community.
+
+I trust that you understand the urgency of this matter and will prioritize our request accordingly. We have always valued the quality of service provided by Facility Solutions, and we hope to see a swift resolution to these issues.
+
+Thank you for your attention to this matter. I look forward to your prompt response.
+
+Best regards,
+
+[Sender]
+
+Copia il messaggio e incollalo nella casella di testo Current Value accanto alla variabile user_email_placeholder.
+Fai clic sul pulsante Run per eseguire il prompt. Viene generata una risposta. Potresti dover scorrere verso l’alto per vedere la risposta completa.
+
+
+
+
+Puoi vedere che la risposta è perfezionata e pronta per un ulteriore utilizzo da parte delle tue applicazioni software.
+Nel caso in cui tu abbia bisogno di fare riferimento a questo output in seguito, puoi copiare e salvare questo output nel ruolo Assistant.
+Nota
+Nel caso in cui tu debba utilizzare il prompt template nel Prompt Editor dopo aver aggiunto il ruolo Assistant per generare nuove risposte, devi eliminare il ruolo Assistant.
+Seleziona l’output nella casella di testo Response e poi aggiungi un ruolo.
+
+
+Scorri verso il basso e seleziona l’opzione Assistant. Copia il testo della risposta. Nel caso in cui tu non veda il testo, seleziona la casella di testo e premi spazio, e sarai in grado di vedere il testo completo.
+Fai clic sul pulsante Save Template. Viene visualizzata la finestra di dialogo Save Template.
+Cambia la Versione a 4.1.0.
+
+
+
+Hai usato il prompt template aggiornato per ottenere una risposta migliore e vedere come conservare l’output, se necessario.
+Task 3: Ottimizzare il Template con Variabili e Valori Predefiniti
+Puoi usare le variabili per semplificare i prompt template per una migliore leggibilità e utilizzo. Questo garantisce anche la riusabilità per più valori di una variabile senza modificare il template. Continuando con il template Facility solutions, puoi usare le variabili per modificare facilmente gli esempi. Invece di copiare messaggi diversi ogni volta, puoi semplicemente cambiare il valore corrente delle variabili o usare valori predefiniti.
+In questo task, creerai variabili per gli esempi few shot e userai valori predefiniti.
+Passaggi
+Assicurati di aver effettuato l’accesso al generative AI hub.
+Seleziona Prompt Management e poi Templates. Puoi vedere il tuo template qui. Puoi anche cercarlo, se necessario.
+Seleziona il radio button All. Puoi vedere il tuo template qui. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 4.1.0. Assicurati di selezionare il tuo template e il timestamp corretto al suo interno. Una buona pratica è leggere il template prima di utilizzarlo.
+Seleziona il prompt template e poi fai clic sul pulsante Open in Prompt Editor. Il tuo prompt è pronto per essere utilizzato.
+Usa il seguente prompt nel ruolo User:
+"<Instructions>
+Analyze the provided customer email and extract the following details into a JSON object.
+Ensure all fields are present and correctly typed according to the specifications in <OutputFormat>.
+Summarize 'Problem_Description' concisely (max 100 words).
+If any field's value cannot be determined from the email, use 'Unknown' or 'N/A' as appropriate.
+</Instructions>
+
+<OutputFormat>
+{
+  "Complaint_ID": "string (e.g., AUTO-GEN-001)",
+  "Complaint_Type": "enum (Plumbing, HVAC, Electrical, Noise, Cleaning, Pest Control, General Maintenance, Other)",
+  "Urgency": "enum (High, Medium, Low)",
+  "Problem_Description": "string (concise summary, max 100 words)",
+  "Affected_Location": "string (e.g., Apartment 301, Main Lobby)",
+  "Customer_Sentiment": "enum (Very Negative, Negative, Neutral, Positive)",
+  "Suggested_Initial_Action": "string (clear next step for agent)"
+}
+</OutputFormat>
+
+{{?few_shot_example_1}}
+{{?few_shot_example_2}}
+{{?few_shot_example_3}}
+<!-- Add more {{few_shot_example_N}} as needed -->
+
+<UserQuery>
+{{?user_email_placeholder}}
+</UserQuery>"
+
+Puoi vedere le variabili few_shot_example per ogni esempio, ognuna delle quali verrà sostituita con la prima coppia e .
+Copia il prompt e incollalo nel ruolo User nella casella di testo Message Blocks.
+Scorri verso il basso fino alla sezione Variables.
+
+
+Aggiungi i seguenti valori per il Default Value di ogni variabile. Aggiungi il seguente valore predefinito per few_shot_example_1:
+"
+<ExampleInput>
+Subject: Urgent - Leaky Faucet in Kitchen, Apartment 301
+Dear Facility Management, I am writing to report on a serious issue in my apartment, 301. The kitchen faucet has been leaking nonstop since last night. It's not just a drip, it's a steady stream, and I'm worried about water damage. I tried to tighten it myself, but it didn't help. This is incredibly frustrating, especially since I just moved in last month. Please send someone to fix it immediately.
+Thank you,
+Sarah Jenkins
+</ExampleInput>
+<ExampleOutput>
+{
+ "Complaint_ID": "AUTO-GEN-001",
+ "Complaint_Type": "Plumbing",
+ "Urgency": "High",
+ "Problem_Description": "Kitchen faucet in Apartment 301 is leaking continuously since last night, causing concern for water damage. Tenant attempted to fix without success.",
+ "Affected_Location": "Apartment 301",
+ "Customer_Sentiment": "Very Negative",
+ "Suggested_Initial_Action": "Dispatch plumber to Apartment 301 with leaking faucet repair kit immediately."
+}"
+
+Aggiungi il seguente valore predefinito per few_shot_example_2:
+
+
+"<ExampleInput>
+Subject: AC not working properly in Main Lobby
+Dear Support team,
+The air conditioning in the main lobby has not been cooling
+effectively for the past few days. It's making the waiting area very uncomfortable for visitors and staff, especially with the weather getting warmer. It's not completely broken, but definitely struggling. Could someone please take a look at it soon? Thanks.
+Regards,
+Building Manager
+</ExampleInput>
+<ExampleOutput>
+{
+ "Complaint_ID": "AUTO-GEN-002",
+ "Complaint_Type": "HVAC",
+ "Urgency": "Medium",
+ "Problem_Description": "Air conditioning in the main lobby is not cooling effectively, causing discomfort for visitors and staff. The unit is struggling but not completely non-functional.",
+ "Affected_Location": "Main Lobby",
+ "Customer_Sentiment": "Negative",
+ "Suggested_Initial_Action": "Schedule HVAC technician to inspect
+main lobby AC unit within 24-48 hours."
+}
+</ExampleOutput>"
+
+Aggiungi il seguente valore predefinito per few_shot_example_3:
+	
+"<ExampleInput>
+Subject: Light bulb replacement - Hallway 3rd Floor
+Hi Team,
+Just a quick note that a light bulb in the hallway on the 3rd floor,
+near apartment 305, seems to have burned out. It's not a critical
+issue, but it would be great if someone could replace it when
+convenient. No rush.
+Thanks,
+Resident
+</ExampleInput>
+<ExampleOutput>
+{
+ "Complaint_ID": "AUTO-GEN-003",
+ "Complaint_Type": "General Maintenance",
+ "Urgency": "Low",
+ "Problem_Description": "A light bulb in the 3rd floor hallway, near
+apartment 305, has burned out and needs replacement.",
+ "Affected_Location": "3rd Floor Hallway (near Apt 305)",
+ "Customer_Sentiment": "Neutral",
+ "Suggested_Initial_Action": "Add to general maintenance task list
+for light bulb replacement during next routine visit."
+}
+</ExampleOutput>"
+
+Aggiungi il seguente valore predefinito per user_email_placeholder.
+	
+Subject: Urgent: Ongoing Maintenance Issues at Our Facility
+
+Dear Support Team,
+
+I hope this message finds you well. My name is [Sender], and I am the community manager for [Community Name]. I have been overseeing our facility’s operations and maintenance for quite some time now, and I must say, the recent experiences with your maintenance services have been less than satisfactory.
+
+We have been facing several recurring issues with our electrical and plumbing systems that have not been adequately addressed despite multiple service requests. The lack of timely and effective solutions is causing significant inconvenience to our residents and staff, and it is becoming increasingly difficult to manage the situation.
+
+To give you a clearer picture, we have had technicians visit our facility on three separate occasions over the past month. Each time, the problem was either temporarily fixed or left unresolved. This has led to significant frustration among our community members and reflects poorly on our management.
+
+I am reaching out to request a more permanent and effective solution to these ongoing maintenance issues. We need a thorough inspection and a comprehensive plan to address the root causes of these problems. It is crucial that we ensure a safe and comfortable environment for everyone in our community.
+
+I trust that you understand the urgency of this matter and will prioritize our request accordingly. We have always valued the quality of service provided by Facility Solutions, and we hope to see a swift resolution to these issues.
+
+Thank you for your attention to this matter. I look forward to your prompt response.
+
+Best regards,
+
+[Sender]
+
+Hai fornito valori predefiniti per tutte le variabili.
+
+Fai clic sul pulsante Save Template. Viene visualizzata la finestra di dialogo Save Template.
+Cambia la Versione a 5.0.0.
+Fai clic sul pulsante Save. Il template viene salvato. Hai aggiornato il prompt template con variabili e valori predefiniti.
+Task 4: Usare il Prompt Template aggiornato per affrontare il tuo problema di business
+Useremo l’ultimo prompt template per generare una risposta valida che possa essere utilizzata dalle applicazioni. Vedrai quanto è più facile usare questo template rispetto alle versioni precedenti.
+Passaggi
+Assicurati di aver effettuato l’accesso al Generative AI hub.
+Seleziona Prompt Management e poi Templates.
+Seleziona il pulsante All. Puoi vedere il tuo template qui. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 5.0.0. Assicurati di selezionare il tuo template e il timestamp corretto al suo interno. Una buona pratica è leggere il template prima di utilizzarlo.
+Seleziona il prompt template e poi fai clic su Open in Prompt Editor. Il tuo prompt è pronto per essere utilizzato.
+Scorri verso il basso ed elimina il ruolo Assistant.
+
+Vedi Variable Definitions. Vedrai tutte le variabili con valori predefiniti.
+Fai clic su Run per eseguire il prompt. Viene generata una risposta.
+
+Puoi vedere la risposta generata. Questo è un metodo rapido e affidabile per iterare e creare la soluzione migliore ai tuoi problemi di business.
+Puoi modificare i valori predefiniti fornendo un valore corrente.
+Scorri verso il basso per vedere Variables e aggiungi il seguente messaggio al Current Value per user_email_placeholder:
+"Subject: Minor issue with light in 2nd floor hallway
+Dear Facility Management,
+I wanted to bring to your attention a minor issue in the hallway on the 2nd floor, specifically near apartment 205. The overhead light fixture has been flickering occasionally for the past couple of days. It’s not a critical problem, and there’s still plenty of light, but I thought you should be aware. No need for an immediate visit, but it would be great if someone could look during a routine check.
+Thank you,
+A Resident
+"
+
+Fai clic su Run per eseguire il prompt. Viene generata una risposta.
+
+Puoi vedere che l’output JSON viene aggiornato per il valore corrente della variabile user_email_placeholder.
+Hai usato il prompt template utilizzando più variabili, valori predefiniti e valori correnti.
+Hai creato prompt utilizzando il Generative AI hub per risolvere i tuoi problemi di business usando funzionalità versatili come prompt template, variabili e prompt management per creare una base per soluzioni AI scalabili.
+Un’applicazione importante di questi template è la creazione di workflow AI utilizzando l’orchestration service.
+Creare un Workflow utilizzando un Prompt Template e l’Orchestration Service
+L’orchestration service facilita lo sviluppo di workflow che integrano varie attività, come il filtraggio dei dati e l’anonimizzazione. All’interno di un ambiente enterprise, questi workflow sono essenziali per costruire applicazioni AI avanzate e resilienti. Il generative AI hub consente agli utenti di sfruttare i prompt template all’interno dell’orchestration service per costruire workflow scalabili che producono in modo coerente risultati sicuri e affidabili.
+Useremo i prompt template per creare workflow che includano privacy dei dati e content filtering per risultati sicuri e affidabili.
+Passaggi
+Assicurati di aver effettuato l’accesso al Generative AI hub.
+Seleziona Orchestration. Vengono visualizzate le Orchestration Configurations.
+
+Fai clic sul pulsante Create. Viene visualizzata la pagina Untitled_Configuration. Puoi vedere i moduli di base.
+
+
+Fai clic sul pulsante Advanced slide per visualizzare tutti i moduli. Puoi vedere tutti i moduli. Questi moduli avanzati sono disabilitati per impostazione predefinita.
+Abbiamo bisogno dei moduli di grounding e traduzione. Attiva Data Masking, Input Filtering e Output Filtering facendo clic sui rispettivi pulsanti.
+
+
+Questi moduli verranno spostati nella sezione Activated.
+Fai clic sul pulsante Select Template.
+
+
+Viene visualizzata la finestra di dialogo Select Template. Cerca il tuo template e seleziona l’ultima versione, che è la 5.0.0.
+
+Fai clic sul pulsante Select. Il template viene visualizzato nella pagina di configurazione. Il riquadro centrale mostra il template e i moduli. Il riquadro destro mostra le variabili del template e un’opzione per eseguire il workflow di orchestration.
+
+Scorri verso il basso al centro per vedere Data Masking, quindi seleziona Pseudonymize.
+Seleziona i campi mostrati nello screenshot seguente.
+
+Questi campi verranno pseudonimizzati prima di inviare la query all’LLM per l’elaborazione. Puoi anche semplicemente anonimizzare i dati.
+Stiamo usando la pseudonimizzazione perché consente di tracciare problemi ricorrenti per lo stesso appartamento o residente nel corso del tempo e di collegare gli storici di manutenzione per insight operativi, senza esporre direttamente le identità personali agli LLM, a differenza della vera anonimizzazione, che interromperebbe questi collegamenti vitali.
+Scorri verso il basso fino a Input Filtering e poi seleziona uno dei metodi, come mostrato nello screenshot seguente.
+
+
+Questo filtrerà il prompt per individuare eventuali contenuti dannosi o inappropriati nel messaggio grezzo; è configurato come medio o “rilassato” per ridurne la rigidità e consentire una gamma più ampia di input.
+Scorri verso il basso per vedere Model Configuration e poi seleziona un modello a tua scelta.
+
+L’LLM riceverà il prompt completamente preparato, sicuro e mascherato.
+Scorri verso il basso per vedere Output Filtering e poi seleziona uno dei metodi, come mostrato nello screenshot seguente.
+
+Questo filtraggio analizza le risposte generate dall’LLM per assicurarsi che non contengano linguaggio tossico, bias o suggerimenti inappropriati.
+Questo filtrerà il prompt per individuare eventuali contenuti dannosi o inappropriati che potrebbero essere presenti nel messaggio grezzo; è configurato come medio o “rilassato” per ridurne la rigidità e consentire una gamma più ampia di input.
+Scorri ed elimina il ruolo Assistant nel template.
+Puoi vedere i valori predefiniti per tutte le variabili nel riquadro destro, che possono essere modificati in base alle tue esigenze. Il workflow è ora pronto per il test. Fai clic su Run. Dopo alcuni istanti, viene generata una risposta.
+
+Puoi vedere la risposta generata.
+Nota che il prompt template ha consentito uno sviluppo e un test rapidi del workflow fornendo ruoli, prompt, variabili e valori predefiniti.
+Puoi vedere il JSON per tutti i moduli utilizzando il pulsante toggle JSON in alto. Puoi anche vedere il trace JSON per l’intera esecuzione utilizzando l’opzione Trace. Ridimensiona i riquadri delle attività per ottenere la visualizzazione migliore.
+
+
+Il tracciamento dei workflow è essenziale per eseguire il debug degli errori, identificare i colli di bottiglia e garantire accountability all’interno di operazioni enterprise complesse e multi-step.
+Puoi anche salvare l’intero workflow utilizzando il pulsante Save.
+Fai clic sul pulsante Save. Viene visualizzata la finestra di dialogo Save Orchestration Configuration. Usa il nome del tuo template per salvare la configurazione. Seleziona solo lo scenario di orchestration per salvare la configurazione.
+
+
+Puoi vedere questa configurazione nella pagina Orchestration Configurations. Usa il pulsante di ricerca per vedere la tua configurazione.
+
+La configurazione fornisce un approccio scalabile per iterare, perfezionare e scalare i workflow per risolvere i tuoi problemi di business.
+Puoi aprire questa configurazione e scaricarla per un ulteriore utilizzo.
+
+Hai usato i prompt template per sviluppare la configurazione del workflow, incluse le misure di privacy dei dati e il content filtering.
+
+Enhancing Prompt Effectiveness Through Multi-modal Input
+
+Abbiamo padroneggiato l’arte di perfezionare prompt basati su testo per ottenere informazioni strutturate. Ma cosa succederebbe se un’immagine potesse rendere il lavoro del tuo LLM molto più semplice? Nel mondo reale, i problemi spesso includono indizi visivi. Questa lezione ti mostrerà come fornire al tuo LLM quel contesto visivo utilizzando input multimodale, cioè sia testo sia immagini. Esploreremo come farlo direttamente in SAP AI Launchpad e ampliando il nostro codice con SAP Cloud SDK for AI, arrivando a soluzioni AI più intelligenti e accurate.
+Perché l’input multimodale è importante
+
+Immagina un cliente che segnala una macchina rotta. Potrebbe descriverla tramite testo, ma se include anche una foto della parte danneggiata, il problema diventa molto più chiaro. Consentendo ai tuoi prompt di accettare sia testo sia immagini, fornisci al LLM un quadro completo, che può portare a:
+Migliore comprensione: il LLM può “vedere” cosa intendi, riducendo la confusione.
+Risultati più accurati: gli elementi visivi possono aiutare a confermare dettagli o rivelare problemi che il solo testo potrebbe non cogliere.
+Risoluzione di nuovi problemi: questo apre possibilità per l’AI di aiutare in attività che richiedono sia analisi visiva sia testuale, come ispezioni di qualità o manutenzione.
+Il generative AI hub, con SAP AI Launchpad e SAP Cloud SDK for AI, rende accessibile questa potente capacità.
+Prompt multimodali in SAP Launchpad
+
+Non è sempre necessario scrivere codice per usare prompt multimodali. SAP AI Launchpad fornisce un’interfaccia intuitiva in cui puoi combinare facilmente testo e immagini. Supporta molti modelli multimodali, come GPT-4o, permettendoti di creare e testare visivamente questi prompt avanzati.
+Per vedere quali modelli supportano le modalità multimodali, consulta la Libreria dei modelli e le schede dei modelli.
+
+
+Vediamo come appare nel Prompt Editor:
+
+Nel Prompt Editor, hai inserito un’e-mail di esempio e le istruzioni per il LLM per estrarre un output JSON con urgenza e sentiment. Noterai un pulsante “Upload Image”. È qui che puoi aggiungere un componente visivo al tuo prompt.
+La risposta dell’AI per questo input solo testuale potrebbe essere: {"urgency": "high", "sentiment": "neutral"}.
+
+Qui, dopo aver cliccato su “Upload Image” (o dopo aver trascinato e rilasciato), una piccola immagine incorporata è ora visibile direttamente all’interno dell’area di testo dell’input. Questa immagine, che mostra un albero caduto davanti all’ingresso, ora fa parte del prompt.
+Ora, la risposta sarà simile a: {"urgency": "high", "sentiment": "negative"}
+Puoi vedere che il testo del reclamo è molto breve, ma con queste informazioni visive aggiuntive, l’AI può spesso fornire una risposta più precisa.
+Prompt multimodali con SAP Cloud SDK for AI
+
+Per l’accesso programmatico e l’integrazione delle capacità multimodali nelle tue applicazioni custom, puoi usare SAP Cloud SDK for AI. Il cambiamento principale riguarda il modo in cui definiamo il messaggio dell’utente per il LLM. Invece di una semplice stringa di testo, lo UserMessage ora può accettare una lista di parti di contenuto, dove ogni parte può essere testo o un URL immagine.
+Ecco come adattiamo la nostra funzione send_request e il prompt (prompt_13_multimodal) per includere un’immagine:
+
+# We need to import TextContent and ImageUrlContent for multimodal messages
+from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage, TextContent, ImageUrlContent
+from gen_ai_hub.orchestration.models.template import Template, TemplateValue
+from gen_ai_hub.orchestration.service import OrchestrationService
+from functools import partial # Imported for consistency with prior lesson code
+
+# The send_request function is updated to accept an optional 'image_url'
+def send_request(prompt: str, _print: bool = True, _model: str = 'meta--llama3-70b-instruct', image_url: Optional[str] = None, **kwargs):
+    # We create a list to hold all parts of our message (text and optional image)
+    content_parts = []
+
+    # If an image URL is provided, we add it as an ImageUrlContent part
+    if image_url:
+        content_parts.append(ImageUrlContent(url=image_url))
+
+    # We always add the text prompt as a TextContent part
+    content_parts.append(TextContent(text=prompt))
+
+    # Now, our OrchestrationConfig uses a UserMessage with this list of content_parts
+    config = OrchestrationConfig(
+        llm=LLM(name=_model),
+        template=Template(messages=[UserMessage(content=content_parts)]) # Key change here!
+    )
+    template_values = [TemplateValue(name=key, value=value) for key, value in kwargs.items()]
+    answer = orchestration_service.run(config=config, template_values=template_values)
+    result = answer.module_results.llm.choices[0].message.content
+    if _print:
+        print(f"<-- PROMPT TEXT --->\n{prompt}")
+        if image_url:
+            print(f"<-- IMAGE URL --->\n{image_url}")
+        print(f"<--- RESPONSE --->\n{result}")
+    return result
+
+# --- Updated Multimodal Prompt (prompt_13_multimodal) ---
+prompt_13_multimodal = """Your task is to classify messages and the provided image.
+Here are some examples:
+---
+{{?few_shot_examples}}
+---
+This is an explanation of `urgency` labels:
+---
+{{?guide_urgency}}
+---
+This is an explanation of `sentiment` labels:
+---
+{{?guide_sentiment}}
+---
+This is an explanation of `support` categories:
+---
+{{?guide_categories}}
+---
+Giving the following message and considering the image for visual context:
+---
+{{?input}}
+---
+extract and return a JSON with the following keys and values:
+- "urgency" as one of {{?urgency}}
+- "sentiment" as one of {{?sentiment}}
+- "categories" list of the best matching support category tags from: {{?categories}}
+Your complete message should be a valid json string that can be read directly and only contain the keys mentioned in the list above. Never enclose it in ```json...```, no newlines, no unnecessary whitespaces.
+"""
+
+# --- Example Usage (requires 'option_lists', 'examples', 'guides', 'mail' to be defined from prior lessons) ---
+# For illustration purposes, let's assume these are set up:
+# option_lists = { "urgency": ["low", "medium", "high"], ... }
+# examples = "..." # Formatted few-shot examples
+# guides = { "guide_urgency": "...", ... }
+# mail = {"message": "The HVAC system is making a loud banging noise and no longer cooling. It needs immediate attention."}
+
+# This URL should point to a real image accessible by the LLM
+example_image_url = "https://example.com/assets/faulty_hvac_part.png" # Replace with a real image URL
+
+# We create our partial function, now including the image_url
+f_13_multimodal = partial(
+    send_request,
+    prompt=prompt_13_multimodal,
+    # Pass all our usual options, few-shot examples, and guides
+    **option_lists,
+    few_shot_examples=examples,
+    **guides,
+    image_url=example_image_url # This is the crucial addition!
+)
+
+# When you call this function, the LLM receives both text and the image
+# response_multimodal = f_13_multimodal(input=mail["message"])
+# print("\nReceived Multimodal Response:", response_multimodal)
+
+Comprendere le modifiche al codice
+
+Nuovi import: ora importiamo TextContent e ImageUrlContent da gen_ai_hub.orchestration.models.message. Questi tipi speciali indicano all’SDK che stiamo inviando diversi tipi di contenuto.
+Aggiornamento di send_request:
+Ora accetta un parametro opzionale image_url.
+All’interno della funzione, creiamo una lista chiamata content_parts.
+Se viene fornito image_url, lo aggiungiamo a content_parts usando ImageUrlContent(url=image_url).
+Anche il prompt testuale originale viene aggiunto a content_parts usando TextContent(text=prompt).
+Lo UserMessage nella nostra OrchestrationConfig ora riceve questa lista content_parts. Questo indica all’SDK di inviare insieme al LLM sia l’immagine sia il testo.
+prompt_13_multimodal: il testo del prompt stesso viene aggiornato leggermente per indicare esplicitamente al LLM di “classificare i messaggi e l’immagine fornita” e di considerare “l’immagine per il contesto visivo”. Questo aiuta a guidare l’attenzione del LLM.
+Chiamata della funzione: quando creiamo f_13_multimodal usando partial, includiamo semplicemente image_url=example_image_url come argomento. Ora, ogni volta che f_13_multimodal viene chiamata, invierà il testo da mail["message"] insieme all’immagine presente in example_image_url al LLM.
+Valutazione delle risposte multimodali
+
+Proprio come con i prompt solo testuali, è fondamentale valutare le risposte multimodali. Userai le stesse funzioni di valutazione usate in precedenza per verificare se l’output JSON è formattato correttamente e se le categorie, il sentiment e l’urgenza estratti sono accurati. La differenza principale è che ora il LLM dispone di più informazioni, cioè l’immagine, per arrivare alla sua risposta, quindi la tua “ground truth” per ciò che è corretto include implicitamente quel contesto visivo. Questo ti aiuta a confermare che l’aggiunta di immagini migliori realmente la comprensione e l’accuratezza della tua AI.
+Applicazione pratica
+
+Un’applicazione pratica di questa capacità multimodale del generative AI hub può essere un chatbot intelligente basato sul web, capace di interagire con gli utenti tramite testo, audio, immagini e video. Restituisce risposte consapevoli del contesto usando un modello AI multimodale.
+Consulta Multimodal Response Assistant Chatbot Using SAP AI Core
+Riepilogo della lezione
+In questa lezione, hai compiuto un significativo passo avanti imparando a incorporare input multimodale nelle tue applicazioni di AI generativa. Sia usando l’intuitivo SAP AI Launchpad sia programmaticamente con SAP Cloud SDK for AI, ora comprendi come fornire ai LLM sia contesto testuale sia contesto visivo. Questo potente approccio porta a risposte più intelligenti, precise e ricche di contesto, ampliando la gamma di problemi aziendali reali che puoi risolvere efficacemente all’interno dell’ecosistema SAP.
+
+
+Selecting a Suitable Model
+Abbiamo perfezionato i nostri prompt e li abbiamo persino migliorati con input multimodale. Ora è il momento di scegliere il modello migliore per alimentare la nostra soluzione. In questa lezione, andremo oltre la semplice valutazione dei prompt per valutare i modelli stessi. Imparerai come testare sistematicamente vari modelli disponibili nel generative AI hub usando SAP Cloud SDK for AI, confrontando i loro risultati sul nostro scenario della Facility Solutions Company per effettuare una selezione informata e guidata dal business.
+Ora valutiamo diversi modelli per il problema di Facility Solutions che stiamo risolvendo.
+Soluzione usando diversi modelli
+
+Continuando con il nostro scenario, abbiamo imparato a creare e perfezionare prompt che assegnano urgenza, sentiment e categorie ai messaggi dei clienti. Abbiamo anche valutato queste tecniche avanzate di prompting per analizzare i loro risultati.
+Ora vedremo come questi prompt si comportano con diversi modelli disponibili tramite il generative AI hub. Questo è importante nella costruzione di una soluzione robusta, perché la scelta di un modello influisce in modo significativo sull’accuratezza, sull’efficienza e sul costo complessivo della tua applicazione.
+Motivi principali che dimostrano perché valutare e selezionare il modello giusto è essenziale per il tuo problema di business:
+Motivi per valutare il modello
+Specializzazione: diversi modelli sono ottimizzati per attività specifiche. Alcuni eccellono nella generazione creativa di testo, altri nelle classificazioni precise, nei riassunti o persino nella gestione di input multimodali, come testo e immagini.
+Prestazioni: non tutti i modelli si comportano allo stesso modo su ogni attività. Confrontarli ti aiuta a trovare il modello più accurato o più adatto ai tuoi requisiti specifici.
+Efficienza dei costi: puoi risparmiare sui costi scegliendo un modello che sia esattamente adatto alla tua attività. A volte, un modello più semplice e più economico può fornire l’accuratezza necessaria, permettendoti di evitare i costi più elevati associati a modelli molto più potenti quando non sono strettamente necessari.
+Flessibilità: modelli diversi offrono capacità diverse, incluso il supporto per vari tipi di input o la generazione di formati di output differenti, fornendo una soluzione più completa per esigenze complesse.
+Ridondanza e affidabilità: per applicazioni enterprise critiche, affidarsi a un solo modello introduce un rischio. Valutare più modelli fornisce alternative testate, migliorando la robustezza della tua soluzione e minimizzando i tempi di inattività.
+Diversi modelli nel codice del generative AI hub
+
+Modelli AI mistralai
+
+Iniziamo con i modelli AI mistralai e usiamo il prompt di base. Questi modelli sono i modelli open source meno costosi, ospitati da SAP, disponibili su generative AI hub.
+overall_result["basic--mixtral-large-instruct"] = evalulation_full_dataset(test_set_small, f_8, _model='mistralai--mistral-large-instruct')
+pretty_print_table(overall_result)
+
+
+Questo codice valuta un dataset e stampa i risultati. Calcola le prestazioni di un modello specifico su un piccolo set di test, memorizzando i risultati sotto una chiave nel dizionario overall_result. La funzione pretty_print_table poi formatta e stampa questi risultati, rendendo i dati di valutazione chiari e facili da leggere.
+Puoi ottenere il seguente output.
+
+
+0%|          | 0/20 [00:00<?, ?it/s]
+                                         is_valid_json correct_categories correct_sentiment correct_urgency
+===========================================================================================================
+                     basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+                  few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+             metaprompting--llama3.1-70b        100.0%              90.0%             30.0%           95.0%
+metaprompting_and_few_shot--llama3.1-70b        100.0%              88.5%             50.0%           90.0%
+basic--mixtral-large-instruct         40.0%              34.5%             25.0%           20.0%
+
+Allo stesso modo, valutiamo i risultati usando una combinazione di few-shot e meta-prompting per lo stesso modello.
+
+
+overall_result["metaprompting_and_few_shot--mixtral-large-instruct"] = evalulation_full_dataset(test_set_small, f_13, _model='mistralai--mistral-large-instruct')
+pretty_print_table(overall_result)
+
+Vedrai i risultati della valutazione.
+Modelli OpenAI
+
+Eseguiamo passaggi simili con i modelli OpenAI. Questi modelli sono tra i migliori modelli proprietari OpenAI disponibili su generative AI hub.
+
+
+overall_result["basic--gpt4o"] = evalulation_full_dataset(test_set_small, f_8, _model='gpt-4o')
+pretty_print_table(overall_result)
+
+0%|          | 0/20 [00:00<?, ?it/s]
+                                                   is_valid_json correct_categories correct_sentiment correct_urgency
+=====================================================================================================================
+                               basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+                            few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+                       metaprompting--llama3.1-70b        100.0%              90.0%             30.0%           95.0%
+          metaprompting_and_few_shot--llama3.1-70b        100.0%              88.5%             50.0%           90.0%
+                     basic--mixtral-large-instruct         40.0%              34.5%             25.0%           20.0%
+metaprompting_and_few_shot--mixtral-large-instruct         80.0%              71.0%             40.0% 75.0%
+
+Allo stesso modo, valutiamo i risultati usando una combinazione di few-shot e meta-prompting per lo stesso modello.
+
+
+overall_result["metaprompting_and_few_shot--gpt4o"] = evalulation_full_dataset(test_set_small, f_13, _model='gpt-4o')
+pretty_print_table(overall_result)
+
+Vedrai i risultati della valutazione.
+Modelli Gemini
+Eseguiamo passaggi simili con i modelli Gemini. Questi modelli sono i migliori modelli Google disponibili su generative AI hub.
+
+
+overall_result["basic--gemini-2.5-flash"] = evalulation_full_dataset(test_set_small, f_8, _model='gemini-2.5-flash')
+pretty_print_table(overall_result)
+
+Puoi ottenere il seguente output:
+ 0%|          | 0/20 [00:00<?, ?it/s]
+                                                   is_valid_json correct_categories correct_sentiment correct_urgency
+=====================================================================================================================
+                               basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+                            few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+                       metaprompting--llama3.1-70b        100.0%              90.0%             30.0%           95.0%
+          metaprompting_and_few_shot--llama3.1-70b        100.0%              88.5%             50.0%           90.0%
+                     basic--mixtral-large-instruct         40.0%              34.5%             25.0%           20.0%
+metaprompting_and_few_shot--mixtral-large-instruct         80.0%              71.0%             40.0%           75.0%
+                                      basic--gpt4o        100.0%              89.0%             35.0%           55.0%
+                 metaprompting_and_few_shot--gpt4o        100.0%              91.5%             60.0%          100.0%
+basic--gemini-2.5-flash        100.0%              91.0%             30.0%           60.0%
+
+Puoi vedere i risultati per questi output.
+Allo stesso modo, valutiamo i risultati usando una combinazione di few-shot e meta-prompting per lo stesso modello.
+
+
+overall_result["metaprompting_and_few_shot--gemini-2.5-flash"] = evalulation_full_dataset(test_set_small, f_13, _model='gemini-2.5-flash')
+pretty_print_table(overall_result)
+
+Puoi vedere i risultati della valutazione.
+
+
+ 0%|          | 0/20 [00:00<?, ?it/s]
+                                                   is_valid_json correct_categories correct_sentiment correct_urgency
+=====================================================================================================================
+                               basic--llama3.1-70b        100.0%              83.5%             30.0%           70.0%
+                            few_shot--llama3.1-70b        100.0%              84.0%             50.0%           90.0%
+                       metaprompting--llama3.1-70b        100.0%              90.0%             30.0%           95.0%
+          metaprompting_and_few_shot--llama3.1-70b        100.0%              88.5%             50.0%           90.0%
+                     basic--mixtral-large-instruct         40.0%              34.5%             25.0%           20.0%
+metaprompting_and_few_shot--mixtral-large-instruct         80.0%              71.0%             40.0%           75.0%
+                                      basic--gpt4o        100.0%              89.0%             35.0%           55.0%
+                 metaprompting_and_few_shot--gpt4o        100.0%              91.5%             60.0%          100.0%
+                           basic--gemini-2.5-flash        100.0%              91.0%             30.0%           60.0%
+metaprompting_and_few_shot--gemini-2.5-flash        100.0%              92.5%             55.0% 90.0%
+
+
+Nota
+Potresti ottenere una risposta leggermente diversa rispetto a quella mostrata qui e in tutte le restanti risposte dei modelli mostrate in questo learning journey.
+Quando esegui lo stesso prompt sulla tua macchina, un modello produce output variabili a causa della sua natura probabilistica, dell’impostazione della temperatura e dell’architettura non deterministica, portando a risposte diverse anche con leggere modifiche delle impostazioni o cambiamenti dello stato interno.
+Esercizio
+
+Negli esercizi successivi, esplorerai come selezionare i modelli ottimali per le tue esigenze di business sfruttando la Model Library nel generative AI hub di SAP.
+Linee guida di valutazione per modelli diversi
+Quando si seleziona un modello all’interno del generative AI hub di SAP, il pricing e vari fattori svolgono un ruolo cruciale. Le considerazioni principali includono:
+Efficienza dei costi: valuta se un modello più piccolo e più conveniente può fornire le prestazioni richieste per la tua attività specifica. È fondamentale pesare il costo del modello rispetto al ritorno sull’investimento previsto, poiché soluzioni efficaci non richiedono sempre i modelli più costosi. Fai riferimento alle SAP Notes 3437766 - Availability of Generative AI Models e 3505347 - Orchestration per i dettagli sui prezzi nel generative AI hub.
+Aggiornamenti del modello e nuove capacità: analizza i dettagli tecnici dei modelli disponibili, inclusi i tassi di conversione dei token, i rate limit e i calendari di deprecazione usando la nota 3437766. Questa nota elenca anche i modelli più recenti del generative AI hub, come i modelli Claude e SAP-RPT-1, per aiutarti a integrare capacità standard di settore nelle tue soluzioni AI.
+Scalabilità: considera quanto facilmente il pricing e l’infrastruttura del modello possano scalare con la crescita della tua applicazione. I modelli basati su sottoscrizione offerti nel generative AI hub forniscono costi prevedibili e sono progettati per supportare sviluppo e deployment AI scalabili.
+Bilanciamento tra prestazioni e costo: i modelli ad alte prestazioni in genere comportano un costo più elevato. Le organizzazioni devono valutare se i miglioramenti incrementali delle prestazioni di un modello più potente giustifichino davvero la spesa aggiuntiva per la loro applicazione specifica e il suo valore di business. A volte, un modello leggermente meno performante ma significativamente più economico offre un valore complessivo migliore.
+Flessibilità: cerca opzioni di pricing e di modello che consentano aggiustamenti in base a pattern di utilizzo variabili o a esigenze AI in evoluzione. Questa adattabilità è cruciale per ottimizzare la spesa in ambienti enterprise dinamici.
+Considerando queste linee guida, le aziende possono prendere decisioni informate su quali modelli di AI generativa distribuire, raggiungendo il miglior equilibrio tra costo, prestazioni e allineamento strategico per le loro soluzioni integrate con SAP.
+Riepilogo della valutazione
+
+Abbiamo visto come il generative AI hub possa risolvere un problema di business e abbiamo imparato le sue funzionalità e opzioni per supportare soluzioni AI custom-built.
+Durante questo corso, hai acquisito una comprensione completa di questo processo. Abbiamo intrapreso un percorso iterativo:
+Partendo dalla creazione di prompt di base in SAP AI Launchpad.
+Scalando la nostra soluzione ricreando prompt e interazioni usando SAP Cloud SDK for AI.
+Stabilendo una baseline tramite valutazione sistematica.
+Migliorando l’accuratezza e l’efficacia dei prompt con tecniche avanzate come Few-shot Prompting e Meta-prompting, e incorporando persino input multimodale.
+Infine, abbiamo valutato vari modelli offerti dal generative AI hub, confrontandone prestazioni, costo e adeguatezza rispetto alle nostre esigenze di business specifiche.
+Nel nostro scenario della Facility Solutions Company, ad esempio, la valutazione ha mostrato chiaramente che combinare il few-shot prompting con un modello efficiente e prontamente disponibile offriva un equilibrio ottimale tra accuratezza, costo e scalabilità per assegnare urgenza, sentiment e categorie alle e-mail dei clienti. Questo garantisce che l’output sia preciso e pronto per essere consumato da altre applicazioni all’interno dell’organizzazione, migliorando significativamente il servizio clienti e l’efficienza operativa.
+Il generative AI hub di SAP ti consente di sviluppare, distribuire e gestire soluzioni AI custom-built che migliorano programmaticamente le tue applicazioni di business esistenti, guidando l’innovazione in tutta la tua enterprise.
+Continuando con lo scenario discusso in precedenza, abbiamo creato prompt e prompt template che assegnano urgenza, sentiment e categorie ai messaggi dei clienti che possono essere usati nel software.
+Abbiamo usato la tecnica few-shot per arrivare a un prompt migliore.
+Abbiamo usato il prompt template per aiutare a scalare la soluzione.
+Task 1: Accedere a modelli diversi usando la Model Library
+
+Inizieremo esplorando la Model Library.
+Passaggi
+Vai alla Model Library. Vedrai l’interfaccia della Model Library.
+
+
+La Model Library fornisce informazioni complete sui modelli disponibili nel generative AI hub per supportare un processo decisionale informato. Per esplorare i modelli disponibili e i relativi metadati, utilizza la modalità catalogo. Per confrontare i dati e guidare le tue decisioni, usa la modalità leaderboard. Per informazioni dettagliate su un modello specifico, inclusi i tipi di input dei dati, i dettagli sui costi e le metriche, ove disponibili, consulta la relativa model card.
+Puoi applicare filtri come capacità, tipi di input, provider del modello ecc.
+Seleziona Leaderboard.
+Seleziona qualsiasi criterio in base alle tue esigenze di business. Ad esempio, seleziona il punteggio ChatBot Arena. Puoi passare il mouse su qualsiasi colonna per conoscerne i dettagli.
+Seleziona la colonna e clicca su Sort Descending.
+
+Puoi vedere le valutazioni dei modelli. Allo stesso modo, puoi confrontare le valutazioni di diversi benchmark nell’opzione Chart.
+Nota
+Puoi vedere tutti i modelli offerti nel Generative AI hub. Tuttavia, questo sistema è configurato per consentire solo pochi modelli selezionati. Questi sono: GP4.1 nano, GPT4o-mini, Gemini 2.0 Flash Lite e Mistral Small Instruct.
+Torna alla modalità Catalogo e cerca e seleziona GPT 4.1 nano nella scheda Catalog.
+
+
+Viene visualizzata la model card. Queste schede forniscono tutti i dettagli sui modelli, inclusi metriche, costo e proprietà.
+
+
+Puoi effettuare il deployment o usare il modello già distribuito direttamente dalla Model Library. Seleziona le opzioni Use in Chat o Use in Prompt Editor in base alle tue esigenze. Qui selezioneremo l’opzione Use in Chat.
+
+
+Usa il seguente prompt nella chat:
+"<System role>
+You are an expert customer service analyst for a facility management company. Your task is to analyze incoming customer messages and extract specific attributes for automated processing.
+
+For 'urgency', classify the message as one of: `low`, `medium`, or `high`.
+For 'sentiment', classify the message as one of: `positive`, `neutral`, or `negative`.
+For 'categories', assign a list of the best matching support tags from the following predefined list:
+`facility_management_issues`, `cleaning_services_scheduling`, `general_inquiries`, `specialized_cleaning_services`, `routine_maintenance_requests`, `emergency_repair_services`, `sustainability_and_environmental_practices`, `training_and_support_requests`, `quality_and_safety_concerns`, `customer_feedback_and_complaints`.
+
+Your complete response MUST be a valid JSON string, ready for parsing by an application. It should contain ONLY the keys 'urgency', 'sentiment', and 'categories'. Do not include any other text, explanations, or formatting like markdown code blocks (e.g., ```json). Ensure there are no newlines or unnecessary white spaces outside the JSON structure.
+<User role>. 
+Analyze the following message:
+Subject: Urgent HVAC System Repair Needed
+
+Dear Support Team,
+
+I hope this message finds you well. My name is [Sender], and I am reaching out to you from [Residential Complex Name], where I have been residing for the past few years. I have always appreciated the meticulous care and attention your team provides in maintaining our facilities.
+
+However, I am currently facing a pressing issue with the HVAC system in my apartment. Over the past few days, the system has been malfunctioning, resulting in inconsistent temperatures and, at times, complete shutdowns. Given the current weather conditions, this has become quite unbearable and is affecting my daily routine significantly.
+
+I have attempted to troubleshoot the problem by resetting the system and checking the thermostat settings, but these efforts have not yielded any improvement. The situation seems to be beyond my control and requires professional intervention.
+
+I kindly request that a repair team be dispatched immediately to address this urgent issue. The urgency of the matter cannot be overstated, as it is impacting not only my comfort but also my ability to carry out daily activities effectively.
+
+Thank you for your prompt attention to this matter. I look forward to your swift response and resolution.
+
+Best regards,
+[Sender]"
+
+Copia il messaggio e incollalo nella chat, quindi clicca su Send. Vedrai la risposta.
+
+
+Puoi analizzare ulteriormente la risposta sfruttando l’interfaccia chat, ad esempio usando il seguente prompt.
+"Analyze this response further to add a field for "key concern" in JSON. Ensure correct JSON format."
+
+Vedrai una risposta.
+
+Allo stesso modo, puoi vedere i risultati di altri modelli e selezionare il modello migliore per il tuo caso d’uso.
+Task 2: Accedere a modelli diversi usando il Prompt Editor
+
+Useremo l’ultima versione del prompt template creato negli esercizi precedenti. Questa è l’ultima versione del prompt few-shot con variabili e relativi valori di default. Eseguiremo questo prompt template con diversi modelli.
+Passaggi
+Assicurati di aver effettuato l’accesso al Generative AI hub.
+Seleziona Prompt Management e poi Templates.
+Seleziona il pulsante All. Puoi vedere qui il tuo template. Puoi anche cercare il tuo template.
+Seleziona l’ultima versione del template, che è la 5.0.0. Assicurati di selezionare il tuo template e il timestamp corretto all’interno del template. Una buona pratica consiste nel leggere il template prima di usarlo.
+Seleziona il prompt template e poi clicca su Open in Prompt Editor. Il tuo prompt è pronto per l’uso.
+Scorri fino alla scheda Model Configuration.
+Clicca su Selected Model.
+
+Viene visualizzata la finestra di dialogo Model Selection.
+Seleziona GPT-4o Mini.
+
+Esegui il prompt. Nota le differenze nella risposta.
+
+Allo stesso modo, seleziona i modelli Mistral AI e GPT4o nano e valuta i risultati.
+Nota
+Nel caso in cui un determinato modello non funzioni correttamente, puoi continuare l’esercizio usando altri modelli.
+Hai testato vari modelli nel Generative AI hub e hai usato un prompt template coerente per valutare gli LLM in termini di costo, prestazioni, scalabilità e flessibilità. Puoi valutare i risultati all’interno di un framework coerente e analizzare sia il costo sia le prestazioni per attività di AI generativa enterprise.
+Devi pesare il costo dell’uso di modelli avanzati rispetto al ritorno sull’investimento previsto.
+Fai riferimento alle SAP Notes 3437766 - Availability of Generative AI Models e 3505347 - Orchestration per i dettagli sui prezzi nel Generative AI hub.
