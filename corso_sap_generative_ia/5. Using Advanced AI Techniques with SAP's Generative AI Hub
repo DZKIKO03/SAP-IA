@@ -1,0 +1,206 @@
+Analyzing Document Grounding in Generative AI Hub
+Analisi del Document Grounding nel Generative AI Hub
+Integrare dati proprietari per ottenere risposte accurate e consapevoli del contesto è importante per sfruttare efficacemente l’AI generativa nelle soluzioni enterprise. Questa unità si concentra sul Document Grounding con il generative AI hub di SAP, una tecnica chiave per ottenere alta precisione e affidabilità quando si combinano Large Language Models (LLM) con dati aziendali.
+In questa lezione, imparerai SAP HANA vector engine e i principi fondamentali alla base del document grounding. Inizierai continuando lo scenario pratico di facility management per illustrare le sfide aziendali reali che il grounding affronta efficacemente. Questo preparerà il terreno per implementare queste potenti tecniche nel servizio di orchestrazione, che approfondiremo nella prossima lezione.
+Scenario: Ottimizzazione del Facility Management
+Facility Solutions Company fornisce servizi completi di facility management, manutenzione e pulizia per proprietà residenziali e commerciali. La loro missione è creare ambienti sicuri, efficienti e mantenuti in modo impeccabile, consentendo ai clienti di concentrarsi sulle attività principali. L’azienda serve un mercato diversificato, inclusi complessi residenziali di lusso, abitazioni individuali e clienti commerciali come edifici per uffici, spazi retail, strutture industriali e istituzioni educative.
+La sfida aziendale:
+L’azienda riceve migliaia di email ogni giorno, comprendenti richieste dei clienti, reclami e domande generali. L’elaborazione manuale di queste email, che comporta il trasferimento dei dati verso applicazioni interne, la categorizzazione e la prioritizzazione delle attività, richiede molto tempo, è soggetta a errori e causa frequentemente ritardi nell’affrontare le esigenze critiche dei clienti.
+Miglioramenti AI precedenti:
+L’azienda ha precedentemente sfruttato l’AI generativa e il prompt engineering per migliorare l’estrazione di informazioni dalle email dei clienti. Questo ha consentito loro di interrogare modelli AI per attività specifiche, portando a risposte più accurate e a una maggiore efficienza nella categorizzazione e prioritizzazione delle richieste e dei reclami dei clienti.
+Sfide in evoluzione e soluzioni del Generative AI Hub:
+Nonostante i progressi precedenti, l’azienda affronta ancora ostacoli significativi nella gestione delle email che richiedono un’integrazione e un’intelligenza più profonde:
+Grounding strutturato delle informazioni: Garantire che le informazioni estratte dalle email siano fondate in un formato strutturato per le applicazioni interne è fondamentale per una categorizzazione e prioritizzazione accurate. Per esempio, una richiesta di manutenzione necessita di dettagli ancorati all’interno dei sistemi dell’azienda. Il generative AI hub facilita questo tramite tecniche di document grounding, sfruttando database vettoriali SAP HANA per archiviare e recuperare informazioni strutturate.
+Comprensione contestuale con embeddings: Prendere decisioni informate richiede una comprensione più profonda del contesto e della semantica delle email. Per esempio, riconoscere la sfumatura dell’insoddisfazione del cliente è vitale per una risoluzione efficace. I modelli di embedding del generative AI hub possono migliorare la categorizzazione e la prioritizzazione catturando questo contesto, abilitando risposte più tempestive e appropriate.
+Affrontando queste sfide in evoluzione, l’azienda mira a semplificare ulteriormente la categorizzazione e la prioritizzazione delle email, ridurre significativamente lo sforzo manuale e aumentare l’efficienza e l’accuratezza complessive dei suoi servizi di facility management. Vedremo come il generative AI hub può implementare queste soluzioni in questa unità.
+Vector Embeddings
+Nell’AI generativa, un vettore è una rappresentazione matematica che codifica le caratteristiche di un oggetto, tipicamente una lista di numeri. Un embedding è questa rappresentazione vettoriale, appresa dai dati, che cattura gli attributi essenziali, le relazioni semantiche e il significato contestuale di oggetti come testo, immagini o record cliente. Questi embeddings consentono alle macchine di analizzare, confrontare e ragionare sui dati in modo significativo.
+
+All’interno del SAP HANA vector engine, i vector embeddings si riferiscono specificamente a queste rappresentazioni numeriche di vari tipi di dati come testo, immagini o audio. Un modello di Text Embeddings è il modello responsabile della conversione del testo in questi embedding numerici. Queste rappresentazioni vengono poi archiviate e gestite in modo efficiente all’interno del vector engine di SAP HANA Cloud, una parte chiave delle sue capacità di elaborazione multimodale.
+Questo vector engine consente un’archiviazione, un recupero e un’analisi efficienti di vettori ad alta dimensionalità. Questo, a sua volta, alimenta applicazioni avanzate come la ricerca semantica e la Retrieval Augmented Generation (RAG). L’integrazione dei vector embeddings con altri tipi di dati facilita lo sviluppo di applicazioni dati intelligenti e processi decisionali automatizzati.
+Il SAP HANA Vector Engine
+Il SAP HANA Vector Engine, una funzionalità centrale di SAP HANA Cloud, consente di archiviare, elaborare e analizzare vettori ad alta dimensionalità, come i text embeddings, direttamente insieme ai dati aziendali. Questo engine è parte integrante delle capacità di elaborazione multimodale di SAP HANA Cloud, supportando un’integrazione fluida con dati relazionali, grafi, spaziali e documentali.
+Le funzionalità chiave del SAP HANA Vector Engine includono:
+Gestione efficiente dei vettori: archivia e gestisce vector embeddings numerici, che rappresentano vari tipi di dati, come testo, immagini o audio.
+Applicazioni AI avanzate: abilita applicazioni sofisticate, come la ricerca semantica e RAG, che combinano efficacemente gli LLM con dati e contesto aziendali.
+Ricerche vettoriali potenti: l’engine supporta ricerche vettoriali efficienti direttamente tramite SQL, utilizzando funzioni specializzate come L2DISTANCE() e COSINE_SIMILARITY().
+L2DISTANCE(): questa funzione calcola la distanza euclidea tra due vettori, comunemente usata per misurare la distanza in linea retta in spazi ad alta dimensionalità per attività come il clustering e le ricerche del vicino più prossimo.
+COSINE_SIMILARITY(): questa funzione calcola il coseno dell’angolo tra due vettori, indicando la loro similarità direzionale. È ampiamente usata nell’analisi del testo e nel recupero delle informazioni per determinare la similarità semantica tra documenti o embeddings.
+
+
+
+Queste funzioni facilitano ricerche vettoriali altamente efficienti e possono essere integrate in modo fluido con altre operazioni SQL all’interno di SAP HANA Cloud. L’engine facilita risposte consapevoli del contesto e processi decisionali automatizzati applicando il significato semantico catturato nelle rappresentazioni vettoriali.
+Nel complesso, il SAP HANA vector engine migliora la capacità delle applicazioni dati intelligenti di fornire risposte dettagliate e consapevoli del contesto, migliorando significativamente l’efficienza e la scalabilità complessive dell’elaborazione dei dati all’interno di SAP HANA Cloud.
+Document Grounding all’interno del Generative AI Hub
+Il document grounding è un processo sofisticato che unisce gli LLM con tecniche avanzate di recupero delle informazioni per migliorare la qualità e l’accuratezza delle risposte AI. Ottiene questo risultato senza il tempo, la complessità e il costo estesi dell’addestramento o del fine-tuning di un LLM sui dati proprietari dell’azienda; invece, il grounding sfrutta le fonti di conoscenza affidabili della tua organizzazione, come i manuali delle policy HR, per integrare direttamente la base di conoscenza interna dell’LLM, rendendo il modello più accurato e affidabile.
+
+All’interno del SAP Generative AI Hub, i modelli di embedding svolgono un ruolo fondamentale e distinto nel rendere possibile questo processo di grounding. A differenza dei modelli generativi, i modelli di embedding non producono autonomamente testo o risposte. Sono invece componenti AI specializzati, come il modello Text Embedding, progettati per convertire dati grezzi, come chunk di documenti o query utente, in rappresentazioni vettoriali numeriche. Questi vettori catturano il significato semantico dei dati, rendendolo computazionalmente comprensibile e confrontabile. Questa capacità è cruciale per implementare RAG e migliorare la rilevanza contestuale e l’accuratezza delle risposte AI.
+Il sistema è costruito su diversi componenti chiave interconnessi:
+Document Store: questa base di conoscenza centralizzata ospita vari tipi di documenti, ad esempio PDF e file di testo.
+Generative AI Hub: agendo come coordinatore centrale, questo hub gestisce l’intero processo di elaborazione e recupero delle informazioni. Orchestra tre fasi principali:
+Data Ingestion: i documenti in ingresso vengono pre-elaborati, segmentati in chunk più piccoli e convertiti in vector embeddings numerici usando modelli di embedding.
+Orchestration: questa fase gestisce il workflow complessivo, incluso il processo di grounding e l’interazione con gli LLM.
+Retrieval: le informazioni rilevanti vengono recuperate tramite embedding e ricerche federate, attraverso più fonti di dati. Gli embeddings delle query vengono generati dinamicamente per facilitare ricerche di similarità altamente efficienti.
+SAP HANA Cloud Vector Engine: questo componente fornisce l’infrastruttura fondamentale per condurre ricerche di similarità basate sugli embeddings generati, archiviando efficacemente il contenuto fornito dall’utente.
+Embedding & Similarity Search: questa funzione critica collega la fase di retrieval con fonti di contenuto SAP e non SAP, abbinando le informazioni in base alla similarità tra query e document embeddings.
+Essenzialmente, il sistema acquisisce documenti, li trasforma in un formato ricercabile e poi utilizza in modo intelligente tecniche di embedding e ricerca federata per recuperare le informazioni più rilevanti in base alle query degli utenti. Questo facilita infine una generazione di testo più solida e fondata da parte degli LLM.
+Riepilogo della lezione
+Questa lezione ha introdotto il document grounding come tecnica essenziale per migliorare le risposte dell’AI generativa collegando gli LLM con fonti di conoscenza esterne e affidabili. Abbiamo esplorato uno scenario di facility management per illustrare le sfide aziendali affrontate dal grounding, poi abbiamo approfondito concetti fondamentali come i vector embeddings e il SAP HANA vector engine. Hai imparato come il generative AI hub orchestra questo processo, sfruttando questi componenti per fornire output AI accurati, contestualmente rilevanti e affidabili, preparandoti all’implementazione pratica.
+
+Implementing Document Grounding in the Orchestration Service
+
+Implementazione del Document Grounding nel Servizio di Orchestrazione
+Hai esplorato i concetti fondamentali di document grounding, vector embeddings e SAP HANA vector engine.
+In questa lezione, scoprirai come sfruttare il Servizio di Orchestrazione del generative AI hub per implementare il document grounding. Usando l’approccio RAG, vedrai un processo passo dopo passo per configurare la tua knowledge base e configurare il modulo di grounding per generare risposte AI altamente accurate e contestualmente rilevanti.
+Implementazione del Document Grounding nel Generative AI Hub
+La funzionalità di grounding è parte integrante del modulo di orchestrazione del generative AI hub. Questo modulo facilita il recupero specializzato dei dati da database vettoriali, assicurando che le risposte dell’AI siano fondate su informazioni esterne e rilevanti per il contesto. Inoltre, la Pipeline API integra vector store come il database SAP HANA gestito, che è direttamente accessibile e funziona all’interno del SAP Generative AI Hub tramite SAP AI Core.
+
+
+SAP AI Launchpad fornisce anche l’app di grounding management, che consente di gestire il ciclo di vita delle tue pipeline di dati.
+Il generative AI hub supporta un solido document grounding tramite diverse funzionalità chiave e processi semplificati:
+Accesso a LLM diversi: il generative AI hub fornisce accesso immediato a un’ampia gamma di LLM di vari provider, inclusi modelli Azure OpenAI (gpt-5), modelli Anthropic (anthropic--claude-4-sonnet) e modelli open-source come Mistral e modelli Meta. Questo ampio accesso consente di orchestrare più LLM per adattarsi al meglio alle esigenze di grounding e generazione di contenuti. Per vedere tutti i modelli disponibili, fai riferimento alla nota 3437766 - Availability of Generative AI Models.
+Integrazione fluida con SAP AI Launchpad: puoi eseguire e monitorare prompt grounded direttamente all’interno di SAP AI Launchpad. Questa integrazione mostra come l’AI generativa, combinata con i tuoi dati aziendali, possa assistere direttamente i processi aziendali sfruttando al contempo l’infrastruttura SAP AI Core sottostante per operazioni sicure.
+Indicizzazione efficiente dei documenti: i documenti non strutturati e semi-strutturati vengono pre-elaborati, suddivisi in chunk e convertiti in embedding numerici con modelli di embedding. Questi embedding vengono archiviati in modo efficiente nel SAP HANA Vector Engine per interrogazioni rapide e precise, fondamentali per fondare le risposte AI su dati reali e rilevanti.
+Queste funzionalità integrate ti consentono di creare soluzioni di AI generativa che sfruttano i repository documentali affidabili della tua organizzazione e forniscono risposte affidabili, trasparenti e contestualmente accurate.
+Grounding per la generazione di contenuti
+Usando l’approccio RAG, utilizzerai il modulo Document Grounding all’interno dell’Orchestration Service per generare contenuti in modo efficace. Questo modulo allinea le query degli utenti con i documenti rilevanti recuperandoli da una knowledge base. Questa knowledge base può provenire da vari repository, incluse cartelle SharePoint, motori Elasticsearch o repository di dati vettoriali dedicati.
+Esegui i seguenti passaggi:
+Crea la knowledge base con documenti rilevanti.
+Configura il modulo Document Grounding nell’Orchestration Service.
+Genera contenuto usando l’approccio RAG basato sulla knowledge base.
+Prerequisiti
+Installa SAP Cloud SDK for AI (Python) - generative usando il comando:
+
+
+%pip install "sap-ai-sdk-gen[all]"
+
+Imposta le credenziali per l’SDK.
+Passaggi dettagliati
+Step 1: Creare una Vector Knowledge Base
+Prepara la tua knowledge base prima di usare il modulo Grounding nella pipeline di orchestrazione.
+Il generative AI hub fornisce diverse opzioni agli utenti per preparare i dati della propria knowledge base:
+Caricare documenti in un repository di dati supportato, quindi eseguire la pipeline di dati per vettorializzare i documenti. Per maggiori dettagli, fai riferimento alla Pipeline API.
+Usare la Vector API per fornire direttamente chunk del documento. Per informazioni aggiuntive, consulta la Vector API.
+Opzioni del modulo Grounding
+Scegli una delle seguenti opzioni per usare il grounding:
+Opzione 1: Caricare documenti in un repository di dati supportato ed eseguire la Data Pipeline
+La pipeline raccoglie i documenti e segmenta i dati in chunk.
+Genera embedding, che sono rappresentazioni multidimensionali delle informazioni testuali, e li archivia in modo efficiente in un database vettoriale.
+Il processo prevede i seguenti passaggi:
+Eseguire i passaggi amministrativi iniziali una tantum: creare un resource group e un generic secret per il grounding. Per maggiori informazioni, consulta:
+Creare un Resource Group per il Grounding
+Grounding Generic Secrets per Microsoft SharePoint
+Preparare la Vector Knowledge Base: configura la Pipeline API per leggere dati non strutturati dai repository di dati e archiviarli in un database vettoriale. Usa la Pipeline API per:
+Leggere documenti non strutturati da vari repository di dati. Suddividere i dati in chunk e creare embedding.
+Archiviare le rappresentazioni multidimensionali delle informazioni testuali nel database vettoriale.
+Fornire un repository ID per accedere ai dati.
+Per maggiori informazioni, consulta Preparing Data Using the Pipeline API.
+Opzione 2: Fornire chunk di documenti direttamente tramite Vector API
+Fornire direttamente chunk di dati e archiviarli usando la Vector API. Il processo prevede i seguenti passaggi:
+Eseguire i passaggi amministrativi iniziali una tantum: creare un Resource Group per il Grounding.
+Preparare la Vector Knowledge Base: fornire direttamente chunk di informazioni e archiviare i dati nel database vettoriale usando la Vector API. Usa la Vector API per:
+Creare collection.
+Creare documenti usando direttamente i chunk di dati forniti dagli utenti.
+Archiviare i dati nel database vettoriale.
+Assegnare repository ID per accedere ai dati.
+Per maggiori informazioni, consulta Preparing Data Using the Vector API.
+Configurare il modulo Grounding nell’Orchestration: nella pipeline di orchestrazione, aggiungi la configurazione per le richieste di grounding:
+Creare una configurazione di grounding request nella pipeline di orchestrazione usando i repository ID e i filtri.
+Eseguire la pipeline di orchestrazione e verificare che la risposta faccia riferimento ai dati utente. Per maggiori informazioni, consulta Using the Grounding Module.
+Una configurazione dettagliata è descritta anche qui per preparare una knowledge base e verificarla.
+Step 2: Configurare il modulo Document Grounding
+Ora, devi definire la configurazione per il modulo Document Grounding, incluso il setup dei filtri e la specifica dei repository di dati.
+orchestration_service_url = <your url code from deployment of the orchestration service>
+
+Devi avere almeno un deployment compatibile con l’orchestrazione in esecuzione per un modello di AI generativa. Per maggiori informazioni, consulta e Create a Deployment for Orchestration in SAP AI Core.
+Successivamente, devi importare tutte le librerie rilevanti. Consulta il codice nel repository del codice qui.
+
+
+# Set up the Orchestration Service
+aicore_client = get_proxy_client().ai_core_client
+orchestration_service = OrchestrationService(api_url=orchestration_service_url)
+llm = LLM(
+    name="gpt-4o",
+    parameters={
+        'temperature': 0.0,
+    }
+)
+template = Template(
+            messages=[
+                SystemMessage("""Facility Solutions Company provides services to luxury residential complexes, apartments,
+                individual homes, and commercial properties such as office buildings, retail spaces, industrial facilities, and educational institutions.
+                Customers are encouraged to reach out with maintenance requests, service deficiencies, follow-ups, or any issues they need by email.
+                """),
+                UserMessage("""You are a helpful assistant for any queries for answering questions.
+                Answer the request by providing relevant answers that fit to the request.
+                Request: {{ ?user_query }}
+                Context:{{ ?grounding_response }}
+                """),
+            ]
+        )
+
+
+Questo codice Python configura un servizio di orchestrazione fondamentale per gestire attività complesse. Inizializza un client AI core e configura un servizio di orchestrazione con un URL specificato. Il codice configura poi un LLM con parametri specifici per garantire risposte coerenti. Infine, crea un template di messaggio per aiutare a rispondere alle richieste dei clienti in modo efficiente ed efficace.
+Successivamente, configuriamo i servizi di grounding.
+
+
+
+
+# Set up Document Grounding
+filters = [DocumentGroundingFilter(id="vector",
+                                   data_repositories=["<add your data repository ID>"],  ,
+                                   search_config=GroundingFilterSearch(max_chunk_count=15),
+                                   data_repository_type=DataRepositoryType.VECTOR.value
+                                   )
+]
+
+grounding_config = GroundingModule(
+            type="document_grounding_service",
+            config=DocumentGrounding(input_params=["user_query"], output_param="grounding_response", filters=filters)
+        )
+
+config = OrchestrationConfig(
+    template=template,
+    llm=llm,
+    grounding=grounding_config
+)
+
+
+Questo codice Python configura e imposta un servizio di document grounding. Definisce filtri per i repository documentali e specifica i parametri di ricerca. La configurazione di grounding viene poi integrata in un sistema di orchestrazione, che utilizza template e un modello linguistico per elaborare e rispondere alle query degli utenti. Questa configurazione garantisce un recupero dei documenti efficiente e accurato in base agli input degli utenti.
+Step 3: Generare risposte rilevanti per il contesto
+Esegui il servizio di orchestrazione con le impostazioni configurate per generare risposte basate sulle query degli utenti.
+
+
+
+response = orchestration_service.run(config=config,
+                            template_values=[
+                                TemplateValue("user_query", "List the issues that are reported by customers."),
+                            ])
+print(response.orchestration_result.choices[0].message.content)
+
+Questo codice Python invia una richiesta a un servizio di orchestrazione per eseguire una configurazione specifica. Include un valore di template con una query utente che chiede di elencare i problemi segnalati dai clienti. Dopo aver eseguito il servizio, stampa la risposta dal risultato dell’orchestrazione, nello specifico il contenuto del messaggio della prima scelta. Questo aiuta ad automatizzare e recuperare in modo efficiente i dati sui problemi dei clienti.
+Ottieni il seguente output:
+
+Puoi vedere l’elenco dei problemi segnalati dal cliente, che è fondato sulle email fornite dai clienti.
+Puoi vedere i documenti che sono stati recuperati per il contesto dal repository di dati.
+
+
+print(response.module_results.grounding.data['grounding_result'])
+
+Questo codice estrae e visualizza il valore di “grounding_result” da una struttura dati annidata all’interno dell’oggetto “response”. Questo specifico dato potrebbe essere fondamentale per comprendere l’esito di un modulo di grounding, rendendo il codice essenziale per il debugging o l’analisi.
+L’output elenca tutte le email rilevanti usate in precedenza per la risposta, fornendo una visione approfondita del contesto della tecnica di grounding. Puoi vedere questo output nel repository.
+Conclusione
+In questa lezione, hai completato le seguenti attività chiave:
+Stabilito una Vector Knowledge Base: hai imparato a caricare e vettorializzare documenti, formando una knowledge base solida e ricercabile.
+Configurato il modulo Document Grounding: hai configurato il modulo all’interno dell’Orchestration Service per recuperare in modo intelligente i documenti rilevanti in base alle query degli utenti.
+Generato risposte AI grounded: hai utilizzato l’Orchestration Service per produrre risposte accurate e contestualmente rilevanti, dimostrando la potenza del grounding.
+Riepilogo della lezione
+Basandosi sulla tua comprensione dei concetti fondamentali del document grounding, dei vector embeddings, del SAP HANA vector engine e di RAG, questa lezione ha fornito un approfondimento pratico sull’implementazione. Hai imparato con successo a stabilire una vector knowledge base, configurare il modulo Document Grounding all’interno dell’Orchestration Service del Generative AI Hub e generare risposte AI accurate e rilevanti per il contesto. Questa esperienza end-to-end ha consolidato il modo in cui il grounding migliora significativamente l’affidabilità e la rilevanza dell’AI integrando dati esterni precisi nelle tue soluzioni.
+Questo corso ha fornito una copertura concettuale e pratica completa di una tecnica di grounding per risolvere problemi aziendali.
+Riepilogo del Learning Journey
+Durante questo learning journey, hai iniziato scoprendo l’importanza di SAP Business AI e come affronta le sfide aziendali automatizzando processi, migliorando il processo decisionale e supportando un’innovazione scalabile e responsabile.
+Hai poi esplorato le basi degli LLM, come funzionano, i loro notevoli punti di forza e le loro limitazioni intrinseche. Hai visto come gli LLM possono automatizzare attività, generare contenuti e sintetizzare informazioni su larga scala, ma anche perché è essenziale usarli con attenzione, con consapevolezza dei rischi come allucinazioni, bias e privacy dei dati. Hai scoperto che il prompt engineering pratico è la chiave per guidare gli LLM a fornire risultati rilevanti e affidabili.
+Hai poi approfondito il generative AI hub di SAP, parte di AI Foundation, comprendendo come sia un gateway sicuro verso l’AI di livello enterprise. L’hub ti consente di accedere e orchestrare LLM leader, gestire prompt e integrare con sicurezza l’AI nei processi aziendali. Assicura che le tue soluzioni siano fondate su un contesto aziendale reale, affidabili tramite sicurezza e conformità robuste, e responsabili by design.
+Basandoti su questa fondazione, hai imparato tecniche pratiche per risolvere problemi aziendali reali con gli LLM, dallo sviluppo e perfezionamento dei prompt all’integrazione dei prompt nelle applicazioni usando SDK. Hai compreso l’arte del prompt engineering, del controllo versione e della valutazione, assicurando che le tue soluzioni AI siano accurate, azionabili e scalabili. La scalabilità è supportata dalla creazione e gestione di prompt template nel generative AI hub. Tecniche avanzate come il few-shot prompting e il meta prompting hanno ulteriormente migliorato la qualità e la coerenza degli output AI, consentendoti di affrontare scenari ancora più complessi.
+Infine, hai scoperto come il document grounding collega gli LLM alle fonti di conoscenza affidabili della tua organizzazione, garantendo risposte accurate e consapevoli del contesto. Puoi trasformare documenti in vettori ricercabili sfruttando SAP HANA Vector Engine e modelli di embedding, abilitando ricerca semantica e RAG. Il grounding minimizza le allucinazioni e allinea gli output AI ai fatti aziendali reali, rendendo le tue soluzioni più affidabili ed efficaci.
+In sintesi, ora sei attrezzato per progettare, costruire e distribuire soluzioni AI intelligenti, affidabili e pronte per il business, combinando la potenza degli LLM, un robusto prompt engineering e SAP Business AI per generare valore reale e innovazione.
